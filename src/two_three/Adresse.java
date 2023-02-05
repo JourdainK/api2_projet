@@ -58,10 +58,10 @@ public class Adresse {
     @Override
     public String toString() {
         return "\nAdresse :\n" +
-                "ID n° : \n" + id +
-                "Code postal :" + cp +
+                "ID n° : " + id +
+                "\nCode postal :" + cp +
                 "\tLocalité : " + localite +
-                "\n Rue :" + rue + '\'' +
+                "\nRue :" + rue +
                 "\t" + num + "\n\n";
     }
 

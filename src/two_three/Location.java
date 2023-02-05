@@ -18,6 +18,18 @@ public class Location {
         this.total = total;
     }
 
+    public Location(int id, int kmTotal, int nbrePassagers, String dateLoc, double total, Taxi vehicule, Client client, Adresse adrDebut, Adresse adrFin) {
+        this.id = id;
+        this.kmTotal = kmTotal;
+        this.nbrePassagers = nbrePassagers;
+        this.dateLoc = dateLoc;
+        this.total = total;
+        this.vehicule = vehicule;
+        this.client = client;
+        this.adrDebut = adrDebut;
+        this.adrFin = adrFin;
+    }
+
     public int getId() {
         return id;
     }
@@ -75,7 +87,9 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return id == location.id;
+        return id == location.id &&
+                adrDebut.equals(((Location) o).adrDebut) &&
+                adrFin.equals(((Location) o).adrFin);
     }
 
     @Override
@@ -83,5 +97,17 @@ public class Location {
         return Objects.hash(id);
     }
 
-
+    @Override
+    public String toString() {
+        return "\n-- Location --\n" +
+                "\nN° d'identification : " + id +
+                "\nKm Total : " + kmTotal +
+                "\t\tNombre de passagers : " + nbrePassagers +
+                "\nDate de la location : " + dateLoc +
+                "\nTotal : " + total + "€" +
+                "\nVéhicule : \n" + vehicule +
+                "\nClient : \n" + client +
+                "\nTrajet :\n\nAdresse de départ : " + adrDebut +
+                "\nAdresse d'arrivée : " + adrFin;
+    }
 }

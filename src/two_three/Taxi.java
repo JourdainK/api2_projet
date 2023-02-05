@@ -33,12 +33,16 @@ public class Taxi {
         return prixKm;
     }
 
+    public void setPrixKm(double prixKm) {
+        this.prixKm = prixKm;
+    }
+
     public List<Location> getLocations() {
         return location;
     }
 
-    public void setLocation(Location location){
-        this.location.add(location);
+    public void setLocation(List<Location> location) {
+        this.location = location;
     }
 
     @Override
@@ -59,8 +63,8 @@ public class Taxi {
         return "\n-- Taxi --\n" +
                 "N° d'identification : " + id +
                 "\nNombre de passagers maximum : " + nbreMaxPassagers +
-                "\t\tImmatriculation : " + immatriculation + '\'' +
-                "\nTarif (au kilomètre ) : " + prixKm;
+                "\t\tImmatriculation : " + immatriculation +
+                "\nTarif (au kilomètre ) : " + prixKm + "€";
     }
 
 }

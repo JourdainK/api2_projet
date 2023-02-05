@@ -42,9 +42,18 @@ public class Client {
         return listLocations;
     }
 
-    public void setListLocations(Location loc) {
-        this.listLocations.add(loc);
+    public void setMail(String mail) {
+        this.mail = mail;
     }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public void setListLocations(List<Location> listLocations) {
+        this.listLocations = listLocations;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -63,10 +72,10 @@ public class Client {
     public String toString() {
         return "\n-- Client --\n" +
                 "N° d'identification : " + id +
-                "\tEmail : " + mail +
+                "\nEmail : " + mail +
                 "\nNom : " + nom +
-                "\tPrénom : " + prenom + '\'' +
-                "N° de téléphone : " + tel;
+                "\t\tPrénom : " + prenom +
+                "\nN° de téléphone : " + tel;
     }
 
 
