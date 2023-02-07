@@ -34,9 +34,6 @@ public class Adresse {
         return num;
     }
 
-    //TODO check-test enter diff. addresses (same road,zip,ect)
-    //TODO check-test enter same addresses + slightly diff. addresses
-    //TODO check a way not to enter twice the same address (equals based on id)
     //asked ChatGpt to give me examples
     @Override
     public boolean equals(Object o) {
