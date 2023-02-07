@@ -9,25 +9,39 @@ public class Location {
     private Taxi vehicule;
     private Client client;
     private Adresse adrDebut, adrFin;
+    //idAtm => static used as counter/serial to generate the Location's id automatically
+    private static int idAtm = 1;
 
-    public Location(int id, int kmTotal, int nbrePassagers, String dateLoc, double total) {
-        this.id = id;
+    public Location(int id, int kmTotal, int nbrePassagers, String dateLoc, Taxi vehicule, Client client, Adresse adrDebut, Adresse adrFin) {
+        this.id = idAtm;
+        idAtm++;
         this.kmTotal = kmTotal;
         this.nbrePassagers = nbrePassagers;
         this.dateLoc = dateLoc;
-        this.total = total;
-    }
-
-    public Location(int id, int kmTotal, int nbrePassagers, String dateLoc, double total, Taxi vehicule, Client client, Adresse adrDebut, Adresse adrFin) {
-        this.id = id;
-        this.kmTotal = kmTotal;
-        this.nbrePassagers = nbrePassagers;
-        this.dateLoc = dateLoc;
-        this.total = total;
         this.vehicule = vehicule;
         this.client = client;
         this.adrDebut = adrDebut;
         this.adrFin = adrFin;
+        setTotal();
+        //once location confirmed > add this location to the list of location of the vehicule
+        this.vehicule.getLocations().add(this);
+        //same as above but for the client
+        this.client.getListLocations().add(this);
+    }
+
+    public Location(int id, int kmTotal, int nbrePassagers, String dateLoc, Taxi vehicule, Client client) {
+        this.id = idAtm;
+        idAtm++;
+        this.kmTotal = kmTotal;
+        this.nbrePassagers = nbrePassagers;
+        this.dateLoc = dateLoc;
+        this.vehicule = vehicule;
+        this.client = client;
+        setTotal();
+        //once location confirmed > add this location to the list of location of the vehicule
+        this.vehicule.getLocations().add(this);
+        //same as above but for the client
+        this.client.getListLocations().add(this);
     }
 
     public int getId() {
@@ -67,10 +81,13 @@ public class Location {
     }
 
     public void setVehicule(Taxi vehicule) {
+
         this.vehicule = vehicule;
+        this.vehicule.getLocations().add(this);
     }
 
     public void setClient(Client client) {
+
         this.client = client;
     }
 
@@ -81,6 +98,8 @@ public class Location {
     public void setAdrFin(Adresse adrFin){
         this.adrFin = adrFin;
     }
+
+    public void setTotal() { this.total = vehicule.getPrixKm() * kmTotal; }
 
     @Override
     public boolean equals(Object o) {
