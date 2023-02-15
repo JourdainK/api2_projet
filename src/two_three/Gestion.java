@@ -38,7 +38,7 @@ public class Gestion {
             }while(choiceMenu < 1 || choiceMenu > 5);
 
             switch(choiceMenu){
-                //TODO develop method for these
+                //TODO develop methods for these
                 case 1 -> menuClient();
                 case 2 -> System.out.println("Menu Taxi");
                 case 3 -> System.out.println("Menu Addresses");
