@@ -82,7 +82,7 @@ public class Location {
      *
      * @return identifiant de la location
      */
-    public int getId() {
+    public int getIdLoc() {
         return idLoc;
     }
 
