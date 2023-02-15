@@ -5,13 +5,40 @@ import java.util.List;
 import java.util.Objects;
 
 public class Client {
-    private int id;
+    /**
+     * Classe client
+     * @version 1.0
+     * @see Location
+     */
+
+    /**
+     * identifiant unique-numéro du client
+     */
+    private int idClient;
+    /**
+     * email du client
+     */
     private String mail;
-    private String nom, prenom, tel;
+    /**
+     * nom du client
+     */
+    private String nom;
+    /**
+     * prénom du client
+     */
+    private String prenom;
+    /**
+     * téléphone du client
+     */
+    private String tel;
+    /**
+     * Liste des locations du client
+     */
     private List<Location> listLocations = new ArrayList<>();
 
-    public Client(int id, String mail, String nom, String prenom, String tel) {
-        this.id = id;
+    //TODO pick up here
+    public Client(int idClient, String mail, String nom, String prenom, String tel) {
+        this.idClient = idClient;
         this.mail = mail;
         this.nom = nom;
         this.prenom = prenom;
@@ -19,7 +46,7 @@ public class Client {
     }
 
     public int getId() {
-        return id;
+        return idClient;
     }
 
     public String getMail() {
@@ -71,7 +98,7 @@ public class Client {
     @Override
     public String toString() {
         return "\n-- Client --\n" +
-                "N° d'identification : " + id +
+                "N° d'identification : " + idClient +
                 "\nEmail : " + mail +
                 "\nNom : " + nom +
                 "\t\tPrénom : " + prenom +

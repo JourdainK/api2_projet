@@ -3,11 +3,12 @@ package two_three;
 import java.util.Objects;
 
 public class Adresse {
-    private int id, cp;
+    private int idAdr;
+    private int cp;
     private String localite, rue, num;
 
     public Adresse(int id, int cp, String localite, String rue, String num) {
-        this.id = id;
+        this.idAdr = id;
         this.cp = cp;
         this.localite = localite;
         this.rue = rue;
@@ -15,7 +16,7 @@ public class Adresse {
     }
 
     public int getId() {
-        return id;
+        return idAdr;
     }
 
     public int getCp() {
@@ -41,7 +42,7 @@ public class Adresse {
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
         return num == adresse.num &&
-                id == adresse.id &&
+                idAdr == adresse.idAdr &&
                 cp == adresse.cp &&
                 localite.equals(adresse.localite) &&
                 rue.equals(adresse.rue);
@@ -49,13 +50,13 @@ public class Adresse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(idAdr);
     }
 
     @Override
     public String toString() {
         return "\nAdresse :\n" +
-                "ID n° : " + id +
+                "ID n° : " + idAdr +
                 "\nCode postal :" + cp +
                 "\tLocalité : " + localite +
                 "\nRue :" + rue +
