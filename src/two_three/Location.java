@@ -73,7 +73,7 @@ public class Location {
         this.adrDebut = adrDebut;
         this.adrFin = adrFin;
         setTotal();
-        this.vehicule.getLocations().add(this);
+        this.vehicule.getListTaxiLoc().add(this);
         this.client.getListLocations().add(this);
     }
 
@@ -166,7 +166,7 @@ public class Location {
     public void setVehicule(Taxi vehicule) {
 
         this.vehicule = vehicule;
-        this.vehicule.getLocations().add(this);
+        this.vehicule.getListTaxiLoc().add(this);
     }
 
     /**
