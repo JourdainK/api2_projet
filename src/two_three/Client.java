@@ -138,6 +138,7 @@ public class Client {
 
     /**
      * éqalité de deux clients basée sur le mail du client
+     *
      * @param o autre élément
      * @return égalité ou pas
      */
@@ -151,6 +152,7 @@ public class Client {
 
     /**
      * calcul du hascode du client basé sur le mail
+     *
      * @return valeur du hashcode
      */
     @Override
