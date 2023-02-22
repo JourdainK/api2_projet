@@ -234,7 +234,6 @@ public class Location {
 
     /**
      * methode toString
-     *
      * @return informations complètes
      */
     @Override
