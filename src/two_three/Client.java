@@ -151,6 +151,7 @@ public class Client {
 
     /**
      * calcul du hascode du client basé sur le mail
+
      * @return valeur du hashcode
      */
     @Override

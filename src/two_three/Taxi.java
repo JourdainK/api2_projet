@@ -127,7 +127,7 @@ public class Taxi {
 
     /**
      * calcul du hashcode basé sur l'immatriculation
-     *
+
      * @return valeur du hashcode
      */
     @Override

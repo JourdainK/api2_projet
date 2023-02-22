@@ -207,7 +207,6 @@ public class Location {
      */
     public void setTotal() { this.total = vehicule.getPrixKm() * kmTotal; }
 
-    //TODO check if this equals is good or not
     /**
      * égalité de deux locations basées sur le quadruplet id, adrDebut, adrFin, dateLoc
      * @param o autre élément
