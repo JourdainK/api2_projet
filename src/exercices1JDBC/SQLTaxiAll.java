@@ -10,23 +10,22 @@ import java.util.Set;
 
 public class SQLTaxiAll {
 
-    public SQLTaxiAll(){
+    public SQLTaxiAll() {
 
         Scanner sc = new Scanner(System.in);
         Connection dbconnect = DBConnection.getConnection();
-        if(dbconnect == null){
+        if (dbconnect == null) {
             System.exit(1);
         }
         System.out.println("Connexion établie");
         String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
-        try(Statement stmt = dbconnect.createStatement();
-            ResultSet rs = stmt.executeQuery(query);){
+        try (Statement stmt = dbconnect.createStatement();
+             ResultSet rs = stmt.executeQuery(query);) {
 
             boolean found = false;
-            while(rs.next()){
+            while (rs.next()) {
                 found = true;
-                System.out.println("ID : " + rs.getInt("ID_TAXI") + "\t\tImmatriculation : " + rs.getString("IMMATRICULATION")  + "\t\tNombre de passagers maximum : " + rs.getInt("NBREMAXPASSAGERS") + "\t\tPrix au kilomètre : " + rs.getDouble("PRIXKM"));
-                System.out.println("");
+                System.out.println("ID : " + rs.getInt("ID_TAXI") + "\t\tImmatriculation : " + rs.getString("IMMATRICULATION") + "\t\tNombre de passagers maximum : " + rs.getInt("NBREMAXPASSAGERS") + "\t\tPrix au kilomètre : " + rs.getDouble("PRIXKM"));
             }
 
         } catch (SQLException e) {

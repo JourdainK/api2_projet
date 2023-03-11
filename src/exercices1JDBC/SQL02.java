@@ -9,25 +9,25 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class SQL02 {
-    public void ex02(){
+    public void ex02() {
         Scanner sc = new Scanner(System.in);
         Connection dbConnect = DBConnection.getConnection();
-        if(dbConnect==null){
+        if (dbConnect == null) {
             System.exit(1);
         }
         System.out.println("Connexion établie");
-        try(PreparedStatement pstm2 = dbConnect.prepareStatement("SELECT * FROM APITAXI WHERE ID_TAXI = ?")){
+        try (PreparedStatement pstm2 = dbConnect.prepareStatement("SELECT * FROM APITAXI WHERE ID_TAXI = ?")) {
             System.out.println("Saisir l'id du taxi : ");
             String idInput1;
             int idInput;
-            do{
+            do {
                 idInput1 = saisie("[0-9]*", "Veuillez saisir un nombre entier , positif.\nSaisir l'id du taxi : ");
                 idInput = Integer.parseInt(idInput1);
-            }while(idInput<0);
-            pstm2.setInt(1,idInput);
+            } while (idInput < 0);
+            pstm2.setInt(1, idInput);
             boolean check = false;
-            try(ResultSet rs = pstm2.executeQuery()){
-                while(rs.next()){
+            try (ResultSet rs = pstm2.executeQuery()) {
+                while (rs.next()) {
                     check = true;
                     int id = rs.getInt("ID_TAXI");
                     String immat = rs.getString("IMMATRICULATION");
@@ -37,16 +37,15 @@ public class SQL02 {
                     System.out.println("id : " + id + "\t\tImmatriculation : " + immat);
                     System.out.println("Nombre de passagers maximum : " + pasger + "\t\tPrix au kilomètre : " + prixKm + "\n\n");
                 }
-                if(!check){
+                if (!check) {
                     System.out.println("Taxi inconnu");
                 }
 
-        } catch (SQLException e) {
-            System.out.println("Erreur Query SQl " + e);
-        }
+            } catch (SQLException e) {
+                System.out.println("Erreur Query SQl " + e);
+            }
 
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erreur SQL " + e);
         }
 
