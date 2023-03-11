@@ -22,7 +22,7 @@ public class Utilitaire {
         return phrase;
     }
 
-    public static void printMap(Map<Integer,String> map){
+    public static void printMapTaxis(Map<Integer,String> map){
         for(Map.Entry<Integer,String> set : map.entrySet()){
             System.out.println("ID : " + set.getKey() + "\tImmatriculation : " + set.getValue() + "\n");
         }

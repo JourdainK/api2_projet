@@ -2,6 +2,7 @@ package gestion;
 
 import exercices1JDBC.SQLTaxiAll;
 import exercices1JDBC.SQLTaxiCreate;
+import exercices1JDBC.SQLTaxiDelete;
 import two_three.*;
 
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class Gestion {
                 //TODO develop methods for these
                 case 1 -> seeAllTaxi();
                 case 2 -> createTaxi();
-                case 3 -> System.out.println("Effacer un taxi");
+                case 3 -> deleteTaxi();
                 case 4 -> System.out.println("Modifier un taxi");
                 case 5 -> System.out.println("Voirs client d'1 taxi");
                 case 6 -> System.out.println("tot km d'un Taxi");
@@ -123,6 +124,10 @@ public class Gestion {
 
     public void createTaxi(){
         SQLTaxiCreate n1 = new SQLTaxiCreate();
+    }
+
+    private void deleteTaxi(){
+        SQLTaxiDelete d1 = new SQLTaxiDelete();
     }
 
 

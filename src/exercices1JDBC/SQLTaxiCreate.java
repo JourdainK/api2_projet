@@ -54,7 +54,7 @@ public class SQLTaxiCreate {
             pstm1.setDouble(3,prixkm);
 
             int nl1 = pstm1.executeUpdate();
-            System.out.println(nl1 + " ligne insérée");
+            System.out.println(nl1 + " ligne insérée\n");
             pstm2.setString(1,immat);
             pstm2.setInt(2,maxPass);
             pstm2.setDouble(3,prixkm);
@@ -63,6 +63,7 @@ public class SQLTaxiCreate {
                 if(rs.next()){
                     int nc = rs.getInt("ID_TAXI");
                     System.out.println("Numéro du taxi inséré : " + nc + "\t\tImmatriculation : " + rs.getString("IMMATRICULATION") + "\t\tPassagers maximum : " + rs.getInt("NBREMAXPASSAGERS") + "\t\tPrix au km : " + rs.getDouble("PRIXKM"));
+                    System.out.println("\n\n");
                 }
             }catch(SQLException e){
                 System.out.println("Erreur SQL : " + e);
