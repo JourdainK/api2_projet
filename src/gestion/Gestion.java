@@ -1,8 +1,15 @@
-package two_three;
+package gestion;
+
+import exercices1JDBC.SQLTaxiAll;
+import exercices1JDBC.SQLTaxiCreate;
+import two_three.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import static utilitaires.Utilitaire.saisie;
 
 public class Gestion {
     private List<Client> clientsList;
@@ -40,7 +47,7 @@ public class Gestion {
             switch(choiceMenu){
                 //TODO develop methods for these
                 case 1 -> menuClient();
-                case 2 -> System.out.println("Menu Taxi");
+                case 2 -> menuTaxi();
                 case 3 -> System.out.println("Menu Addresses");
                 case 4 -> System.out.println("Menu Locations");
                 case 5 -> System.out.println("Au revoir");
@@ -74,19 +81,54 @@ public class Gestion {
         }while(choiceMenuCli!=4);
     }
 
+    //TODO modify -> See teacher instructions -> most of the homework is about Taxis !! -> need more options > see clients of one taxi + nmbre TOT km of one taxi + all locations made by one Taxi
+    public void menuTaxi(){
+        List<String> optionTaxi = new ArrayList<>(Arrays.asList("1. Voir les taxi","2. Ajouter un taxi","3. Effacer un taxi","4. Modifier un taxi","5. Voir les clients d'un taxi choisi", "6. Total de km parcourus d'un taxi choisi","7. Voir les locations d'un taxi choisi","8. Retour au menu précédent\n"));
+        String choiceMenTax1;
+        int choiceMenTax = -1, i = 1;
+        StringBuilder errMsg = new StringBuilder("Erreur veuillez saisir un nombre compris entre 1 et " + optionTaxi.size());
+        String errMesg = errMsg.toString();
 
-    public String saisie(String regex, String message) {
-        Scanner sc = new Scanner(System.in);
-        boolean check = false;
-        String phrase;
-        do {
-            phrase = sc.nextLine();
-            if (phrase.matches(regex)) {
-                check = true;
-            } else {
-                System.out.println(message);
+        System.out.println("-- Menu Taxi --");
+        do{
+            do{
+                for(String o:optionTaxi){
+                    System.out.println(o);
+                }
+                System.out.println("\nVotre choix : ");
+                choiceMenTax1 =  saisie("[0-9]*",errMesg);
+                choiceMenTax = Integer.parseInt(choiceMenTax1);
+                if(choiceMenTax < 1 || choiceMenTax> optionTaxi.size()){
+                    System.out.println(errMesg);
+                }
+            }while(choiceMenTax < 1 || choiceMenTax> optionTaxi.size());
+
+            switch (choiceMenTax){
+                //TODO develop methods for these
+                case 1 -> seeAllTaxi();
+                case 2 -> createTaxi();
+                case 3 -> System.out.println("Effacer un taxi");
+                case 4 -> System.out.println("Modifier un taxi");
+                case 5 -> System.out.println("Voirs client d'1 taxi");
+                case 6 -> System.out.println("tot km d'un Taxi");
+                case 7 -> System.out.println("All locations d'un taxi");
             }
-        } while (!check);
-        return phrase;
+
+        }while(choiceMenTax!=8);
+    }
+
+    public void seeAllTaxi(){
+        SQLTaxiAll all = new SQLTaxiAll();
+    }
+
+    public void createTaxi(){
+        SQLTaxiCreate n1 = new SQLTaxiCreate();
+    }
+
+
+
+
+    public static void main(String[] args) {
+        Gestion g = new Gestion();
     }
 }
