@@ -44,4 +44,9 @@ public class SQL01 {
         }
         DBConnection.closeConnection();
     }
+
+    public static void main(String[] args) {
+        SQL01 test = new SQL01();
+        test.ex01();
+    }
 }
