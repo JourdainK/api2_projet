@@ -7,4 +7,4 @@
 /dataSources/
 /dataSources.local.xml
 #others
-../src/resources/application.properties
+#../src/resources/application.properties

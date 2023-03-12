@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static utilitaires.Utilitaire.printListTaxis;
 import static utilitaires.Utilitaire.saisie;
 
 public class Gestion {
@@ -41,7 +40,7 @@ public class Gestion {
         do {
             do {
                 System.out.println(option);
-                System.out.println("Votre choix : ");
+                System.out.println("\nVotre choix : ");
                 choiceMenu1 = saisie("[1-5]", "Veuillez saisir un nombre compris entre 1 et 5.\nVotre choix : ");
                 choiceMenu = Integer.parseInt(choiceMenu1);
             } while (choiceMenu < 1 || choiceMenu > 5);
@@ -50,7 +49,7 @@ public class Gestion {
                 //TODO develop methods for these
                 case 1 -> menuClient();
                 case 2 -> taxisList = gTaxi.menuTaxi();
-                case 3 -> printListTaxis(taxisList);
+                case 3 -> System.out.println("Menu Addresses");
                 case 4 -> System.out.println("Menu Locations");
                 case 5 -> System.out.println("Au revoir");
                 default -> System.out.println("Erreur de saisie.\n");
