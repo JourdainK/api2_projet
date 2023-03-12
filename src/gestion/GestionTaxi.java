@@ -1,6 +1,5 @@
 package gestion;
 
-import oracle.jdbc.proxy.annotation.Pre;
 import two_three.Location;
 import two_three.Taxi;
 import utilitaires.DateValidator;
@@ -8,7 +7,6 @@ import utilitaires.DateValidatorUsingDateTimeFormatter;
 import utilitaires.SQLTaxiAllHashMap;
 import myconnections.DBConnection;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -350,11 +348,11 @@ public class GestionTaxi {
         System.out.println("Connexion établie");
         String query = "SELECT * FROM API_TAXI_USED WHERE immatriculation = ? ORDER BY id_client";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
-            pstm.setString(1,chosenImmat);
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setString(1, chosenImmat);
 
-            try(ResultSet rs = pstm.executeQuery()){
-                while(rs.next()){
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
                     int idClient = rs.getInt(1);
                     String nomCli = rs.getString(2);
                     String prenCli = rs.getString(3);
@@ -363,17 +361,17 @@ public class GestionTaxi {
                     i++;
                 }
 
-            }catch (SQLException f){
+            } catch (SQLException f) {
                 System.out.println("Erreur SQL : " + f);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e);
         }
 
         DBConnection.closeConnection();
     }
 
-    public void seeKmNpriceTot(){
+    public void seeKmNpriceTot() {
         String chosenImmat;
 
         chosenImmat = getImmatChosenTaxi();
@@ -381,51 +379,51 @@ public class GestionTaxi {
         System.out.println(" -- Total des locations et total des kilomètre parcourus du taxi " + chosenImmat + " --");
 
         Connection dbConnect = DBConnection.getConnection();
-        if(dbConnect == null){
+        if (dbConnect == null) {
             System.exit(1);
         }
         System.out.println("Connection établie");
         String query1 = "SELECT * FROM api_locat_simple WHERE immatriculation = ?";
         String query2 = "SELECT * FROM api_totkm_taxi WHERE immatriculation = ?";
 
-        try(PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
-            PreparedStatement pstm2 = dbConnect.prepareStatement(query2)) {
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
+             PreparedStatement pstm2 = dbConnect.prepareStatement(query2)) {
 
-            pstm1.setString(1,chosenImmat);
-            pstm2.setString(1,chosenImmat);
+            pstm1.setString(1, chosenImmat);
+            pstm2.setString(1, chosenImmat);
             double tot = 0;
 
-            try(ResultSet rs1 = pstm1.executeQuery()){
-                while (rs1.next()){
+            try (ResultSet rs1 = pstm1.executeQuery()) {
+                while (rs1.next()) {
 
                     tot = tot + rs1.getDouble(7);
 
                 }
-            }catch (SQLException f){
+            } catch (SQLException f) {
                 System.out.println("Erreur SQL : " + f);
             }
-            System.out.println("Total des locations : "  + tot + " €");
+            System.out.println("Total des locations : " + tot + " €");
 
             int totKm = 0;
-            try (ResultSet rs2 = pstm2.executeQuery()){
-                while (rs2.next()){
+            try (ResultSet rs2 = pstm2.executeQuery()) {
+                while (rs2.next()) {
                     totKm += rs2.getInt(3);
                 }
                 System.out.println("Total km parcourus : " + totKm);
-            }catch (SQLException g){
+            } catch (SQLException g) {
                 System.out.println("Erreur SQL : " + g);
             }
 
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e);
         }
 
         DBConnection.closeConnection();
     }
 
-    public void seeAllLocatDate(){
-        Map<Integer,String> taxis = new SQLTaxiAllHashMap().getTaxis();
+    public void seeAllLocatDate() {
+        Map<Integer, String> taxis = new SQLTaxiAllHashMap().getTaxis();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String choiceId1;
         int choiceId;
@@ -433,62 +431,61 @@ public class GestionTaxi {
         String dateEnd;
         boolean checkStart, checkEnd;
 
-        do{
+        do {
             printMapTaxis(taxis);
             System.out.println("Choisir un l'ID d'un taxi : ");
-            choiceId1 = saisie("[0-9]*","Erreur, veuillez saisir un nombre");
+            choiceId1 = saisie("[0-9]*", "Erreur, veuillez saisir un nombre");
             choiceId = Integer.parseInt(choiceId1);
-        }while(!taxis.containsKey(choiceId));
+        } while (!taxis.containsKey(choiceId));
 
-        do{
+        do {
             System.out.println(" \n -- Saisie de la période -- ");
             System.out.print("\nSaisir la date de départ : ");
             dateStart = saisie("[0-9]{2}[.][0-9]{2}[.][0-9]{4}", "Veuillez saisir une date au format dd.MM.yyyy");
             DateValidator verif = new DateValidatorUsingDateTimeFormatter();
             checkStart = verif.isValid(dateStart);
-            if(!checkStart){
+            if (!checkStart) {
                 System.out.println("Veuillez entrer une date valide");
             }
-        }while(!checkStart);
+        } while (!checkStart);
         LocalDate start = LocalDate.parse(dateStart, format);
 
-        do{
+        do {
             System.out.println(" \n -- Saisie de la période -- ");
             System.out.print("\nSaisir la date de fin : ");
             dateEnd = saisie("[0-9]{2}[.][0-9]{2}[.][0-9]{4}", "Veuillez saisir une date au format dd.MM.yyyy");
             DateValidator verif = new DateValidatorUsingDateTimeFormatter();
             checkEnd = verif.isValid(dateEnd);
-            if(!checkEnd){
+            if (!checkEnd) {
                 System.out.println("Veuillez entrer une date valide");
             }
-        }while(!checkEnd);
-        LocalDate end = LocalDate.parse(dateEnd,format);
+        } while (!checkEnd);
+        LocalDate end = LocalDate.parse(dateEnd, format);
 
         Connection dbConnect = DBConnection.getConnection();
-        if(dbConnect == null){
+        if (dbConnect == null) {
             System.exit(1);
         }
         System.out.println("Connection établie");
-        String query = "SELECT * FROM apilocation WHERE id_taxi = " +choiceId;
+        String query = "SELECT * FROM apilocation WHERE id_taxi = " + choiceId;
 
-        try(Statement stmt = dbConnect.createStatement();
-            ResultSet rs = stmt.executeQuery(query);){
+        try (Statement stmt = dbConnect.createStatement();
+             ResultSet rs = stmt.executeQuery(query);) {
 
-            while(rs.next()){
+            while (rs.next()) {
                 LocalDate dateLoc;
                 dateLoc = rs.getDate("DATELOC").toLocalDate();
 
-                if((dateLoc.isAfter(start) && dateLoc.isBefore(end)) || (dateLoc.isEqual(start) || dateLoc.isEqual(end))){
+                if ((dateLoc.isAfter(start) && dateLoc.isBefore(end)) || (dateLoc.isEqual(start) || dateLoc.isEqual(end))) {
                     System.out.println("ID location : " + rs.getInt("ID_LOCATION") + "\t\tDate : " + rs.getDate("DATELOC"));
                 }
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erreur SQL :  " + e);
         }
 
         DBConnection.closeConnection();
-
 
 
     }
