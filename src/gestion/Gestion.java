@@ -1,8 +1,5 @@
 package gestion;
 
-import exercices1JDBC.SQLTaxiAll;
-import exercices1JDBC.SQLTaxiCreate;
-import exercices1JDBC.SQLTaxiDelete;
 import two_three.*;
 
 import java.util.ArrayList;
@@ -10,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static utilitaires.Utilitaire.getImmatChosenTaxi;
+import static utilitaires.Utilitaire.printListTaxis;
 import static utilitaires.Utilitaire.saisie;
 
 public class Gestion {
@@ -19,6 +16,7 @@ public class Gestion {
     private List<Adresse> adressesList;
     private List<Location> locationsList;
     private Scanner sc = new Scanner(System.in);
+    private GestionTaxi gTaxi = new GestionTaxi();
 
     public Gestion() {
 
@@ -26,6 +24,7 @@ public class Gestion {
         taxisList = new ArrayList<>();
         adressesList = new ArrayList<>();
         locationsList = new ArrayList<>();
+        taxisList = gTaxi.getAllTaxis();
         //TODO testing classes > for all classes declare instances to test each classes
         menu();
 
@@ -35,6 +34,7 @@ public class Gestion {
         String option = "\n1 - Menu client\n2 - Menu Taxi\n3 - Menu Adresses\n4 - Menu Locations\n5 - Quitter";
         String choiceMenu1;
         int choiceMenu;
+
 
         System.out.println(" -- Taxi service --");
 
@@ -49,8 +49,8 @@ public class Gestion {
             switch (choiceMenu) {
                 //TODO develop methods for these
                 case 1 -> menuClient();
-                case 2 -> menuTaxi();
-                case 3 -> System.out.println("Menu Addresses");
+                case 2 -> taxisList = gTaxi.menuTaxi();
+                case 3 -> printListTaxis(taxisList);
                 case 4 -> System.out.println("Menu Locations");
                 case 5 -> System.out.println("Au revoir");
                 default -> System.out.println("Erreur de saisie.\n");
@@ -81,62 +81,6 @@ public class Gestion {
                 default -> System.out.println("Erreur de saisie\n");
             }
         } while (choiceMenuCli != 4);
-    }
-
-    //TODO modify -> See teacher instructions -> most of the homework is about Taxis !! -> need more options > see clients of one taxi + nmbre TOT km of one taxi + all locations made by one Taxi
-    public void menuTaxi() {
-        List<String> optionTaxi = new ArrayList<>(Arrays.asList("1. Voir les taxi", "2. Ajouter un taxi", "3. Effacer un taxi", "4. Modifier un taxi", "5. Voir les clients d'un taxi choisi", "6. Total de km parcourus d'un taxi choisi", "7. Voir les locations d'un taxi choisi", "8. Retour au menu précédent"));
-        String choiceMenTax1;
-        int choiceMenTax = -1, i = 1;
-        StringBuilder errMsg = new StringBuilder("Erreur veuillez saisir un nombre compris entre 1 et " + optionTaxi.size());
-        String errMesg = errMsg.toString();
-
-        System.out.println("-- Menu Taxi --");
-        do {
-            do {
-                System.out.println("");
-                for (String o : optionTaxi) {
-                    System.out.println(o);
-                }
-                System.out.println("\nVotre choix : ");
-                choiceMenTax1 = saisie("[0-9]*", errMesg);
-                choiceMenTax = Integer.parseInt(choiceMenTax1);
-                if (choiceMenTax < 1 || choiceMenTax > optionTaxi.size()) {
-                    System.out.println(errMesg);
-                }
-            } while (choiceMenTax < 1 || choiceMenTax > optionTaxi.size());
-
-            switch (choiceMenTax) {
-                //TODO develop methods for these
-                case 1 -> seeAllTaxi();
-                case 2 -> createTaxi();
-                case 3 -> deleteTaxi();
-                case 4 -> modifTaxi();
-                case 5 -> System.out.println("Voirs client d'1 taxi");
-                case 6 -> System.out.println("tot km d'un Taxi");
-                case 7 -> System.out.println("All locations d'un taxi");
-            }
-
-        } while (choiceMenTax != 8);
-    }
-
-    public void seeAllTaxi() {
-        SQLTaxiAll all = new SQLTaxiAll();
-    }
-
-    public void createTaxi() {
-        SQLTaxiCreate n1 = new SQLTaxiCreate();
-    }
-
-    private void deleteTaxi() {
-        SQLTaxiDelete d1 = new SQLTaxiDelete();
-    }
-
-    private void modifTaxi() {
-        //TODO menu choix taxi-> renvoi immatriculation -> menu : modif X , Y ou Z (no modif ID !)
-        String chosenTaxiImmat;
-        chosenTaxiImmat = getImmatChosenTaxi();
-        System.out.println("Test : " + chosenTaxiImmat);
     }
 
     public static void main(String[] args) {

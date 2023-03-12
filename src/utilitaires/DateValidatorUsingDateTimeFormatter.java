@@ -1,9 +1,9 @@
-package two_three;
+package utilitaires;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class DateValidatorUsingDateTimeFormatter implements DateValidator{
+public class DateValidatorUsingDateTimeFormatter implements DateValidator {
 
     private DateTimeFormatter dateFormatter;
 

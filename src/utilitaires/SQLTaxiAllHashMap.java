@@ -1,4 +1,4 @@
-package exercices1JDBC;
+package utilitaires;
 
 import myconnections.DBConnection;
 
