@@ -48,6 +48,15 @@ public class Taxi {
         this.prixKm = prixKm;
     }
 
+
+    /**
+     * Setter IdTaxi -> numéro d'identification du taxi
+     *
+     * @param idTaxi
+     */
+    public void setIdTaxi(int idTaxi) {
+        this.idTaxi = idTaxi;
+    }
     /**
      * getter idTaxi
      *

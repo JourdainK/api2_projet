@@ -2,6 +2,8 @@
   <library name="ojdbc8">
     <CLASSES>
       <root url="jar://$USER_HOME$/Documents/librairies/ojdbc8.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/Java libs/apache-log4j-2.20.0-bin/log4j-api-2.20.0.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/Java libs/apache-log4j-2.20.0-bin/log4j-core-2.20.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

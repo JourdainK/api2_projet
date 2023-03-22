@@ -11,13 +11,13 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import static utilitaires.Utilitaire.saisie;
 
 public class GestionTaxi {
-    //TODO ask teacher if returned list is a good way to keep the List updated (in Gestion) after handling taxis in this menu ?
-    //GestionTaxi initiated upon creation of menu() in Gestion (Global handler) > list called from getAllTaxis > then reupdated each time you close the menu
-    //CRUD inside menuTaxi -> handled from a SQL request that build a hashmap (key-> ID , Value -> IMMATRICULATION (UNIQUE))
+    private static final Logger logger = LogManager.getLogger(GestionTaxi.class);
+
     public List<Taxi> menuTaxi() {
         List<String> optionTaxi = new ArrayList<>(Arrays.asList("1. Voir les taxi", "2. Ajouter un taxi", "3. Effacer un taxi", "4. Modifier un taxi", "5. Voir les clients d'un taxi choisi", "6. Total de km parcourus d'un taxi choisi", "7. Voir les locations d'un taxi choisi", "8. Retour au menu précédent"));
         String choiceMenTax1;
@@ -38,11 +38,11 @@ public class GestionTaxi {
                 choiceMenTax = Integer.parseInt(choiceMenTax1);
                 if (choiceMenTax < 1 || choiceMenTax > optionTaxi.size()) {
                     System.out.println(errMesg);
+                    logger.info("choix du taxi entrée (test logger)");
                 }
             } while (choiceMenTax < 1 || choiceMenTax > optionTaxi.size());
 
             switch (choiceMenTax) {
-                //TODO develop methods for these
                 case 1 -> seeAllTaxi();
                 case 2 -> createTaxi();
                 case 3 -> deleteTaxi();
@@ -89,6 +89,7 @@ public class GestionTaxi {
         if (dbConnect == null) {
             System.exit(1);
         }
+        logger.info("Connexion établie - création taxi");
         System.out.println("Connexion établie");
 
         String query1 = "INSERT INTO APITAXI(immatriculation,nbremaxpassagers,prixkm)"

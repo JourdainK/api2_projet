@@ -20,11 +20,9 @@ public class Gestion {
     public Gestion() {
 
         clientsList = new ArrayList<>();
-        taxisList = new ArrayList<>();
         adressesList = new ArrayList<>();
         locationsList = new ArrayList<>();
         taxisList = gTaxi.getAllTaxis();
-        //TODO testing classes > for all classes declare instances to test each classes
         menu();
 
     }
@@ -46,7 +44,6 @@ public class Gestion {
             } while (choiceMenu < 1 || choiceMenu > 5);
 
             switch (choiceMenu) {
-                //TODO develop methods for these
                 case 1 -> menuClient();
                 case 2 -> taxisList = gTaxi.menuTaxi();
                 case 3 -> System.out.println("Menu Addresses");
@@ -73,7 +70,6 @@ public class Gestion {
             } while (choiceMenuCli < 1 || choiceMenuCli > 4);
 
             switch (choiceMenuCli) {
-                //TODO develop methods for these
                 case 1 -> System.out.println("Enregistrer un client");
                 case 2 -> System.out.println("Voir les locations d'un client");
                 case 3 -> System.out.println("Voir les infos d'un client");
