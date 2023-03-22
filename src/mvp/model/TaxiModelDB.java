@@ -2,10 +2,13 @@ package mvp.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import two_three.Location;
 import two_three.Taxi;
 import myconnections.DBConnection;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +84,30 @@ public class TaxiModelDB implements DAOTaxi{
             return false;
         }
     }
+    @Override
+    public Taxi updateTaxi(Taxi taxi) {
+        String query = "UPDATE apitaxi SET immatriculation=?, nbremaxpassagers=?, prixkm=? WHERE id_taxi=?";
+
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
+            pstm.setString(1,taxi.getImmatriculation());
+            pstm.setInt(2,taxi.getNbreMaxPassagers());
+            pstm.setDouble(3,taxi.getPrixKm());
+            pstm.setInt(4,taxi.getIdTaxi());
+            int v = pstm.executeUpdate();
+            if(v!=0) return readTaxi(taxi.getIdTaxi());
+            else return null;
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la mise à jour (" + taxi.getIdTaxi() + ") , Erreur SQL + " + e);
+            return null;
+        }
+
+    }
+
+    //TODO reacClient
+    @Override
+    public Taxi readClient(Taxi taxi) {
+        return null;
+    }
 
     @Override
     public List<Taxi> getTaxis() {
@@ -154,21 +181,51 @@ public class TaxiModelDB implements DAOTaxi{
 
 
     public Taxi readTaxi(int idTaxi){
+        List<Location> llocTax;
+        Taxi tmpTaxi;
+        Location tmpLoc;
         String query = "SELECT * FROM APITAXI WHERE idTaxi = ?";
+        String query2 = "SELECT * FROM APILOCATION WHERE id_taxi = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
             pstm.setInt(1, idTaxi);
             ResultSet rs = pstm.executeQuery(query);
             if(rs.next()){
+                int taxiId = rs.getInt(1);
+                int nbrPassMax = rs.getInt(2);
+                String immat = rs.getString(3);
+                double prixKm = rs.getDouble(4);
+                tmpTaxi = new Taxi(taxiId,nbrPassMax,immat,prixKm);
+               return tmpTaxi;
+
+                /*      //TODO when all the above are done -> condensed the methods above within this one to get all location, all client and addresses
+                try(PreparedStatement pstm2 = dbConnect.prepareStatement(query2)){
+                    pstm2.setInt(1,idTaxi);
+                    ResultSet rs2 = pstm2.executeQuery(query);
+                    while(rs2.next()){
+                        int idLocation = rs2.getInt(1);
+                        LocalDate dateloc = rs2.getDate(2).toLocalDate();
+                        int kmTotal = rs2.getInt(3);
+                        int nbrPass = rs2.getInt(4);
+                        int idAdrAller = rs.getInt(7);
+                        int idAdreRet = rs.getInt(8);
+                        int idCli = rs.getInt(9);
+
+                        tmpLoc = new Location(idLocation,kmTotal,nbrPass,dateloc,tmpTaxi,nu)
+
+                    }
+
+                }catch (SQLException f){
+                    logger.error(" readTaxi - Erreur SQL : " + f);
+                }
+
+                 */
 
             }
         }catch(SQLException e){
             logger.error("Erreur lors de la lecture du client (" + idTaxi + ") Erreur SQL : " + e);
         }
 
-
+        return null;
     }
-
-    //TODO add methods asked by teacher's homework
-    //TODO Test all
 }

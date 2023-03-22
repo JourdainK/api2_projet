@@ -23,6 +23,33 @@ public class TaxiPresenter {
     }
 
     public void addTaxi(Taxi taxi){
+        Taxi newTaxi = model.addTaxi(taxi);
+        if(newTaxi!=null) view.affMsg("Taxi ajouté \nID : " + newTaxi.getIdTaxi() + "\t\timmatriculation : " + newTaxi.getImmatriculation());
+        else view.affMsg("Erreur : échec de l'ajout");
+    }
+
+    public void removeTaxi(Taxi taxi){
+        boolean check;
+        check = model.removeTaxi(taxi);
+        if(check) view.affMsg("Taxi éffacé");
+        else view.affMsg("Erreur, taxi non effacé");
+    }
+
+    public void updateTaxi(Taxi taxi){
+        Taxi modifiedTaxi = model.updateTaxi(taxi);
+        if(modifiedTaxi!=null) view.affMsg("Modification éffectuée " + modifiedTaxi);
+        else view.affMsg("Erreur, modification non éffectuée");
+    }
+
+    //TODO Presenter link readTaxi
+    public void readTaxi(Taxi taxi){
+
+    }
+
+
+    public void getListTaxis(){
+        List<Taxi> listTaxis = model.getTaxis();
+        //TODO view.setListTaxis(listTaxis) -->>> TODO IN VIEW !
 
     }
 
