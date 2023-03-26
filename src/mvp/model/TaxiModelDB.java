@@ -2,6 +2,8 @@ package mvp.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import two_three.Adresse;
+import two_three.Client;
 import two_three.Location;
 import two_three.Taxi;
 import myconnections.DBConnection;
@@ -17,7 +19,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TaxiModelDB implements DAOTaxi{
+public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     private Connection dbConnect;
     private static final Logger logger = LogManager.getLogger(TaxiModelDB.class);
 
@@ -197,35 +199,28 @@ public class TaxiModelDB implements DAOTaxi{
                 double prixKm = rs.getDouble(4);
                 tmpTaxi = new Taxi(taxiId,nbrPassMax,immat,prixKm);
                return tmpTaxi;
-
-                /*      //TODO when all the above are done -> condensed the methods above within this one to get all location, all client and addresses
-                try(PreparedStatement pstm2 = dbConnect.prepareStatement(query2)){
-                    pstm2.setInt(1,idTaxi);
-                    ResultSet rs2 = pstm2.executeQuery(query);
-                    while(rs2.next()){
-                        int idLocation = rs2.getInt(1);
-                        LocalDate dateloc = rs2.getDate(2).toLocalDate();
-                        int kmTotal = rs2.getInt(3);
-                        int nbrPass = rs2.getInt(4);
-                        int idAdrAller = rs.getInt(7);
-                        int idAdreRet = rs.getInt(8);
-                        int idCli = rs.getInt(9);
-
-                        tmpLoc = new Location(idLocation,kmTotal,nbrPass,dateloc,tmpTaxi,nu)
-
-                    }
-
-                }catch (SQLException f){
-                    logger.error(" readTaxi - Erreur SQL : " + f);
-                }
-
-                 */
-
             }
         }catch(SQLException e){
             logger.error("Erreur lors de la lecture du client (" + idTaxi + ") Erreur SQL : " + e);
         }
 
+        return null;
+    }
+
+    //TODO
+    @Override
+    public List<Taxi> taxisUtilisés(Client client) {
+
+        return null;
+    }
+
+    @Override
+    public List<Location> allLocTaxi(Taxi taxi) {
+        return null;
+    }
+
+    @Override
+    public List<Adresse> allAdressTaxi(Taxi taxi) {
         return null;
     }
 }
