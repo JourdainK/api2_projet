@@ -12,7 +12,7 @@ public interface DAOTaxi {
 
     Taxi updateTaxi(Taxi taxi);
 
-    Taxi readClient(Taxi taxi);
+    Taxi readTaxi(int idTaxi);
 
     List<Taxi> getTaxis();
 }

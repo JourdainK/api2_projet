@@ -11,13 +11,7 @@ import myconnections.DBConnection;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.*;
 
 public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     private Connection dbConnect;
@@ -107,11 +101,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
 
     //TODO reacClient
     @Override
-    public Taxi readClient(Taxi taxi) {
-        return null;
-    }
-
-    @Override
     public List<Taxi> getTaxis() {
         List<Taxi> ltaxis = new ArrayList<>();
         Taxi tmpTaxi;
@@ -187,7 +176,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         Taxi tmpTaxi;
         Location tmpLoc;
         String query = "SELECT * FROM APITAXI WHERE idTaxi = ?";
-        String query2 = "SELECT * FROM APILOCATION WHERE id_taxi = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
             pstm.setInt(1, idTaxi);
@@ -210,12 +198,66 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     //TODO
     @Override
     public List<Taxi> taxisUtilisés(Client client) {
+        List<Taxi> taxisUsed = new ArrayList<>();
+        Set<Integer> idTaxis = new HashSet<>();
 
-        return null;
+        int idClient = client.getIdclient();
+        String query1 = "SELECT * FROM api_taxi_used WHERE id_client = ?";
+
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query1)){
+            pstm.setInt(1,idClient);
+            ResultSet rs = pstm.executeQuery(query1);
+            if(rs.next()){
+                idTaxis.add(rs.getInt("ID_TAXI"));
+            }
+        } catch (SQLException e){
+            logger.error("Erreur lors de la requête taxi utilisé : " + e);
+        }
+        Taxi tmpTaxi;
+        for(Integer s : idTaxis){
+            tmpTaxi = readTaxi(s);
+            taxisUsed.add(tmpTaxi);
+        }
+
+        return taxisUsed;
     }
 
     @Override
     public List<Location> allLocTaxi(Taxi taxi) {
+        int idTaxi = taxi.getIdTaxi();
+        Location tmpLoc;
+        List<Location> lLoc = new ArrayList<>();
+        String query1 = "SELECT * FROM apilocation WHERE id_taxi = ?";
+
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query1)){
+            pstm.setInt(1,idTaxi);
+            ResultSet rs = pstm.executeQuery(query1);
+
+            if(rs.next()){
+                int idLoc = rs.getInt(1);
+                LocalDate dateloc = rs.getDate(2).toLocalDate();
+                int kmTotal = rs.getInt(3);
+                int nbrPass = rs.getInt(4);
+                BigDecimal tot = rs.getBigDecimal(5);
+                //double total = rs.getInt(5);
+                int idTax = rs.getInt(6);
+                int adAll = rs.getInt(7);
+                int adRet = rs.getInt(8);
+                int idCli = rs.getInt(9);
+                Taxi tax = readTaxi(idTax);
+                //TODO ? built client , adr all , adr retour....
+                //for each Locat ? pretty heavy for one deman -> check if better way
+                //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)
+
+
+            }
+
+        } catch (SQLException e){
+            logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
+        }
+
+
+
         return null;
     }
 
