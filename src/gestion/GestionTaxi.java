@@ -13,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utilitaires.Utilitaire;
+
+import static utilitaires.Utilitaire.printMapTaxis;
 import static utilitaires.Utilitaire.saisie;
 
 public class GestionTaxi {
@@ -489,13 +492,6 @@ public class GestionTaxi {
         DBConnection.closeConnection();
 
 
-    }
-
-    public void printMapTaxis(Map<Integer, String> map) {
-        System.out.println("");
-        for (Map.Entry<Integer, String> set : map.entrySet()) {
-            System.out.println("ID : " + set.getKey() + "\tImmatriculation : " + set.getValue());
-        }
     }
 
     public String getImmatChosenTaxi() {

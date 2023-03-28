@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/Documents/Java libs/apache-log4j-2.20.0-bin/log4j-api-2.20.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/log4j-api-2.20.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

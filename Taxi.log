@@ -1,0 +1,40 @@
+28-03-2023 19:01:22.758 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:03:53.971 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (25) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:05:26.265 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLSyntaxErrorException: ORA-00904: "IDTAXI": invalid identifier
+
+28-03-2023 19:06:18.846 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:08:14.205 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:09:10.936 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:09:55.911 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:12:43.104 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:13:20.582 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:15:34.089 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:43:03.695 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:43:50.322 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:44:27.102 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:45:44.894 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (25) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:46:23.709 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:47:11.837 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:49:06.930 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (4) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:49:41.734 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:51:52.516 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:54:16.333 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:56:07.968 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 19:58:50.169 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 20:05:42.358 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 20:09:30.147 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLRecoverableException: Closed Connection
+28-03-2023 20:14:32.308 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:27:48.849 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:34:50.918 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:35:02.717 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:41:13.163 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:41:37.927 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:42:17.225 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Invalid column index
+28-03-2023 20:43:23.154 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:44:06.483 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: ORA-01008: not all variables bound
+
+28-03-2023 20:48:10.048 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (62) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:51:10.122 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 20:57:45.959 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation
+28-03-2023 21:14:23.411 [main] INFO  mvp.model.TaxiModelDB - Erreur de connexion
+28-03-2023 21:16:09.623 [main] ERROR mvp.model.TaxiModelDB - Erreur lors de la lecture du client (61) Erreur SQL : java.sql.SQLException: Fail to convert to internal representation

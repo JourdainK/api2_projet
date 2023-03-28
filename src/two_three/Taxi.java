@@ -48,6 +48,12 @@ public class Taxi {
         this.prixKm = prixKm;
     }
 
+    public Taxi(int nbreMaxPassagers, String immatriculation, double prixKm) {
+        this.nbreMaxPassagers = nbreMaxPassagers;
+        this.immatriculation = immatriculation;
+        this.prixKm = prixKm;
+    }
+
 
     /**
      * Setter IdTaxi -> numéro d'identification du taxi
@@ -126,6 +132,25 @@ public class Taxi {
      * @param o autre élément
      * @return égalité ou pas
      */
+
+    /**
+     * setter : nombre maximum de passagers du taxi
+     *
+     * @param nbreMaxPassagers
+     */
+    public void setNbreMaxPassagers(int nbreMaxPassagers) {
+        this.nbreMaxPassagers = nbreMaxPassagers;
+    }
+
+    /**
+     * Setter : Immatriculation du taxi
+     *
+     * @param immatriculation
+     */
+    public void setImmatriculation(String immatriculation) {
+        this.immatriculation = immatriculation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
