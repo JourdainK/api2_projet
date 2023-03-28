@@ -99,7 +99,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
 
     }
 
-    //TODO reacClient
+
     @Override
     public List<Taxi> getTaxis() {
         List<Taxi> ltaxis = new ArrayList<>();
@@ -109,11 +109,11 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         try (Statement stmt = dbConnect.createStatement();
              ResultSet rs = stmt.executeQuery(query);){
             while(rs.next()){
-                int idclient = rs.getInt(1);
+                int idtaxi = rs.getInt(1);
                 String immat = rs.getString(2);
                 int nbrMaxPas = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                tmpTaxi = new Taxi(idclient,nbrMaxPas,immat,prixKm);
+                tmpTaxi = new Taxi(idtaxi,nbrMaxPas,immat,prixKm);
                 ltaxis.add(tmpTaxi);
 
             }
@@ -171,31 +171,32 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     }
 
 
-    public Taxi readTaxi(int idTaxi){
-        List<Location> llocTax;
+    public Taxi readTaxi(int idTaxi) {
         Taxi tmpTaxi;
-        Location tmpLoc;
-        String query = "SELECT * FROM APITAXI WHERE idTaxi = ?";
+        String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query)) {
             pstm.setInt(1, idTaxi);
-            ResultSet rs = pstm.executeQuery(query);
-            if(rs.next()){
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
                 int taxiId = rs.getInt(1);
                 int nbrPassMax = rs.getInt(2);
                 String immat = rs.getString(3);
                 double prixKm = rs.getDouble(4);
-                tmpTaxi = new Taxi(taxiId,nbrPassMax,immat,prixKm);
-               return tmpTaxi;
+                tmpTaxi = new Taxi(taxiId, nbrPassMax, immat, prixKm);
+                System.out.println(tmpTaxi + " test test test");
+                return tmpTaxi;
             }
-        }catch(SQLException e){
+            else {
+                return null;
+            }
+        } catch (SQLException e) {
             logger.error("Erreur lors de la lecture du client (" + idTaxi + ") Erreur SQL : " + e);
+            return  null;
         }
 
-        return null;
     }
 
-    //TODO
     @Override
     public List<Taxi> taxisUtilisés(Client client) {
         List<Taxi> taxisUsed = new ArrayList<>();
@@ -248,6 +249,9 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 //TODO ? built client , adr all , adr retour....
                 //for each Locat ? pretty heavy for one deman -> check if better way
                 //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)
+                //dev them int thei modelDB -> import -> use method here ?
+                //DO crud modelDB all -> then special all
+
 
 
             }
@@ -255,8 +259,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         } catch (SQLException e){
             logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
         }
-
-
 
         return null;
     }

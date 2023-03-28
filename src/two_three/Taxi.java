@@ -48,6 +48,12 @@ public class Taxi {
         this.prixKm = prixKm;
     }
 
+    public Taxi(int nbreMaxPassagers, String immatriculation, double prixKm) {
+        this.nbreMaxPassagers = nbreMaxPassagers;
+        this.immatriculation = immatriculation;
+        this.prixKm = prixKm;
+    }
+
 
     /**
      * Setter IdTaxi -> numéro d'identification du taxi

@@ -2,7 +2,10 @@ package mvp.presenter;
 
 import mvp.model.DAOTaxi;
 import mvp.view.TaxiViewInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
+
 
 import java.util.List;
 
@@ -10,6 +13,7 @@ public class TaxiPresenter {
     //TODO methods , see teach versions
     private DAOTaxi model;
     private TaxiViewInterface view;
+    private static final Logger logger = LogManager.getLogger(TaxiPresenter.class);
 
     public TaxiPresenter(DAOTaxi model, TaxiViewInterface view){
         this.model = model;
@@ -25,7 +29,10 @@ public class TaxiPresenter {
     public void addTaxi(Taxi taxi){
         Taxi newTaxi = model.addTaxi(taxi);
         if(newTaxi!=null) view.affMsg("Taxi ajouté \nID : " + newTaxi.getIdTaxi() + "\t\timmatriculation : " + newTaxi.getImmatriculation());
-        else view.affMsg("Erreur : échec de l'ajout");
+        else  {
+            view.affMsg("Erreur : échec de l'ajout");
+            logger.error("Erreur lors de l'ajout du taxi " + taxi.getImmatriculation());
+        }
     }
 
     public void removeTaxi(Taxi taxi){
@@ -42,15 +49,25 @@ public class TaxiPresenter {
     }
 
     //TODO Presenter link readTaxi
-    public void readTaxi(Taxi taxi){
-
+    public Taxi readTaxi(int idTaxi){
+        Taxi tx = model.readTaxi(idTaxi);
+        System.out.println("PRESENTER TAXI " + tx);
+        if(tx==null) {
+            view.affMsg("Taxi non trouvé");
+            return null;
+        }
+        else {
+            view.affMsg(tx.toString());
+            return tx;
+        }
     }
 
-
-    public void getListTaxis(){
+    public List<Taxi> getListTaxis(){
         List<Taxi> listTaxis = model.getTaxis();
-        //TODO view.setListTaxis(listTaxis) -->>> TODO IN VIEW !
 
+        return listTaxis;
     }
+
+    //TODO specials
 
 }

@@ -35,7 +35,7 @@ public class SQLTaxiAllHashMap {
         } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e);
         }
-        DBConnection.closeConnection();
+
 
     }
 

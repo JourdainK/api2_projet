@@ -1,13 +1,27 @@
 package mvp;
 
+import mvp.model.DAOTaxi;
+import mvp.model.TaxiModelDB;
+import mvp.presenter.TaxiPresenter;
+import mvp.view.TaxiViewConsole;
+import mvp.view.TaxiViewInterface;
+
 import java.util.Arrays;
 import java.util.List;
 import static utilitaires.Utilitaire.*;
 
 public class GestMain {
 
+    private DAOTaxi tm;
+    private TaxiViewInterface tv;
+    private TaxiPresenter tp;
     //TODO MAIN MENU
     public void gestion(){
+
+        tm = new TaxiModelDB();
+        tv = new TaxiViewConsole();
+        tp = new TaxiPresenter(tm,tv);
+
         List<String> loptions = Arrays.asList("Menu Taxi", "fin");
 
         do{
@@ -15,7 +29,7 @@ public class GestMain {
             int choix = choixElt(loptions);
             switch (choix){
                 case 1 :
-                    System.out.println("taxis");
+                    tp.start();
                     break;
                 case 2 :
                     System.exit(0);

@@ -52,12 +52,14 @@ public class Utilitaire {
         return choix;
     }
 
-    public void printMapTaxis(Map<Integer, String> map) {
+    public static void printMapTaxis(Map<Integer, String> map) {
         System.out.println("");
         for (Map.Entry<Integer, String> set : map.entrySet()) {
             System.out.println("ID : " + set.getKey() + "\tImmatriculation : " + set.getValue());
         }
     }
+
+
 
 
 
