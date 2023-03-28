@@ -223,6 +223,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         return taxisUsed;
     }
 
+    //TODO ? built client , adr all , adr retour....
     @Override
     public List<Location> allLocTaxi(Taxi taxi) {
         int idTaxi = taxi.getIdTaxi();
@@ -246,7 +247,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 int adRet = rs.getInt(8);
                 int idCli = rs.getInt(9);
                 Taxi tax = readTaxi(idTax);
-                //TODO ? built client , adr all , adr retour....
+
                 //for each Locat ? pretty heavy for one deman -> check if better way
                 //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)
                 //dev them int thei modelDB -> import -> use method here ?

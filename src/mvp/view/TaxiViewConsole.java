@@ -140,7 +140,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
 
                     double newprix= Double.MIN_VALUE;
                     do{
-                        String newPrice = saisie("[0-9]*","Veuillez entrer un nombre entier");
+                        String newPrice = saisie("[0-9]{0,10}[.][0-9]{0,2}|[0-9]{0,10}", "Erreur de saisie, veuillez saisir un nombre réel (séparée d'un point) supérieur à 0\nSaisir le prix au km : ");
                         newprix = Double.parseDouble(newPrice);
                     }while(newprix < 0);
                     chosenTaxi.setPrixKm(newprix);

@@ -48,7 +48,6 @@ public class TaxiPresenter {
         else view.affMsg("Erreur, modification non éffectuée");
     }
 
-    //TODO Presenter link readTaxi
     public Taxi readTaxi(int idTaxi){
         Taxi tx = model.readTaxi(idTaxi);
         System.out.println("PRESENTER TAXI " + tx);
@@ -68,6 +67,6 @@ public class TaxiPresenter {
         return listTaxis;
     }
 
-    //TODO specials
+    //TODO specials when all other cruds are done
 
 }
