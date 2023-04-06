@@ -8,7 +8,6 @@ import two_three.Location;
 import two_three.Taxi;
 import myconnections.DBConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -120,6 +119,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
 
         } catch (SQLException e) {
             System.err.println("Erreur SQL : " + e);
+            logger.error("Erreur lors de la récupération des taxis : " + e);
         }
 
         tmpTaxi = null;
@@ -171,6 +171,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     }
 
 
+    // fixed the problem : https://stackoverflow.com/questions/5963472/java-sql-sqlexception-fail-to-convert-to-internal-representation
     public Taxi readTaxi(int idTaxi) {
         Taxi tmpTaxi;
         String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
@@ -184,7 +185,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 int nbrPassMax = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
                 tmpTaxi = new Taxi(taxiId, nbrPassMax, immat, prixKm);
-                System.out.println(tmpTaxi + " test test test");
                 return tmpTaxi;
             }
             else {
@@ -240,8 +240,8 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 LocalDate dateloc = rs.getDate(2).toLocalDate();
                 int kmTotal = rs.getInt(3);
                 int nbrPass = rs.getInt(4);
-                BigDecimal tot = rs.getBigDecimal(5);
-                //double total = rs.getInt(5);
+                //BigDecimal tot = rs.getBigDecimal(5);
+                double total = rs.getInt(5);
                 int idTax = rs.getInt(6);
                 int adAll = rs.getInt(7);
                 int adRet = rs.getInt(8);

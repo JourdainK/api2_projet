@@ -44,19 +44,19 @@ public class TaxiPresenter {
 
     public void updateTaxi(Taxi taxi){
         Taxi modifiedTaxi = model.updateTaxi(taxi);
-        if(modifiedTaxi!=null) view.affMsg("Modification éffectuée " + modifiedTaxi);
-        else view.affMsg("Erreur, modification non éffectuée");
+        if(modifiedTaxi!=null) view.affMsg("Modification effectuée " + modifiedTaxi);
+        else view.affMsg("Erreur, modification non effectuée");
     }
 
     public Taxi readTaxi(int idTaxi){
         Taxi tx = model.readTaxi(idTaxi);
-        System.out.println("PRESENTER TAXI " + tx);
         if(tx==null) {
-            view.affMsg("Taxi non trouvé");
+            view.affMsg("Taxi non trouvé\n");
             return null;
         }
         else {
             view.affMsg(tx.toString());
+            view.affMsg("\n");
             return tx;
         }
     }

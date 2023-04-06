@@ -56,6 +56,48 @@ public class Client {
     }
 
     /**
+     * Constructeur paramétré  -> id a set plus tard
+     * utilisé lors de la création -> ajout a la BD sans id (id déterminé par la séquence de la base de données)
+     * @param mail
+     * @param nom
+     * @param prenom
+     * @param tel
+     */
+    public Client(String mail, String nom, String prenom, String tel) {
+        this.mail = mail;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+    }
+
+    /**
+     * setter : idClient
+     *
+     * @param idClient
+     */
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
+    }
+
+    /**
+     * Setter Nom du client
+     *
+     * @param nom
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    /**
+     * Setter prénom du client
+     *
+     * @param prenom
+     */
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    /**
      * getter idclient
      *
      * @return identifiant du client
@@ -166,12 +208,11 @@ public class Client {
      */
     @Override
     public String toString() {
-        return "\n-- Client --\n" +
-                "N° d'identification : " + idClient +
+        return  "\tN° d'identification : " + idClient +
                 "\nEmail : " + mail +
                 "\nNom : " + nom +
                 "\t\tPrénom : " + prenom +
-                "\nN° de téléphone : " + tel;
+                "\nN° de téléphone : " + tel + "\n";
     }
 
 

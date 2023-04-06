@@ -176,7 +176,7 @@ public class Taxi {
      */
     @Override
     public String toString() {
-        return "\n-- Taxi --\n" +
+        return "\t-- Taxi --\n" +
                 "N° d'identification : " + idTaxi +
                 "\nNombre de passagers maximum : " + nbreMaxPassagers +
                 "\t\tImmatriculation : " + immatriculation +

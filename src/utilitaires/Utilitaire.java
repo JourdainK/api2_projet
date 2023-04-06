@@ -31,12 +31,12 @@ public class Utilitaire {
         }
     }
 
-    public static void printListTaxis(List<Taxi> taxis){
-        int i = 1;
-        for(Taxi t:taxis){
-            System.out.println(i + " - " + t);
+    public static void affNoNumberList(List l){
+        for(Object o : l){
+            System.out.println(o);
         }
     }
+
 
     public static int choixElt(List l){
         int choix;

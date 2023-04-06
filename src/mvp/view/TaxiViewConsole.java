@@ -43,7 +43,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
                 case 2 -> ajouter();
                 case 3 -> deleteTaxi();
                 case 4 -> modifTaxi();
-                case 5 -> System.out.println("rechercher");
+                case 5 -> seekTaxi();
                 case 6 -> System.out.println("voir taxi client");
                 case 7 -> System.out.println("voir locat taxi");
                 case 8 -> System.out.println("Voir adre");
@@ -149,6 +149,14 @@ public class TaxiViewConsole implements TaxiViewInterface {
         }while(choixMod!=4);
         presenter.updateTaxi(chosenTaxi);
         lTaxis = presenter.getListTaxis();
+    }
+
+    public void seekTaxi(){
+        System.out.println("\t--Recherche d'un taxi--");
+        System.out.print("Saisir le numéro d'identification du taxi : ");
+        String idTaxi = saisie("[0-9]*","Veuillez saisir un nombre");
+        int taxiID = Integer.parseInt(idTaxi);
+        Taxi seekdTaxi = presenter.readTaxi(taxiID);
     }
 
     //TODO special when all other classes' Crud are done
