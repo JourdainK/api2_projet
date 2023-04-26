@@ -27,13 +27,14 @@ public class ClientPresenter {
         view.setListDatas(clients);
     }
 
-    public void addClient(Client client){
+    public int addClient(Client client){
         Client newCli = model.addClient(client);
         if(newCli!=null) view.affMsg("Client ajouté (id : " + client.getIdclient() + " )");
         else{
             view.affMsg("Erreur : échec de l'ajout client");
             logger.error("Erreur : échec de l'ajout client " + client.getIdclient() + "\t" + client.getNom());
         }
+        return client.getIdclient();
     }
 
     public void removeClient(Client client){
@@ -70,5 +71,7 @@ public class ClientPresenter {
 
         return listCli;
     }
+
+    //TODO client Specials
 
 }

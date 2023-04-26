@@ -36,6 +36,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
         List<String> loptions = new ArrayList<>(Arrays.asList("Voir la liste des taxis","Ajouter", "Effacer","Modifier","Rechercher","Voir les taxi d'un client donné","Voir les locations d'un taxi","Voir les adresses auquel s'est rendu un taxi","Retour"));
         int choix;
         do{
+            System.out.println("");
             affListe(loptions);
             choix = choixElt(loptions);
             switch (choix){
@@ -114,7 +115,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
         int choix = choixElt(lTaxis);
         int choixMod = -1;
         Taxi chosenTaxi = lTaxis.get(choix-1);
-        System.out.println("chosen = "  + chosenTaxi);
+        //System.out.println("chosen = "  + chosenTaxi);
         List<String> lmodif = new ArrayList<>(Arrays.asList("Immatriculation","Nombre maximum de passager","Prix au kilomètre","retour"));
         do{
             System.out.println("Modifier : ");
@@ -128,7 +129,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
                     break;
                 case 2 :
                     System.out.print("\nSaisir le nouveau nombre de passagers maximum : ");
-                    int newnbrMax= Integer.MIN_VALUE;
+                    int newnbrMax= chosenTaxi.getNbreMaxPassagers();
                     do{
                         String newMax = saisie("[0-9]*","Veuillez entrer un nombre entier");
                         newnbrMax = Integer.parseInt(newMax);
@@ -138,7 +139,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
                 case 3 :
                     System.out.print("\nSaisir le nouveau prix au kilomètre : ");
 
-                    double newprix= Double.MIN_VALUE;
+                    double newprix= chosenTaxi.getPrixKm();
                     do{
                         String newPrice = saisie("[0-9]{0,10}[.][0-9]{0,2}|[0-9]{0,10}", "Erreur de saisie, veuillez saisir un nombre réel (séparée d'un point) supérieur à 0\nSaisir le prix au km : ");
                         newprix = Double.parseDouble(newPrice);

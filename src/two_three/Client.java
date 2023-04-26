@@ -9,99 +9,44 @@ public class Client {
      * Classe client
      *
      * @author Kevin Jourdain
-     * @version 1.0
+     * @version 2.0
      * @see Location
      */
 
     /**
      * identifiant unique-numéro du client
      */
-    private int idClient;
+    protected int idClient;
     /**
      * email du client
      */
-    private String mail;
+    protected String mail;
     /**
      * nom du client
      */
-    private String nom;
+    protected String nom;
     /**
      * prénom du client
      */
-    private String prenom;
+    protected String prenom;
     /**
      * téléphone du client
      */
-    private String tel;
+    protected String tel;
     /**
      * Liste des locations du client
      */
     private List<Location> listLocations = new ArrayList<>();
 
-    /**
-     * constructeur paramétré
-     *
-     * @param idClient identifiant unique du client
-     * @param mail mail du client
-     * @param nom nom du client
-     * @param prenom prénom du client
-     * @param tel téléphone du client
-     */
-    public Client(int idClient, String mail, String nom, String prenom, String tel) {
-        this.idClient = idClient;
-        this.mail = mail;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.tel = tel;
+    private Client(ClientBuilder builder){
+        this.idClient = builder.idClient;
+        this.mail = builder.mail;
+        this.nom = builder.nom;
+        this.prenom = builder.nom;
+        this.tel = builder.tel;
     }
 
-    /**
-     * Constructeur paramétré  -> id a set plus tard
-     * utilisé lors de la création -> ajout a la BD sans id (id déterminé par la séquence de la base de données)
-     * @param mail
-     * @param nom
-     * @param prenom
-     * @param tel
-     */
-    public Client(String mail, String nom, String prenom, String tel) {
-        this.mail = mail;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.tel = tel;
-    }
 
-    /**
-     * setter : idClient
-     *
-     * @param idClient
-     */
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
-    }
-
-    /**
-     * Setter Nom du client
-     *
-     * @param nom
-     */
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Setter prénom du client
-     *
-     * @param prenom
-     */
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    /**
-     * getter idclient
-     *
-     * @return identifiant du client
-     */
     public int getIdclient() {
         return idClient;
     }
@@ -151,29 +96,10 @@ public class Client {
         return listLocations;
     }
 
-    /**
-     * setter mail
-     *
-     * @param mail mail du client
-     */
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
     }
 
-    /**
-     * setter téléphone
-     *
-     * @param tel téléphone du client
-     */
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    /**
-     * setter liste des locations du client
-     *
-     * @param listLocations liste de locations du client
-     */
     public void setListLocations(List<Location> listLocations) {
         this.listLocations = listLocations;
     }
@@ -213,6 +139,44 @@ public class Client {
                 "\nNom : " + nom +
                 "\t\tPrénom : " + prenom +
                 "\nN° de téléphone : " + tel + "\n";
+    }
+
+    public static class ClientBuilder{
+        protected int idClient;
+        protected String mail;
+        protected String nom;
+        protected String prenom;
+        protected String tel;
+
+        public ClientBuilder setIdClient(int idClient) {
+            this.idClient = idClient;
+            return this;
+        }
+
+        public ClientBuilder setMail(String mail) {
+            this.mail = mail;
+            return this;
+        }
+
+        public ClientBuilder setNom(String nom) {
+            this.nom = nom;
+            return this;
+        }
+
+        public ClientBuilder setPrenom(String prenom) {
+            this.prenom = prenom;
+            return this;
+        }
+
+        public ClientBuilder setTel(String tel) {
+            this.tel = tel;
+            return this;
+        }
+
+        public Client build() throws Exception{
+            if(idClient<=0 || nom.isBlank() || prenom.isBlank() || tel.isBlank()) throw new Exception("Erreur lors de la construction du client");
+            return new Client(this);
+        }
     }
 
 

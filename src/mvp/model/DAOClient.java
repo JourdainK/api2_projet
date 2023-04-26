@@ -13,6 +13,7 @@ public interface DAOClient {
     Client updateClient(Client client);
 
     Client readClient(int idClient);
+    //TODO readCLient EMAIL
 
     List<Client> getClients();
 }

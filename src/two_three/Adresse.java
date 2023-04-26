@@ -48,6 +48,66 @@ public class Adresse {
     }
 
     /**
+     * Constructeur paramétré , sans idAdresse -> donné par le Trigger de la base de données
+     *
+     * @param cp code postal de l'adresse
+     * @param localite localité de l'adresse
+     * @param rue rue de l'adresse
+     * @param num numéro de l'adresse
+     */
+    public Adresse(int cp, String localite, String rue, String num) {
+        this.cp = cp;
+        this.localite = localite;
+        this.rue = rue;
+        this.num = num;
+    }
+
+    /**
+     * Setter idAdr
+     *
+     * @param idAdr
+     */
+    public void setIdAdr(int idAdr) {
+        this.idAdr = idAdr;
+    }
+
+
+    /**
+     * Setter cp : code postal
+     *
+     * @param cp
+     */
+    public void setCp(int cp) {
+        this.cp = cp;
+    }
+
+    /**
+     * Setter localite
+     *
+     * @param localite
+     */
+    public void setLocalite(String localite) {
+        this.localite = localite;
+    }
+
+    /**
+     * Setter rue
+     *
+     * @param rue
+     */
+    public void setRue(String rue) {
+        this.rue = rue;
+    }
+
+    /**
+     * Setter num : numéro de l'habitation
+     * @param num
+     */
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    /**
      * getter idAdre
      *
      * @return identifiant de l'adresse

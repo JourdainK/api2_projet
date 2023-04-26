@@ -59,9 +59,18 @@ public class Utilitaire {
         }
     }
 
+    public static int getCp(){
+        int cp;
 
+        do{
+            System.out.print("\nSaisir le code postal : ");
+            String cp1 = saisie("[0-9]*","Veuillez saisir un numéro de code postal compris entre 1000 et 9992");
+            cp = Integer.parseInt(cp1);
+            if(cp < 1000 || cp > 9992) System.out.println("Erreur le numéro doit être compris entre 1000 et 9992 (Belgique)");
+        }while (cp < 1000 || cp > 9992);
 
-
+        return cp;
+    }
 
 
 }

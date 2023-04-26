@@ -1,15 +1,10 @@
 package mvp;
 
-import mvp.model.ClientModelDB;
-import mvp.model.DAOClient;
-import mvp.model.DAOTaxi;
-import mvp.model.TaxiModelDB;
+import mvp.model.*;
+import mvp.presenter.AdressePresenter;
 import mvp.presenter.ClientPresenter;
 import mvp.presenter.TaxiPresenter;
-import mvp.view.ClientViewConsole;
-import mvp.view.ClientViewInterface;
-import mvp.view.TaxiViewConsole;
-import mvp.view.TaxiViewInterface;
+import mvp.view.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +18,9 @@ public class GestMain {
     private DAOClient cm;
     private ClientViewInterface cv;
     private ClientPresenter cp;
-
+    private DAOAdresse am;
+    private AdresseViewInterface av;
+    private AdressePresenter ap;
 
 
     public void gestion(){
@@ -34,9 +31,13 @@ public class GestMain {
         cm = new ClientModelDB();
         cv = new ClientViewConsole();
         cp = new ClientPresenter(cm,cv);
+        am = new AdresseModelDB();
+        av = new AdresseViewConsole();
+        ap = new AdressePresenter(am,av);
 
 
-        List<String> loptions = Arrays.asList("Menu Taxi", "Menu Client","fin");
+
+        List<String> loptions = Arrays.asList("Menu Taxi", "Menu Client", "Menu Adresse","fin");
 
         do{
             affListe(loptions);
@@ -49,7 +50,11 @@ public class GestMain {
                     cp.start();
                     break;
                 case 3 :
+                    ap.start();
+                    break;
+                case 4 :
                     System.exit(0);
+                    break;
             }
         }while(true);
 

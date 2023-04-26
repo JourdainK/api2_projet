@@ -6,11 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
 
-
 import java.util.List;
 
 public class TaxiPresenter {
-    //TODO methods , see teach versions
     private DAOTaxi model;
     private TaxiViewInterface view;
     private static final Logger logger = LogManager.getLogger(TaxiPresenter.class);
@@ -38,7 +36,7 @@ public class TaxiPresenter {
     public void removeTaxi(Taxi taxi){
         boolean check;
         check = model.removeTaxi(taxi);
-        if(check) view.affMsg("Taxi éffacé");
+        if(check) view.affMsg("Taxi effacé");
         else view.affMsg("Erreur, taxi non effacé");
     }
 

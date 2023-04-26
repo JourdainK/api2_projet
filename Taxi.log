@@ -1,0 +1,6 @@
+07-04-2023 19:29:01.599 [main] INFO  mvp.model.TaxiModelDB - Erreur de connexion
+13-04-2023 17:47:39.807 [main] ERROR mvp.model.AdresseModelDB - Erreur lors de la récupération des adresses par code postal
+13-04-2023 17:48:13.983 [main] ERROR mvp.model.AdresseModelDB - Erreur lors de la récupération des adresses par code postal
+13-04-2023 17:48:23.391 [main] ERROR mvp.model.AdresseModelDB - Erreur lors de la récupération des adresses par localité
+13-04-2023 17:52:38.047 [main] ERROR mvp.model.AdresseModelDB - Erreur lors de la récupération des adresses par code postal
+13-04-2023 20:31:18.576 [main] ERROR mvp.model.AdresseModelDB - Erreur lors de l'ajout d'une adresse

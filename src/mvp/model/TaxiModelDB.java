@@ -126,50 +126,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         return ltaxis;
     }
 
-    public Map<Integer, String> getMapTaxis(){
-        Map<Integer, String> taxis = new HashMap<>();
-
-        String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
-        try (Statement stmt = dbConnect.createStatement();
-             ResultSet rs = stmt.executeQuery(query);) {
-
-            boolean found = false;
-            while (rs.next()) {
-                found = true;
-                int id = rs.getInt("ID_TAXI");
-                String immat = rs.getString("IMMATRICULATION");
-                taxis.put(id, immat);
-            }
-            return taxis;
-
-        } catch (SQLException e) {
-            System.out.println("Erreur SQL : " + e);
-            return null;
-        }
-    }
-
-
-    public boolean modifTaxi(Taxi taxi){
-        String update = "UPDATE apitaxi set immatriculation=?,nbreMaxPassagers =?, prixKm=? WHERE idTaxi =?";
-        int n=0;
-
-        try(PreparedStatement pstm = dbConnect.prepareStatement(update)){
-            pstm.setString(1,taxi.getImmatriculation());
-            pstm.setInt(2,taxi.getNbreMaxPassagers());
-            pstm.setDouble(3,taxi.getPrixKm());
-            pstm.setInt(4,taxi.getIdTaxi());
-            n = pstm.executeUpdate();
-
-
-
-        }catch (SQLException e){
-            logger.error("Erreur lors de la modification du taxi " +  taxi.getIdTaxi() + " Erreur SQL : " + e);
-        }
-
-        if(n!=0) return true;
-        else return false;
-    }
-
 
     // fixed the problem : https://stackoverflow.com/questions/5963472/java-sql-sqlexception-fail-to-convert-to-internal-representation
     public Taxi readTaxi(int idTaxi) {
@@ -252,9 +208,6 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)
                 //dev them int thei modelDB -> import -> use method here ?
                 //DO crud modelDB all -> then special all
-
-
-
             }
 
         } catch (SQLException e){

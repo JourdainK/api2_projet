@@ -58,7 +58,7 @@ public class ClientModelDB implements DAOClient{
             logger.error("Erreur lors de l'ajout d'un client \tSQL : " + e);
             return null;
         }
-        //TODO hybride -> when crud LOCAT DONE -> get all LOCAT of that client
+
     }
 
     @Override
@@ -108,14 +108,39 @@ public class ClientModelDB implements DAOClient{
         String query = "SELECT * FROM APITCLIENT WHERE id_client = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
-            //TODO !!!!!!!!a
+            pstm.setInt(1,idClient);
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()){
+                int idCli = rs.getInt("ID_CLIENT");
+                String mail = rs.getString("MAIL");
+                String nom = rs.getString("NOM_CLI");
+                String pren = rs.getString("PRENOM_CLI");
+                String tel = rs.getString("TEL");
+                try{
+                            cli = new Client.ClientBuilder()
+                            .setIdClient(idCli)
+                            .setMail(mail)
+                            .setNom(nom)
+                            .setPrenom(pren)
+                            .setTel(tel)
+                            .build();
+                    return cli;
+                }catch (Exception e){
+                    logger.error("Erreur lors de la lecture du client  : " + e);
+                    //TO DELETE
+                    e.printStackTrace();
+                    return null;
+                }
+
+            }else return null;
 
         }catch (SQLException e){
             logger.error("Erreur lors de la recherche SQL :"  + e );
+            return null;
         }
-
-        return null;
     }
+
+    //TODO readClient -> NOM -> return list client avec le même nom
 
     @Override
     public List<Client> getClients() {
@@ -131,8 +156,21 @@ public class ClientModelDB implements DAOClient{
                 String nomCLi = rs.getString("NOM_CLI");
                 String prenCli = rs.getString("PRENOM_CLI");
                 String telCli = rs.getString("TEL");
-                tmpClient = new Client(idcli,mail,nomCLi,prenCli,telCli);
-                lClients.add(tmpClient);
+                try{
+                    tmpClient = new Client.ClientBuilder()
+                            .setIdClient(idcli)
+                            .setMail(mail)
+                            .setNom(nomCLi)
+                            .setPrenom(prenCli)
+                            .setTel(telCli)
+                            .build();
+                    lClients.add(tmpClient);
+                }catch (Exception e){
+                    logger.error("Erreur lors du listing clients : " + e);
+                    //to delete
+                    e.printStackTrace();
+
+                }
             }
 
         } catch (SQLException e) {

@@ -6,7 +6,7 @@ import java.util.Objects;
  * Classe métier de gestion de location de service Taxi
  *
  *  @author Kevin Jourdain
- *  @version 1.0
+ *  @version 2.0
  *  @see Taxi
  *  @see Client
  *  @see Adresse
@@ -16,65 +16,64 @@ public class Location {
     /**
      * identifiant unique du client
      */
-    private int idLoc;
+    protected int idLoc;
     /**
      * nombre de kilomètres parcouru lors de la location
      */
-    private int kmTotal;
+    protected int kmTotal;
     /**
      * nombre de passagers véhiculés lors de la location
      */
-    private int nbrePassagers;
+    protected int nbrePassagers;
     /**
      * date de la location
      */
-    private String dateLoc;
+    protected String dateLoc;
     /**
      * coût total de la location
      */
-    private double total;
+    protected double total;
     /**
      * Taxi utilisé pour la location
      */
-    private Taxi vehicule;
+    protected Taxi vehicule;
     /**
      * Client de la Location
      */
-    private Client client;
+    protected Client client;
     /**
      * Adresse de départ de la location
      */
-    private Adresse adrDebut;
+    protected Adresse adrDebut;
     /**
      * Adresse d'arrivée de la location
      */
-    private Adresse adrFin;
+    protected Adresse adrFin;
 
 
     /**
-     * constructeur paramétré
-     *
-     * @param idLoc Identifiant unique de la location
-     * @param kmTotal Nombre de kilomètres parcourus lors de la location
-     * @param nbrePassagers Nombre de passagers véhiculés lors de la location
-     * @param dateLoc Date de la location
-     * @param vehicule Véhicule utilisé lors de la location
-     * @param client Client de la location
-     * @param adrDebut Adresse de départ de la location
-     * @param adrFin Adresse d'arrivée de la location
+     * Constructeur à l'aide du pattern Builder
+     * @param builder
      */
-    public Location(int idLoc, int kmTotal, int nbrePassagers, String dateLoc, Taxi vehicule, Client client, Adresse adrDebut, Adresse adrFin) {
+    private Location(LocationBuilder builder){
+        this.kmTotal = builder.kmTot;
+        this.nbrePassagers = builder.nbrePassagers;
+        this.dateLoc = builder.dateLoc;
+        this.total = builder.total;
+        this.vehicule = builder.vehicule;
+        this.client = builder.client;
+        this.adrDebut = builder.adrDebut;
+        this.adrFin = builder.adrFin;
+    }
+
+    /**
+     * Setter idLoc (numéro d'identification de la location)
+     *  id donné par la base de données
+     *
+     * @param idLoc
+     */
+    public void setIdLoc(int idLoc) {
         this.idLoc = idLoc;
-        this.kmTotal = kmTotal;
-        this.nbrePassagers = nbrePassagers;
-        this.dateLoc = dateLoc;
-        this.vehicule = vehicule;
-        this.client = client;
-        this.adrDebut = adrDebut;
-        this.adrFin = adrFin;
-        setTotal();
-        this.vehicule.getListTaxiLoc().add(this);
-        this.client.getListLocations().add(this);
     }
 
     /**
@@ -158,54 +157,6 @@ public class Location {
         return adrFin;
     }
 
-    /**
-     * setter véhicule
-     *
-     * @param vehicule véhicule utilisé lors de la location
-     */
-    public void setVehicule(Taxi vehicule) {
-
-        this.vehicule = vehicule;
-        this.vehicule.getListTaxiLoc().add(this);
-    }
-
-    /**
-     * setter client
-     *
-     * @param client client de la location
-     */
-    public void setClient(Client client) {
-
-        this.client = client;
-    }
-
-    /**
-     * setter adresse de départ
-     *
-     * @param adrDebut adresse de départ
-     */
-    public void setAdrDebut(Adresse adrDebut){
-        this.adrDebut = adrDebut;
-    }
-
-    /**
-     * setter adresse d'arrivée
-     *
-     * @param adrFin adresse d'arrivée
-     */
-    public void setAdrFin(Adresse adrFin){
-        this.adrFin = adrFin;
-    }
-
-    /**
-     * setter total
-     *
-     * this.total =
-     *  kmTotal kilomètres totaux parcourus
-     *      Multipliés
-     *  par le prix kilométrique du véhicule utilisé
-     */
-    public void setTotal() { this.total = vehicule.getPrixKm() * kmTotal; }
 
     /**
      * égalité de deux locations basées sur le quadruplet id, adrDebut, adrFin, dateLoc
@@ -248,5 +199,59 @@ public class Location {
                 "\nClient : \n" + client +
                 "\nTrajet :\n\nAdresse de départ : " + adrDebut +
                 "\nAdresse d'arrivée : " + adrFin;
+    }
+
+
+    public static class LocationBuilder{
+        protected int idLoc;
+        protected int kmTot;
+        protected int nbrePassagers;
+        protected String dateLoc;
+        protected Taxi vehicule;
+        protected double total;
+        protected Client client;
+        protected Adresse adrDebut;
+        protected Adresse adrFin;
+
+        public void setIdLoc(int idLoc) {
+            this.idLoc = idLoc;
+        }
+
+        public void setKmTot(int kmTot) {
+            this.kmTot = kmTot;
+        }
+
+        public void setNbrePassagers(int nbrePassagers) {
+            this.nbrePassagers = nbrePassagers;
+        }
+
+        public void setDateLoc(String dateLoc) {
+            this.dateLoc = dateLoc;
+        }
+
+        public void setVehicule(Taxi vehicule) {
+            this.vehicule = vehicule;
+        }
+
+        public void setTotal(double total) {
+            this.total = total;
+        }
+
+        public void setClient(Client client) {
+            this.client = client;
+        }
+
+        public void setAdrDebut(Adresse adrDebut) {
+            this.adrDebut = adrDebut;
+        }
+
+        public void setAdrFin(Adresse adrFin) {
+            this.adrFin = adrFin;
+        }
+
+        public Location build() throws Exception{
+            if(idLoc<=0 || kmTot<=0 ||nbrePassagers<=0 || dateLoc.trim().equals("")) throw new Exception("Erreur lors de la construction de la location");
+            return new Location(this);
+        }
     }
 }
