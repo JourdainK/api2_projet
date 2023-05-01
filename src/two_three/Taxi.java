@@ -15,43 +15,30 @@ public class Taxi {
     /**
      * Identifiant du Taxi
      */
-    private int idTaxi;
+    protected int idTaxi;
     /**
      * nombre maximum de passagers du taxi
      */
-    private int nbreMaxPassagers;
+    protected int nbreMaxPassagers;
     /**
      * immatriculation du taxi
      */
-    private String immatriculation;
+    protected String immatriculation;
     /**
      * prix au kilomètre
      */
-    private double prixKm;
+    protected double prixKm;
     /**
      * liste des locations réalisées par le taxi
      */
-    private List<Location> listTaxiLoc = new ArrayList<>();
+    protected List<Location> listTaxiLoc = new ArrayList<>();
 
-    /**
-     * constructeur paramétré
-     *
-     * @param idTaxi identifiant du taxi
-     * @param nbreMaxPassagers nombre de passagers maximum que le taxi peut transporter
-     * @param immatriculation immatriculation du taxi
-     * @param prixKm prix au kilomètre
-     */
-    public Taxi(int idTaxi, int nbreMaxPassagers, String immatriculation, double prixKm) {
-        this.idTaxi = idTaxi;
-        this.nbreMaxPassagers = nbreMaxPassagers;
-        this.immatriculation = immatriculation;
-        this.prixKm = prixKm;
-    }
-
-    public Taxi(int nbreMaxPassagers, String immatriculation, double prixKm) {
-        this.nbreMaxPassagers = nbreMaxPassagers;
-        this.immatriculation = immatriculation;
-        this.prixKm = prixKm;
+    private Taxi(TaxiBuilder builder){
+        this.idTaxi = builder.idTaxi;
+        this.nbreMaxPassagers = builder.nbreMaxPassagers;
+        this.immatriculation = builder.immatriculation;
+        this.prixKm = builder.prixKm;
+        this.listTaxiLoc = builder.listTaxiLoc;
     }
 
 
@@ -63,6 +50,16 @@ public class Taxi {
     public void setIdTaxi(int idTaxi) {
         this.idTaxi = idTaxi;
     }
+
+    /**
+     * setter listTaxiLoc
+     *
+     * @param listTaxiLoc liste des locations du taxi
+     */
+    public void setLocation(List<Location> listTaxiLoc) {
+        this.listTaxiLoc = listTaxiLoc;
+    }
+
     /**
      * getter idTaxi
      *
@@ -100,15 +97,6 @@ public class Taxi {
     }
 
     /**
-     * setter prixKm
-     *
-     * @param prixKm prix au kilomètre
-     */
-    public void setPrixKm(double prixKm) {
-        this.prixKm = prixKm;
-    }
-
-    /**
      * getter listTaxiLoc
      *
      * @return liste des locations du taxi
@@ -118,39 +106,11 @@ public class Taxi {
     }
 
     /**
-     * setter listTaxiLoc
-     *
-     * @param listTaxiLoc liste des locations du taxi
-     */
-    public void setLocation(List<Location> listTaxiLoc) {
-        this.listTaxiLoc = listTaxiLoc;
-    }
-
-    /**
      * égalité de deux taxis basée sur l'immatriculation
      *
      * @param o autre élément
      * @return égalité ou pas
      */
-
-    /**
-     * setter : nombre maximum de passagers du taxi
-     *
-     * @param nbreMaxPassagers
-     */
-    public void setNbreMaxPassagers(int nbreMaxPassagers) {
-        this.nbreMaxPassagers = nbreMaxPassagers;
-    }
-
-    /**
-     * Setter : Immatriculation du taxi
-     *
-     * @param immatriculation
-     */
-    public void setImmatriculation(String immatriculation) {
-        this.immatriculation = immatriculation;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -183,4 +143,41 @@ public class Taxi {
                 "\nTarif (au kilomètre ) : " + prixKm + "€";
     }
 
+    public static class TaxiBuilder{
+        protected int idTaxi;
+        protected int nbreMaxPassagers;
+        protected String immatriculation;
+        protected double prixKm;
+        protected List<Location> listTaxiLoc;
+
+        public TaxiBuilder setIdTaxi(int idTaxi) {
+            this.idTaxi = idTaxi;
+            return this;
+        }
+
+        public TaxiBuilder setNbreMaxPassagers(int nbreMaxPassagers) {
+            this.nbreMaxPassagers = nbreMaxPassagers;
+            return this;
+        }
+
+        public TaxiBuilder setImmatriculation(String immatriculation) {
+            this.immatriculation = immatriculation;
+            return this;
+        }
+
+        public TaxiBuilder setPrixKm(double prixKm) {
+            this.prixKm = prixKm;
+            return this;
+        }
+
+        public TaxiBuilder setListTaxiLoc(List<Location> listTaxiLoc) {
+            this.listTaxiLoc = listTaxiLoc;
+            return this;
+        }
+
+        public Taxi build() throws Exception{
+            if(idTaxi<0 || immatriculation.isBlank() || prixKm < 0 || nbreMaxPassagers < 1) throw new Exception("Erreur lors de la construction du Taxi");
+            return new Taxi(this);
+        }
+    }
 }

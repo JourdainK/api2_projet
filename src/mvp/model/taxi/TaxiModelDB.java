@@ -1,5 +1,6 @@
-package mvp.model;
+package mvp.model.taxi;
 
+import mvp.model.DAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
@@ -12,7 +13,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 
-public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
+public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
     private Connection dbConnect;
     private static final Logger logger = LogManager.getLogger(TaxiModelDB.class);
 
@@ -28,7 +29,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
 
 
     @Override
-    public Taxi addTaxi(Taxi taxi) {
+    public Taxi add(Taxi taxi) {
         String query1 = "INSERT INTO APITAXI(immatriculation,nbremaxpassagers,prixkm)"
                 + "VALUES (?,?,?)";
         String query2 = "SELECT * FROM APITAXI WHERE immatriculation=? AND nbremaxpassagers=? AND prixkm=?";
@@ -64,7 +65,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
     }
 
     @Override
-    public boolean removeTaxi(Taxi taxi) {
+    public boolean remove(Taxi taxi) {
         String query = "DELETE FROM APITAXI WHERE ID_TAXI = ? AND IMMATRICULATION = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
@@ -80,7 +81,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         }
     }
     @Override
-    public Taxi updateTaxi(Taxi taxi) {
+    public Taxi update(Taxi taxi) {
         String query = "UPDATE apitaxi SET immatriculation=?, nbremaxpassagers=?, prixkm=? WHERE id_taxi=?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
@@ -89,7 +90,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
             pstm.setDouble(3,taxi.getPrixKm());
             pstm.setInt(4,taxi.getIdTaxi());
             int v = pstm.executeUpdate();
-            if(v!=0) return readTaxi(taxi.getIdTaxi());
+            if(v!=0) return readbyId(taxi.getIdTaxi());
             else return null;
         } catch (SQLException e) {
             logger.error("Erreur lors de la mise à jour (" + taxi.getIdTaxi() + ") , Erreur SQL + " + e);
@@ -100,7 +101,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
 
 
     @Override
-    public List<Taxi> getTaxis() {
+    public List<Taxi> getAll() {
         List<Taxi> ltaxis = new ArrayList<>();
         Taxi tmpTaxi;
         String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
@@ -112,8 +113,18 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 String immat = rs.getString(2);
                 int nbrMaxPas = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                tmpTaxi = new Taxi(idtaxi,nbrMaxPas,immat,prixKm);
-                ltaxis.add(tmpTaxi);
+                try{
+                    tmpTaxi = new Taxi.TaxiBuilder()
+                            .setIdTaxi(idtaxi)
+                            .setImmatriculation(immat)
+                            .setPrixKm(prixKm)
+                            .setNbreMaxPassagers(nbrMaxPas)
+                            .build();
+                    ltaxis.add(tmpTaxi);
+                }catch (Exception e){
+                    logger.error("Erreur lors de la récupération des taxis : " + e);
+                    e.printStackTrace();
+                }
 
             }
 
@@ -126,9 +137,15 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         return ltaxis;
     }
 
+    @Override
+    public Taxi read(Taxi taxi){
+        //TODO read Taxi taxi-> return taxi
+        return null;
+    }
 
     // fixed the problem : https://stackoverflow.com/questions/5963472/java-sql-sqlexception-fail-to-convert-to-internal-representation
-    public Taxi readTaxi(int idTaxi) {
+    @Override
+    public Taxi readbyId(int idTaxi) {
         Taxi tmpTaxi;
         String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
 
@@ -140,8 +157,19 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 String immat = rs.getString(2);
                 int nbrPassMax = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                tmpTaxi = new Taxi(taxiId, nbrPassMax, immat, prixKm);
-                return tmpTaxi;
+                try{
+                    tmpTaxi = new Taxi.TaxiBuilder()
+                            .setIdTaxi(taxiId)
+                            .setImmatriculation(immat)
+                            .setPrixKm(prixKm)
+                            .setNbreMaxPassagers(nbrPassMax)
+                            .build();
+                    return tmpTaxi;
+                }catch (Exception e){
+                    logger.error("Erreur lors de la recherche d'un taxi : " + e);
+                    e.printStackTrace();
+                    return null;
+                }
             }
             else {
                 return null;
@@ -172,7 +200,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
         }
         Taxi tmpTaxi;
         for(Integer s : idTaxis){
-            tmpTaxi = readTaxi(s);
+            tmpTaxi = readbyId(s);
             taxisUsed.add(tmpTaxi);
         }
 
@@ -202,7 +230,7 @@ public class TaxiModelDB implements DAOTaxi, TaxiSpecial{
                 int adAll = rs.getInt(7);
                 int adRet = rs.getInt(8);
                 int idCli = rs.getInt(9);
-                Taxi tax = readTaxi(idTax);
+                Taxi tax = readbyId(idTax);
 
                 //for each Locat ? pretty heavy for one deman -> check if better way
                 //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)

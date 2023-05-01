@@ -77,6 +77,40 @@ public class Location {
     }
 
     /**
+     * Setter Véhicule (taxi utilisé pour la location)
+     *
+     * @param vehicule
+     */
+    public void setVehicule(Taxi vehicule) {
+        this.vehicule = vehicule;
+    }
+
+    /**
+     * Setter Client (Client de la location)
+     * @param client
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
+     * Setter adrDebut (Adresse de départ de la location)
+     * @param adrDebut
+     */
+    public void setAdrDebut(Adresse adrDebut) {
+        this.adrDebut = adrDebut;
+    }
+
+
+    /**
+     * Setter adrFin (Adresse d'arrivée de la location)
+     * @param adrFin
+     */
+    public void setAdrFin(Adresse adrFin) {
+        this.adrFin = adrFin;
+    }
+
+    /**
      * getter idLoc
      *
      * @return identifiant de la location
@@ -163,6 +197,8 @@ public class Location {
      * @param o autre élément
      * @return égalité ou pas
      */
+
+    //TODO check this equals => Compare to exercice instructions !
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -213,45 +249,55 @@ public class Location {
         protected Adresse adrDebut;
         protected Adresse adrFin;
 
-        public void setIdLoc(int idLoc) {
+        public LocationBuilder setIdLoc(int idLoc) {
             this.idLoc = idLoc;
+            return this;
         }
 
-        public void setKmTot(int kmTot) {
+        public LocationBuilder setKmTot(int kmTot) {
             this.kmTot = kmTot;
+            return this;
         }
 
-        public void setNbrePassagers(int nbrePassagers) {
+        public LocationBuilder setNbrePassagers(int nbrePassagers) {
             this.nbrePassagers = nbrePassagers;
+            return this;
         }
 
-        public void setDateLoc(String dateLoc) {
+        public LocationBuilder setDateLoc(String dateLoc) {
             this.dateLoc = dateLoc;
+            return this;
         }
 
-        public void setVehicule(Taxi vehicule) {
+        public LocationBuilder setVehicule(Taxi vehicule) {
             this.vehicule = vehicule;
+            return this;
         }
 
-        public void setTotal(double total) {
+        public LocationBuilder setTotal(double total) {
             this.total = total;
+            return this;
         }
 
-        public void setClient(Client client) {
+        public LocationBuilder setClient(Client client) {
             this.client = client;
+            return this;
         }
 
-        public void setAdrDebut(Adresse adrDebut) {
+        public LocationBuilder setAdrDebut(Adresse adrDebut) {
             this.adrDebut = adrDebut;
+            return this;
         }
 
-        public void setAdrFin(Adresse adrFin) {
+        public LocationBuilder setAdrFin(Adresse adrFin) {
             this.adrFin = adrFin;
+            return this;
         }
 
         public Location build() throws Exception{
             if(idLoc<=0 || kmTot<=0 ||nbrePassagers<=0 || dateLoc.trim().equals("")) throw new Exception("Erreur lors de la construction de la location");
             return new Location(this);
         }
+
     }
 }

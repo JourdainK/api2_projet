@@ -1,4 +1,4 @@
-package mvp.model;
+package mvp.model.adresse;
 
 import two_three.Adresse;
 

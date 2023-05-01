@@ -1,10 +1,16 @@
 package mvp;
 
 import mvp.model.*;
+import mvp.model.adresse.AdresseModelDB;
+import mvp.model.client.ClientModelDB;
+import mvp.model.taxi.TaxiModelDB;
 import mvp.presenter.AdressePresenter;
 import mvp.presenter.ClientPresenter;
 import mvp.presenter.TaxiPresenter;
 import mvp.view.*;
+import two_three.Adresse;
+import two_three.Client;
+import two_three.Taxi;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,13 +18,13 @@ import static utilitaires.Utilitaire.*;
 
 public class GestMain {
 
-    private DAOTaxi tm;
+    private DAO<Taxi> tm;
     private TaxiViewInterface tv;
     private TaxiPresenter tp;
-    private DAOClient cm;
+    private DAO<Client> cm;
     private ClientViewInterface cv;
     private ClientPresenter cp;
-    private DAOAdresse am;
+    private DAO<Adresse> am;
     private AdresseViewInterface av;
     private AdressePresenter ap;
 

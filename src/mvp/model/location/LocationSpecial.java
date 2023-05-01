@@ -1,4 +1,4 @@
-package mvp.model;
+package mvp.model.location;
 
 import two_three.Adresse;
 import two_three.Client;

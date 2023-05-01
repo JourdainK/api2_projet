@@ -1,6 +1,8 @@
 package mvp.view;
 
 import mvp.presenter.AdressePresenter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class AdresseViewConsole implements AdresseViewInterface {
     private AdressePresenter presenter;
     private List<Adresse> lAdresses;
     private Scanner sc = new Scanner(System.in);
+    private static final Logger logger = LogManager.getLogger(AdresseViewConsole.class);
 
 
     @Override
@@ -64,8 +67,21 @@ public class AdresseViewConsole implements AdresseViewInterface {
         System.out.print("\nSaisir la localité : ");
         String localite = sc.nextLine();
         int cp = getCp();
-        Adresse newAdresse = new Adresse(cp,localite,rue,num);
-        presenter.addAdresse(newAdresse);
+        try{
+
+            Adresse newAdresse = new Adresse.AdresseBuilder()
+                    .setCp(cp)
+                    .setLocalite(localite)
+                    .setRue(rue)
+                    .setNum(num)
+                    .build();
+            int idAdre = presenter.addAdresse(newAdresse);
+            newAdresse.setIdAdr(idAdre);
+        }catch (Exception e){
+            logger.error("Erreur lors de la création de l'adresse");
+            e.printStackTrace();
+        }
+
         lAdresses = presenter.getAll();
         //affListe(lAdresses);
     }
@@ -129,23 +145,52 @@ public class AdresseViewConsole implements AdresseViewInterface {
                 case 1 :
                     System.out.print("\nSaisir la nouvelle rue : ");
                     String newRue = sc.nextLine();
-                    modifAdress.setRue(newRue);
+                    try{
+                        modifAdress = new Adresse.AdresseBuilder()
+                                .setCp(modifAdress.getCp())
+                                .setLocalite(modifAdress.getLocalite())
+                                .setRue(newRue)
+                                .setNum(modifAdress.getNum())
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification de l'adresse (rue)");
+                        e.printStackTrace();
+                    }
                     break;
                 case 2 :
                     System.out.print("\nSaisir le nouveau numéro : ");
                     String num = saisie("[0-9]{1,3}[a-zA-Z]{0,1}","Veuillez un numéro d'adresse correcte ( 10 , 10A)");
-                    modifAdress.setNum(num);
+                    try{
+                        modifAdress = new Adresse.AdresseBuilder()
+                                .setCp(modifAdress.getCp())
+                                .setLocalite(modifAdress.getLocalite())
+                                .setRue(modifAdress.getRue())
+                                .setNum(num)
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification de l'adresse (rue)");
+                        e.printStackTrace();
+                    }
                     break;
                 case 3 :
                     System.out.print("\nSaisir la nouvelle localité : ");
                     newLocat = sc.nextLine();
-                    modifAdress.setLocalite(newLocat);
                     cp = getCp();
-                    modifAdress.setCp(cp);
+                    try{
+                        modifAdress = new Adresse.AdresseBuilder()
+                                .setCp(cp)
+                                .setLocalite(newLocat)
+                                .setRue(modifAdress.getRue())
+                                .setNum(modifAdress.getNum())
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification de l'adresse (rue)");
+                        e.printStackTrace();
+                    }
+
                     break;
             }
         }while(choixMod!=loption.size());
-
         presenter.updateAdresse(modifAdress);
         lAdresses = presenter.getAll();
     }

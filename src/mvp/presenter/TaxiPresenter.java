@@ -1,6 +1,6 @@
 package mvp.presenter;
 
-import mvp.model.DAOTaxi;
+import mvp.model.DAO;
 import mvp.view.TaxiViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,45 +9,47 @@ import two_three.Taxi;
 import java.util.List;
 
 public class TaxiPresenter {
-    private DAOTaxi model;
+    private DAO<Taxi> model;
     private TaxiViewInterface view;
     private static final Logger logger = LogManager.getLogger(TaxiPresenter.class);
 
-    public TaxiPresenter(DAOTaxi model, TaxiViewInterface view){
+    public TaxiPresenter(DAO<Taxi> model, TaxiViewInterface view){
         this.model = model;
         this.view = view;
         this.view.setPresenter(this);
     }
 
     public void start(){
-        List<Taxi> taxis = model.getTaxis();
+        List<Taxi> taxis = model.getAll();
         view.setListDatas(taxis);
     }
 
-    public void addTaxi(Taxi taxi){
-        Taxi newTaxi = model.addTaxi(taxi);
+    public int addTaxi(Taxi taxi){
+        Taxi newTaxi = model.add(taxi);
         if(newTaxi!=null) view.affMsg("Taxi ajouté \nID : " + newTaxi.getIdTaxi() + "\t\timmatriculation : " + newTaxi.getImmatriculation());
         else  {
             view.affMsg("Erreur : échec de l'ajout");
             logger.error("Erreur lors de l'ajout du taxi " + taxi.getImmatriculation());
         }
+
+        return newTaxi.getIdTaxi();
     }
 
     public void removeTaxi(Taxi taxi){
         boolean check;
-        check = model.removeTaxi(taxi);
+        check = model.remove(taxi);
         if(check) view.affMsg("Taxi effacé");
         else view.affMsg("Erreur, taxi non effacé");
     }
 
     public void updateTaxi(Taxi taxi){
-        Taxi modifiedTaxi = model.updateTaxi(taxi);
+        Taxi modifiedTaxi = model.update(taxi);
         if(modifiedTaxi!=null) view.affMsg("Modification effectuée " + modifiedTaxi);
         else view.affMsg("Erreur, modification non effectuée");
     }
 
     public Taxi readTaxi(int idTaxi){
-        Taxi tx = model.readTaxi(idTaxi);
+        Taxi tx = model.readbyId(idTaxi);
         if(tx==null) {
             view.affMsg("Taxi non trouvé\n");
             return null;
@@ -60,7 +62,7 @@ public class TaxiPresenter {
     }
 
     public List<Taxi> getListTaxis(){
-        List<Taxi> listTaxis = model.getTaxis();
+        List<Taxi> listTaxis = model.getAll();
 
         return listTaxis;
     }

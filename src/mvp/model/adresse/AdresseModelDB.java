@@ -1,5 +1,6 @@
-package mvp.model;
+package mvp.model.adresse;
 
+import mvp.model.DAO;
 import myconnections.DBConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
+public class AdresseModelDB implements DAO<Adresse>, AdresseSpecial {
     private Connection dbConnect;
     private static final Logger logger = LogManager.getLogger(AdresseModelDB.class);
 
@@ -22,7 +23,7 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
     }
 
     @Override
-    public Adresse addAdresse(Adresse adresse) {
+    public Adresse add(Adresse adresse) {
         String query1 = "INSERT INTO APIADRESSE(cp,localite,rue,num)" + "VALUES(?,?,?,?)";
         String query2 = "SELECT * FROM APIADRESSE WHERE cp=? AND localite=? AND rue=? AND num=?";
 
@@ -59,7 +60,7 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
     }
 
     @Override
-    public boolean removeAdresse(Adresse adresse) {
+    public boolean remove(Adresse adresse) {
         String query = "DELETE FROM APIADRESSE WHERE ID_ADRESSE = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
@@ -75,7 +76,7 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
     }
 
     @Override
-    public Adresse updateAdresse(Adresse adresse) {
+    public Adresse update(Adresse adresse) {
         String query = "UPDATE APIADRESSE SET cp=?, localite=?,rue=?,num=? WHERE id_adresse = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
@@ -85,7 +86,7 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
             pstm.setString(4,adresse.getNum());
             pstm.setInt(5,adresse.getIdAdr());
             int nl = pstm.executeUpdate();
-            if(nl!=0) return readAdresse(adresse.getIdAdr());
+            if(nl!=0) return readbyId(adresse.getIdAdr());
             else return null;
         } catch (SQLException e) {
             logger.error("Erreur lors de la mise à jour d'une adresse");
@@ -95,7 +96,7 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
     }
 
     @Override
-    public Adresse readAdresse(int idAdresse) {
+    public Adresse readbyId(int idAdresse) {
         Adresse tmpAdr;
         String query = "SELECT * FROM APIADRESSE WHERE ID_ADRESSE = ?";
 
@@ -108,8 +109,17 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
                 String localite = rs.getString(3);
                 String rue = rs.getString(4);
                 String num = rs.getString(5);
-                tmpAdr = new Adresse(idAdres,cp,localite,rue,num);
-                return tmpAdr;
+                try{
+                    tmpAdr = new Adresse.AdresseBuilder()
+                            .setCp(cp).setLocalite(localite).setIdAdr(idAdres).setNum(num)
+                            .setRue(rue).build();
+                    return tmpAdr;
+                }catch (Exception e){
+                    logger.error("Erreur lors de la recherche de l'adresse");
+                    e.printStackTrace();
+                    return null;
+                }
+
             }
             else return null;
 
@@ -121,7 +131,14 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
     }
 
     @Override
-    public List<Adresse> getAdresses() {
+    public Adresse read(Adresse adresse){
+        //TODO read Adresse(Adresse adre)
+
+        return null;
+    }
+
+    @Override
+    public List<Adresse> getAll() {
         List<Adresse> lAdresses = new ArrayList<>();
         Adresse adr;
         String query = "SELECT * FROM apiadresse ORDER BY id_adresse";
@@ -134,8 +151,15 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
                 String local = rs.getString(3);
                 String rue = rs.getString(4);
                 String num = rs.getString(5);
-                adr = new Adresse(idAdre,cp,local,rue,num);
-                lAdresses.add(adr);
+                try{
+                    adr = new Adresse.AdresseBuilder()
+                            .setIdAdr(idAdre).setCp(cp).setLocalite(local).setRue(rue)
+                            .setNum(num).build();
+                    lAdresses.add(adr);
+                }catch (Exception e){
+                    logger.error("Erreur lors de la récupération d'une des adresses de la liste");
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {
@@ -161,8 +185,15 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
                 String local = rs.getString(3);
                 String rue = rs.getString(4);
                 String num = rs.getString(5);
-                adr = new Adresse(idAdre,cpost,local,rue,num);
-                lAdresses.add(adr);
+                try{
+                    adr = new Adresse.AdresseBuilder()
+                            .setIdAdr(idAdre).setCp(cpost).setLocalite(local)
+                            .setRue(rue).setNum(num).build();
+                    lAdresses.add(adr);
+                }catch (Exception e){
+                    logger.error("Erreur lors de la récupération d'une des adressses par code postal");
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {
@@ -188,8 +219,15 @@ public class AdresseModelDB implements DAOAdresse, AdresseSpecial {
                 String local = rs.getString(3);
                 String rue = rs.getString(4);
                 String num = rs.getString(5);
-                adr = new Adresse(idAdre,cpost,local,rue,num);
-                lAdresses.add(adr);
+                try{
+                    adr = new Adresse.AdresseBuilder()
+                            .setIdAdr(idAdre).setCp(cpost).setLocalite(local)
+                            .setRue(rue).setNum(num).build();
+                    lAdresses.add(adr);
+                }catch (Exception e){
+                    logger.error("Erreur lors de la récupération d'une des adresses par localité");
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {

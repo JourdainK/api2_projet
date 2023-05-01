@@ -1,34 +1,35 @@
 package mvp.presenter;
 
-import mvp.model.DAOClient;
+import mvp.model.DAO;
 import mvp.view.ClientViewInterface;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Client;
 
+
 import java.util.List;
 
 public class ClientPresenter {
-    private DAOClient model;
+    private DAO<Client> model;
 
     private ClientViewInterface view;
 
     private static final Logger logger = LogManager.getLogger(ClientPresenter.class);
 
-    public ClientPresenter(DAOClient model, ClientViewInterface view){
+    public ClientPresenter(DAO<Client> model, ClientViewInterface view){
         this.model = model;
         this.view = view;
         this.view.setPresenter(this);
     }
 
     public void start(){
-        List<Client> clients = model.getClients();
+        List<Client> clients = model.getAll();
         view.setListDatas(clients);
     }
 
     public int addClient(Client client){
-        Client newCli = model.addClient(client);
+        Client newCli = model.add(client);
         if(newCli!=null) view.affMsg("Client ajouté (id : " + client.getIdclient() + " )");
         else{
             view.affMsg("Erreur : échec de l'ajout client");
@@ -39,7 +40,7 @@ public class ClientPresenter {
 
     public void removeClient(Client client){
         boolean check;
-        check = model.removeClient(client);
+        check = model.remove(client);
         if(check) view.affMsg("Client effacé");
         else {
             view.affMsg("Erreur, client non effacé");
@@ -48,13 +49,13 @@ public class ClientPresenter {
     }
 
     public void updateClient(Client client){
-        Client updateClient = model.updateClient(client);
+        Client updateClient = model.update(client);
         if(updateClient!=null) view.affMsg("Modification effectuée" + updateClient);
         else view.affMsg("Erreur, modification non effectuée");
     }
 
-    public Client readClient(int numClient){
-        Client retClient = model.readClient(numClient);
+    public Client readClient(Client client){
+        Client retClient = model.read(client);
 
         if(retClient==null){
             view.affMsg("Client non trouvé");
@@ -66,8 +67,20 @@ public class ClientPresenter {
         }
     }
 
+    public Client readClientById(int idClient){
+        Client cli = model.readbyId(idClient);
+        if(cli == null) {
+            view.affMsg("Client non trouvé");
+            return null;
+        }
+        else{
+            view.affMsg("Client trouvé : " + cli);
+            return cli;
+        }
+    }
+
     public List<Client> getClients() {
-        List<Client> listCli = model.getClients();
+        List<Client> listCli = model.getAll();
 
         return listCli;
     }

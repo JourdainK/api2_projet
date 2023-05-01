@@ -12,54 +12,30 @@ public class Adresse {
     /**
      * identifiant unique de l'adresse
      */
-    private int idAdr;
+    protected int idAdr;
     /**
      * code postal de l'adresse
      */
-    private int cp;
+    protected int cp;
     /**
      * localité de l'adresse
      */
-    private String localite;
+    protected String localite;
     /**
      * rue de l'adresse
      */
-    private String rue;
+    protected String rue;
     /**
      * numéro de l'adresse
      */
-    private String num;
+    protected String num;
 
-    /**
-     * constructeur paramétré
-     *
-     * @param idAdr identifiant unique de l'adresse
-     * @param cp code postal de l'adresse
-     * @param localite localité de l'adresse
-     * @param rue rue de l'adresse
-     * @param num numéro de l'adresse
-     */
-    public Adresse(int idAdr, int cp, String localite, String rue, String num) {
-        this.idAdr = idAdr;
-        this.cp = cp;
-        this.localite = localite;
-        this.rue = rue;
-        this.num = num;
-    }
-
-    /**
-     * Constructeur paramétré , sans idAdresse -> donné par le Trigger de la base de données
-     *
-     * @param cp code postal de l'adresse
-     * @param localite localité de l'adresse
-     * @param rue rue de l'adresse
-     * @param num numéro de l'adresse
-     */
-    public Adresse(int cp, String localite, String rue, String num) {
-        this.cp = cp;
-        this.localite = localite;
-        this.rue = rue;
-        this.num = num;
+    private Adresse(AdresseBuilder builder){
+        this.idAdr = builder.idAdr;
+        this.cp = builder.cp;
+        this.localite = builder.localite;
+        this.rue = builder.rue;
+        this.num = builder.num;
     }
 
     /**
@@ -71,41 +47,6 @@ public class Adresse {
         this.idAdr = idAdr;
     }
 
-
-    /**
-     * Setter cp : code postal
-     *
-     * @param cp
-     */
-    public void setCp(int cp) {
-        this.cp = cp;
-    }
-
-    /**
-     * Setter localite
-     *
-     * @param localite
-     */
-    public void setLocalite(String localite) {
-        this.localite = localite;
-    }
-
-    /**
-     * Setter rue
-     *
-     * @param rue
-     */
-    public void setRue(String rue) {
-        this.rue = rue;
-    }
-
-    /**
-     * Setter num : numéro de l'habitation
-     * @param num
-     */
-    public void setNum(String num) {
-        this.num = num;
-    }
 
     /**
      * getter idAdre
@@ -191,6 +132,44 @@ public class Adresse {
                 "\tLocalité : " + localite +
                 "\nRue :" + rue +
                 "\t" + num + "\n\n";
+    }
+
+    public static class AdresseBuilder{
+        protected int idAdr;
+        protected int cp;
+        protected String localite;
+        protected String rue;
+        protected String num;
+
+        public AdresseBuilder setIdAdr(int idAdr) {
+            this.idAdr = idAdr;
+            return this;
+        }
+
+        public AdresseBuilder setCp(int cp) {
+            this.cp = cp;
+            return this;
+        }
+
+        public AdresseBuilder setLocalite(String localite) {
+            this.localite = localite;
+            return this;
+        }
+
+        public AdresseBuilder setRue(String rue) {
+            this.rue = rue;
+            return this;
+        }
+
+        public AdresseBuilder setNum(String num) {
+            this.num = num;
+            return this;
+        }
+
+        public Adresse build() throws Exception{
+            if(idAdr<0 || localite.isBlank() || rue.isBlank() || num.isBlank()) throw new Exception("Erreur lors de la construction de l'adresse");
+            return new Adresse(this);
+        }
     }
 
 

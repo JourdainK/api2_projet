@@ -42,7 +42,7 @@ public class Client {
         this.idClient = builder.idClient;
         this.mail = builder.mail;
         this.nom = builder.nom;
-        this.prenom = builder.nom;
+        this.prenom = builder.prenom;
         this.tel = builder.tel;
     }
 

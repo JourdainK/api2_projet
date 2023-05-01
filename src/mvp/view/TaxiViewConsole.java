@@ -1,6 +1,8 @@
 package mvp.view;
 
 import mvp.presenter.TaxiPresenter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
 import utilitaires.SQLTaxiAllHashMap;
 
@@ -12,6 +14,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
     private TaxiPresenter presenter;
     private List<Taxi> lTaxis;
     private Scanner sc = new Scanner(System.in);
+    private static final Logger logger = LogManager.getLogger(TaxiViewConsole.class);
 
 
     @Override
@@ -74,9 +77,16 @@ public class TaxiViewConsole implements TaxiViewInterface {
                 System.out.println("Erreur, le prix au km doit étre supérieur à 0");
             }
         } while (prixkm <= 0);
-
-        Taxi tmpTaxi = new Taxi(maxPass,immat,prixkm);
-        presenter.addTaxi(tmpTaxi);
+        try{
+            Taxi tmpTaxi =  new Taxi.TaxiBuilder()
+                    .setImmatriculation(immat).setNbreMaxPassagers(maxPass)
+                    .setPrixKm(prixkm).build();
+            int idTaxi = presenter.addTaxi(tmpTaxi);
+            tmpTaxi.setIdTaxi(idTaxi);
+        }catch (Exception e){
+            logger.error("Erreur lors de l'ajout d'un taxi : " + e );
+            e.printStackTrace();
+        }
         lTaxis = presenter.getListTaxis();
         //affListe(lTaxis);
     }
@@ -125,7 +135,17 @@ public class TaxiViewConsole implements TaxiViewInterface {
                 case 1 :
                     System.out.print("\nSaisir la nouvelle immatriculation : ");
                     String immat = saisie("^[T]{1}\\-([L]{1}||[X]{1})[A-Z]{2}\\-[0-9]{3}$", "Erreur de saisie, veuillez saisir une immatriculation de type 'T-XXX-000' ou 'T-LXX-000'\nSaisir l'immatriculation : ");
-                    chosenTaxi.setImmatriculation(immat);
+                    try{
+                        chosenTaxi = new Taxi.TaxiBuilder()
+                                .setIdTaxi(chosenTaxi.getIdTaxi())
+                                .setImmatriculation(immat)
+                                .setPrixKm(chosenTaxi.getPrixKm())
+                                .setNbreMaxPassagers(chosenTaxi.getNbreMaxPassagers())
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification du taxi (immatriculation) : " + e);
+                        e.printStackTrace();
+                    }
                     break;
                 case 2 :
                     System.out.print("\nSaisir le nouveau nombre de passagers maximum : ");
@@ -134,17 +154,36 @@ public class TaxiViewConsole implements TaxiViewInterface {
                         String newMax = saisie("[0-9]*","Veuillez entrer un nombre entier");
                         newnbrMax = Integer.parseInt(newMax);
                     }while(newnbrMax < 0);
-                    chosenTaxi.setNbreMaxPassagers(newnbrMax);
+                    try{
+                        chosenTaxi = new Taxi.TaxiBuilder()
+                                .setIdTaxi(chosenTaxi.getIdTaxi())
+                                .setImmatriculation(chosenTaxi.getImmatriculation())
+                                .setPrixKm(chosenTaxi.getPrixKm())
+                                .setNbreMaxPassagers(newnbrMax)
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification du taxi (passagers max) : " + e);
+                        e.printStackTrace();
+                    }
                     break;
                 case 3 :
                     System.out.print("\nSaisir le nouveau prix au kilomètre : ");
-
                     double newprix= chosenTaxi.getPrixKm();
                     do{
                         String newPrice = saisie("[0-9]{0,10}[.][0-9]{0,2}|[0-9]{0,10}", "Erreur de saisie, veuillez saisir un nombre réel (séparée d'un point) supérieur à 0\nSaisir le prix au km : ");
                         newprix = Double.parseDouble(newPrice);
                     }while(newprix < 0);
-                    chosenTaxi.setPrixKm(newprix);
+                    try{
+                        chosenTaxi = new Taxi.TaxiBuilder()
+                                .setIdTaxi(chosenTaxi.getIdTaxi())
+                                .setImmatriculation(chosenTaxi.getImmatriculation())
+                                .setPrixKm(newprix)
+                                .setNbreMaxPassagers(chosenTaxi.getNbreMaxPassagers())
+                                .build();
+                    }catch (Exception e){
+                        logger.error("Erreur lors de la modification du taxi (prix au km) : " + e);
+                        e.printStackTrace();
+                    }
                     break;
             }
         }while(choixMod!=4);

@@ -1,5 +1,7 @@
-package mvp.model;
+package mvp.model.client;
 
+import mvp.model.DAO;
+import mvp.model.taxi.TaxiModelDB;
 import myconnections.DBConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientModelDB implements DAOClient{
-    private Connection dbConnect;
+public class ClientModelDB implements DAO<Client> {
+    private static Connection dbConnect;
 
     private static final Logger logger = LogManager.getLogger(TaxiModelDB.class);
 
@@ -24,7 +26,7 @@ public class ClientModelDB implements DAOClient{
     }
 
     @Override
-    public Client addClient(Client client) {
+    public Client add(Client client) {
         //new client come with no idclient -> return created one in DB , WITH id client
         String insertQuery = "INSERT INTO APITCLIENT(mail, nom_cli, prenom_cli, tel) VALUES (?,?,?,?)";
         String query = "SELECT * FROM APITCLIENT WHERE mail = ?";
@@ -62,7 +64,7 @@ public class ClientModelDB implements DAOClient{
     }
 
     @Override
-    public boolean removeClient(Client client) {
+    public boolean remove(Client client) {
         String query = "DELETE FROM APITCLIENT WHERE ID_CLIENT = ? AND MAIL = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
@@ -81,7 +83,7 @@ public class ClientModelDB implements DAOClient{
     }
 
     @Override
-    public Client updateClient(Client client) {
+    public Client update(Client client) {
         String update = "UPDATE apitclient SET mail=?, nom_cli=?, prenom_cli=?, tel=? WHERE id_client=?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(update)){
@@ -93,7 +95,7 @@ public class ClientModelDB implements DAOClient{
 
             int line = pstm.executeUpdate();
 
-            if(line!=0) return readClient(client.getIdclient());
+            if(line!=0) return read(client);
             else return null;
         }catch (SQLException e){
             logger.error("Erreur lors de la mise à jour du client : " + client.getIdclient()  + " " + client.getNom());
@@ -103,12 +105,12 @@ public class ClientModelDB implements DAOClient{
     }
 
     @Override
-    public Client readClient(int idClient) {
+    public Client read(Client client) {
         Client cli;
         String query = "SELECT * FROM APITCLIENT WHERE id_client = ?";
 
         try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
-            pstm.setInt(1,idClient);
+            pstm.setInt(1,client.getIdclient());
             ResultSet rs = pstm.executeQuery();
             if(rs.next()){
                 int idCli = rs.getInt("ID_CLIENT");
@@ -140,10 +142,47 @@ public class ClientModelDB implements DAOClient{
         }
     }
 
-    //TODO readClient -> NOM -> return list client avec le même nom
+    //TODO fix usages
+    @Override
+    public Client readbyId(int idClient) {
+        Client cli;
+        String query = "SELECT * FROM APITCLIENT WHERE id_client = ?";
+
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
+            pstm.setInt(1,idClient);
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()){
+                int idCli = rs.getInt("ID_CLIENT");
+                String mail = rs.getString("MAIL");
+                String nom = rs.getString("NOM_CLI");
+                String pren = rs.getString("PRENOM_CLI");
+                String tel = rs.getString("TEL");
+                try{
+                    cli = new Client.ClientBuilder()
+                            .setIdClient(idCli)
+                            .setMail(mail)
+                            .setNom(nom)
+                            .setPrenom(pren)
+                            .setTel(tel)
+                            .build();
+                    return cli;
+                }catch (Exception e){
+                    logger.error("Erreur lors de la lecture du client  : " + e);
+                    //TO DELETE
+                    e.printStackTrace();
+                    return null;
+                }
+
+            }else return null;
+
+        }catch (SQLException e){
+            logger.error("Erreur lors de la recherche SQL :"  + e );
+            return null;
+        }
+    }
 
     @Override
-    public List<Client> getClients() {
+    public List<Client> getAll() {
         List<Client> lClients = new ArrayList<>();
         Client tmpClient;
         String query = "SELECT * FROM apitclient ORDER BY id_client";
@@ -181,4 +220,5 @@ public class ClientModelDB implements DAOClient{
     }
 
     //TODO specials clients
+    //TODO readClient -> NOM -> return list client avec le même nom
 }

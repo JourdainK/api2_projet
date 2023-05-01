@@ -1,6 +1,5 @@
 package mvp.view;
 
-import mvp.model.TaxiModelDB;
 import mvp.presenter.ClientPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,10 +77,9 @@ public class ClientViewConsole implements ClientViewInterface{
             cli.setIdClient(idcli);
 
         }catch (Exception e){
-            logger.error("Erreur lors de la création du client");
+            logger.error("Erreur lors de la création du client : " + e);
             e.printStackTrace();
         }
-        //TODO get idClient -> setId -> add ID;
         lClients = presenter.getClients();
     }
 
@@ -193,11 +191,7 @@ public class ClientViewConsole implements ClientViewInterface{
         System.out.print("Saisir le numéro du client : ");
         String idCli = saisie("[0-9]*","Veuillez saisir un numéro");
         int idClient = Integer.parseInt(idCli);
-
-        presenter.readClient(idClient);
+        Client cli = presenter.readClientById(idClient);
     }
-
     //TODO client specials view
-
-
 }

@@ -549,8 +549,16 @@ public class GestionTaxi {
                 immat = rs.getString("IMMATRICULATION");
                 prixkm = rs.getDouble("PRIXKM");
 
-                tmpTaxi = new Taxi(tmpId, maxPass, immat, prixkm);
-                lTaxis.add(tmpTaxi);
+                try{
+                    tmpTaxi = new Taxi.TaxiBuilder()
+                            .setIdTaxi(tmpId).setNbreMaxPassagers(maxPass)
+                            .setImmatriculation(immat).setPrixKm(prixkm)
+                            .build();
+                    lTaxis.add(tmpTaxi);
+                }catch (Exception e){
+                    logger.error("Erreur lors de la récupération d'un taxi : " + e);
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {
@@ -560,7 +568,6 @@ public class GestionTaxi {
         DBConnection.closeConnection();
 
         return lTaxis;
-
     }
 
 }
