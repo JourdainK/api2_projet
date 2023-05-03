@@ -295,7 +295,7 @@ public class Location {
         }
 
         public Location build() throws Exception{
-            if(idLoc<=0 || kmTot<=0 ||nbrePassagers<=0 || dateLoc.trim().equals("")) throw new Exception("Erreur lors de la construction de la location");
+            if(idLoc<=0 || kmTot<=0 ||nbrePassagers<=0 || dateLoc.isBlank() || adrDebut == null || adrFin == null || client == null || vehicule == null ) throw new Exception("Erreur lors de la construction de la location");
             return new Location(this);
         }
 

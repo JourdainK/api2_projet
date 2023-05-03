@@ -1,5 +1,5 @@
 package mvp.model.client;
 
-public class SpecialClient {
+public interface SpecialClient {
     //TODO special client
 }

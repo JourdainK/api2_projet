@@ -1,6 +1,4 @@
 package mvp.view;
-
-import mvp.presenter.AdressePresenter;
 import mvp.presenter.LocationPresenter;
 import two_three.Location;
 
@@ -25,6 +23,7 @@ public class LocationViewConsole implements LocationViewInterface{
 
     public void menu(){
         //TODO menu view Location
+        //TODO pick up here
     }
 
 }

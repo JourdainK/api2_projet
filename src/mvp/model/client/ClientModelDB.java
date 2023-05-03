@@ -13,7 +13,6 @@ import java.util.List;
 
 public class ClientModelDB implements DAO<Client> {
     private static Connection dbConnect;
-
     private static final Logger logger = LogManager.getLogger(TaxiModelDB.class);
 
     public ClientModelDB(){
@@ -142,7 +141,6 @@ public class ClientModelDB implements DAO<Client> {
         }
     }
 
-    //TODO fix usages
     @Override
     public Client readbyId(int idClient) {
         Client cli;

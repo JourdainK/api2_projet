@@ -1,6 +1,5 @@
-package gestion;
+package exercices1JDBC;
 
-import two_three.Location;
 import two_three.Taxi;
 import utilitaires.DateValidator;
 import utilitaires.DateValidatorUsingDateTimeFormatter;
@@ -13,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utilitaires.Utilitaire;
 
 import static utilitaires.Utilitaire.printMapTaxis;
 import static utilitaires.Utilitaire.saisie;

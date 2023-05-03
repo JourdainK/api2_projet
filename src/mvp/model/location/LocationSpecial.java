@@ -3,9 +3,14 @@ package mvp.model.location;
 import two_three.Adresse;
 import two_three.Client;
 import two_three.Location;
+import two_three.Taxi;
 
 public interface LocationSpecial {
-    //TODO check comfact example magasin -> understand , implement
-    public boolean addClient(Location loc, Client client);
-    public boolean addAdresse(Adresse adresse);
+    //TODO getClientbyID + getAdresseByID + getTaxibyId
+
+    public Client getClientById(int id);
+
+    public Adresse getAdresseByID(int id);
+
+    public Taxi getTaxiByID(int id);
 }

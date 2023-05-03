@@ -249,4 +249,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
     public List<Adresse> allAdressTaxi(Taxi taxi) {
         return null;
     }
+
+
 }
