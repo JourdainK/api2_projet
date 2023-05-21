@@ -1,4 +1,4 @@
-package utilitaires;
+package exercices1JDBC;
 
 import myconnections.DBConnection;
 
@@ -14,12 +14,11 @@ public class SQLTaxiAllHashMap {
     private Map<Integer, String> taxis = new HashMap<>();
 
     public SQLTaxiAllHashMap() {
-        Scanner sc = new Scanner(System.in);
         Connection dbconnect = DBConnection.getConnection();
         if (dbconnect == null) {
             System.exit(1);
         }
-        //System.out.println("Connexion établie");
+
         String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
         try (Statement stmt = dbconnect.createStatement();
              ResultSet rs = stmt.executeQuery(query);) {

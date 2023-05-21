@@ -51,9 +51,8 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                 if (rs.next()) {
                     int idLoc = rs.getInt(1);
                     location.setId(idLoc);
-                    //TODO specials taxi -> list location
-                    //location.getVehicule().getListTaxiLoc().add(location);
-                    return location = read(location);
+                    location.getVehicule().getListTaxiLoc().add(location);
+                    return location;
                 } else return null;
             } else {
                 logger.error("Erreur lors de la récupération d'une location");

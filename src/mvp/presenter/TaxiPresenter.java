@@ -1,12 +1,14 @@
 package mvp.presenter;
 
 import mvp.model.DAO;
+import mvp.model.taxi.TaxiSpecial;
 import mvp.view.TaxiViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
 
 import java.util.List;
+import java.util.Map;
 
 public class TaxiPresenter {
     private DAO<Taxi> model;
@@ -73,6 +75,12 @@ public class TaxiPresenter {
         List<Taxi> listTaxis = getListTaxis();
         Taxi taxi = view.selectTaxi(listTaxis);
         return taxi;
+    }
+
+    public Map<Integer, String> getMapTaxis(){
+        Map<Integer, String> mapTaxis = ((TaxiSpecial) model).getTaxisMap();
+
+        return mapTaxis;
     }
 
 }

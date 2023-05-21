@@ -218,5 +218,4 @@ public class ClientModelDB implements DAO<Client> {
     }
 
     //TODO specials clients
-    //TODO readClient -> NOM -> return list client avec le même nom
 }

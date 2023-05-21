@@ -54,8 +54,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                     System.err.println("Record introuvable");
                     return null;
                 }
-            }
-            else{
+            } else {
                 return null;
             }
         } catch (SQLException e) {
@@ -68,29 +67,30 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
     public boolean remove(Taxi taxi) {
         String query = "DELETE FROM APITAXI WHERE ID_TAXI = ? AND IMMATRICULATION = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
             pstm.setInt(1, taxi.getIdTaxi());
-            pstm.setString(2,taxi.getImmatriculation());
+            pstm.setString(2, taxi.getImmatriculation());
             int nl = pstm.executeUpdate();
 
-            if(nl!=0) return true;
+            if (nl != 0) return true;
             else return false;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Erreur SQL : " + e);
             return false;
         }
     }
+
     @Override
     public Taxi update(Taxi taxi) {
         String query = "UPDATE apitaxi SET immatriculation=?, nbremaxpassagers=?, prixkm=? WHERE id_taxi=?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
-            pstm.setString(1,taxi.getImmatriculation());
-            pstm.setInt(2,taxi.getNbreMaxPassagers());
-            pstm.setDouble(3,taxi.getPrixKm());
-            pstm.setInt(4,taxi.getIdTaxi());
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setString(1, taxi.getImmatriculation());
+            pstm.setInt(2, taxi.getNbreMaxPassagers());
+            pstm.setDouble(3, taxi.getPrixKm());
+            pstm.setInt(4, taxi.getIdTaxi());
             int v = pstm.executeUpdate();
-            if(v!=0) return readbyId(taxi.getIdTaxi());
+            if (v != 0) return readbyId(taxi.getIdTaxi());
             else return null;
         } catch (SQLException e) {
             logger.error("Erreur lors de la mise à jour (" + taxi.getIdTaxi() + ") , Erreur SQL + " + e);
@@ -107,13 +107,13 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
 
         try (Statement stmt = dbConnect.createStatement();
-             ResultSet rs = stmt.executeQuery(query);){
-            while(rs.next()){
+             ResultSet rs = stmt.executeQuery(query);) {
+            while (rs.next()) {
                 int idtaxi = rs.getInt(1);
                 String immat = rs.getString(2);
                 int nbrMaxPas = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                try{
+                try {
                     tmpTaxi = new Taxi.TaxiBuilder()
                             .setIdTaxi(idtaxi)
                             .setImmatriculation(immat)
@@ -121,7 +121,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                             .setNbreMaxPassagers(nbrMaxPas)
                             .build();
                     ltaxis.add(tmpTaxi);
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error("Erreur lors de la récupération des taxis : " + e);
                     e.printStackTrace();
                 }
@@ -138,7 +138,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
     }
 
     @Override
-    public Taxi read(Taxi taxi){
+    public Taxi read(Taxi taxi) {
         //TODO read Taxi taxi-> return taxi
         return null;
     }
@@ -149,7 +149,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         Taxi tmpTaxi;
         String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
             pstm.setInt(1, idTaxi);
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
@@ -157,26 +157,27 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                 String immat = rs.getString(2);
                 int nbrPassMax = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                try{
+                try {
                     tmpTaxi = new Taxi.TaxiBuilder()
                             .setIdTaxi(taxiId)
                             .setImmatriculation(immat)
                             .setPrixKm(prixKm)
                             .setNbreMaxPassagers(nbrPassMax)
                             .build();
+                    List<Location> locatTaxi = allLocTaxi(tmpTaxi);
+                    tmpTaxi.setLocations(locatTaxi);
                     return tmpTaxi;
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error("Erreur lors de la recherche d'un taxi : " + e);
                     e.printStackTrace();
                     return null;
                 }
-            }
-            else {
+            } else {
                 return null;
             }
         } catch (SQLException e) {
             logger.error("Erreur lors de la lecture du client (" + idTaxi + ") Erreur SQL : " + e);
-            return  null;
+            return null;
         }
 
     }
@@ -189,17 +190,17 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         int idClient = client.getIdclient();
         String query1 = "SELECT * FROM api_taxi_used WHERE id_client = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query1)){
-            pstm.setInt(1,idClient);
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query1)) {
+            pstm.setInt(1, idClient);
             ResultSet rs = pstm.executeQuery(query1);
-            if(rs.next()){
+            if (rs.next()) {
                 idTaxis.add(rs.getInt("ID_TAXI"));
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Erreur lors de la requête taxi utilisé : " + e);
         }
         Taxi tmpTaxi;
-        for(Integer s : idTaxis){
+        for (Integer s : idTaxis) {
             tmpTaxi = readbyId(s);
             taxisUsed.add(tmpTaxi);
         }
@@ -207,7 +208,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return taxisUsed;
     }
 
-    //TODO ? built client , adr all , adr retour....
     @Override
     public List<Location> allLocTaxi(Taxi taxi) {
         int idTaxi = taxi.getIdTaxi();
@@ -215,11 +215,11 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         List<Location> lLoc = new ArrayList<>();
         String query1 = "SELECT * FROM apilocation WHERE id_taxi = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query1)){
-            pstm.setInt(1,idTaxi);
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query1)) {
+            pstm.setInt(1, idTaxi);
             ResultSet rs = pstm.executeQuery(query1);
 
-            if(rs.next()){
+            if (rs.next()) {
                 int idLoc = rs.getInt(1);
                 LocalDate dateloc = rs.getDate(2).toLocalDate();
                 int kmTotal = rs.getInt(3);
@@ -230,15 +230,28 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                 int adAll = rs.getInt(7);
                 int adRet = rs.getInt(8);
                 int idCli = rs.getInt(9);
-                Taxi tax = readbyId(idTax);
+                Taxi taxiLoc = getTaxiByID(idTax);
+                Adresse adrAll = getAdresseByID(adAll);
+                Adresse adrRet = getAdresseByID(adRet);
+                try {
+                    tmpLoc = new Location.LocationBuilder()
+                            .setIdLoc(idLoc)
+                            .setDateLoc(dateloc)
+                            .setKmTot(kmTotal)
+                            .setNbrePassagers(nbrPass)
+                            .setTotal(total)
+                            .setVehicule(taxiLoc)
+                            .setAdrDebut(adrAll)
+                            .setAdrFin(adrRet)
+                            .build();
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
+                }
 
-                //for each Locat ? pretty heavy for one deman -> check if better way
-                //tmpLoc = new Location(idLoc,kmTotal,nbrPass,dateloc.toString(),tax,)
-                //dev them int thei modelDB -> import -> use method here ?
-                //DO crud modelDB all -> then special all
             }
+            taxi.setLocation(lLoc);
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
         }
 
@@ -250,5 +263,171 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return null;
     }
 
+    @Override
+    public Client getClientById(int id) {
+        Client cli;
+        String query = "SELECT * FROM APITCLIENT WHERE id_client = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, id);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                int idCli = rs.getInt("ID_CLIENT");
+                String mail = rs.getString("MAIL");
+                String nom = rs.getString("NOM_CLI");
+                String pren = rs.getString("PRENOM_CLI");
+                String tel = rs.getString("TEL");
+                try {
+                    cli = new Client.ClientBuilder()
+                            .setIdClient(idCli)
+                            .setMail(mail)
+                            .setNom(nom)
+                            .setPrenom(pren)
+                            .setTel(tel)
+                            .build();
+                    return cli;
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la lecture du client  : " + e);
+                    //TO DELETE
+                    e.printStackTrace();
+                    return null;
+                }
+            } else return null;
+
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la recherche SQL :" + e);
+            return null;
+        }
+    }
+
+    @Override
+    public Adresse getAdresseByID(int id) {
+        Adresse tmpAdr;
+        String query = "SELECT * FROM APIADRESSE WHERE ID_ADRESSE = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, id);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                int idAdres = rs.getInt(1);
+                int cp = rs.getInt(2);
+                String localite = rs.getString(3);
+                String rue = rs.getString(4);
+                String num = rs.getString(5);
+                try {
+                    tmpAdr = new Adresse.AdresseBuilder()
+                            .setCp(cp).setLocalite(localite).setIdAdr(idAdres).setNum(num)
+                            .setRue(rue).build();
+                    return tmpAdr;
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la recherche de l'adresse");
+                    e.printStackTrace();
+                    return null;
+                }
+            } else return null;
+
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la recherche de l'adresse");
+            return null;
+        }
+    }
+
+    @Override
+    public Taxi getTaxiByID(int id) {
+        Taxi tmpTaxi;
+        String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, id);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                int taxiId = rs.getInt(1);
+                String immat = rs.getString(2);
+                int nbrPassMax = rs.getInt(3);
+                double prixKm = rs.getDouble(4);
+                try {
+                    tmpTaxi = new Taxi.TaxiBuilder()
+                            .setIdTaxi(taxiId)
+                            .setImmatriculation(immat)
+                            .setPrixKm(prixKm)
+                            .setNbreMaxPassagers(nbrPassMax)
+                            .build();
+                    return tmpTaxi;
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la recherche d'un taxi : " + e);
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la lecture du client (" + id + ") Erreur SQL : " + e);
+            return null;
+        }
+    }
+
+    @Override
+    public Map<Integer, String> getTaxisMap() {
+        Map<Integer, String> taxis = new HashMap<>();
+        String query = "SELECT * FROM APITAXI ORDER BY ID_TAXI";
+        try (Statement stmt = dbConnect.createStatement();
+             ResultSet rs = stmt.executeQuery(query);) {
+
+            while (rs.next()) {
+                int id = rs.getInt("ID_TAXI");
+                String immat = rs.getString("IMMATRICULATION");
+                taxis.put(id, immat);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL : " + e);
+
+        }
+        return taxis;
+    }
+
+    //TODO implements
+    @Override
+    public List<Client> getClientOfTaxi(Taxi taxi) {
+        try (CallableStatement cs = dbConnect.prepareCall("{? = call client_by_taxi(?)}")) {
+
+            cs.registerOutParameter(1, Types.REF_CURSOR);
+            cs.setInt(2, taxi.getIdTaxi());
+            cs.execute();
+
+            ResultSet rs = (ResultSet) cs.getObject(1);
+            Set<Client> sClients = new HashSet<>();
+            List<Client> clients;
+
+            while (rs.next()) {
+                int id = rs.getInt("id_client");
+                String nom = rs.getString("nom_cli");
+                String prenom = rs.getString("prenom_cli");
+                String mail = rs.getString("mail");
+                String tel = rs.getString("tel");
+
+                try {
+                    Client cli = new Client.ClientBuilder()
+                            .setIdClient(id)
+                            .setNom(nom)
+                            .setPrenom(prenom)
+                            .setMail(mail)
+                            .setTel(tel)
+                            .build();
+                    sClients.add(cli);
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la lecture du client: " + e);
+                    e.printStackTrace();
+                }
+            }
+
+            clients = new ArrayList<>(sClients);
+            return clients;
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL : " + e);
+            return null;
+        }
+    }
 
 }

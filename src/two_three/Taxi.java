@@ -31,14 +31,14 @@ public class Taxi {
     /**
      * liste des locations réalisées par le taxi
      */
-    protected List<Location> listTaxiLoc = new ArrayList<>();
+    protected List<Location> listTaxiLoc;
 
     private Taxi(TaxiBuilder builder){
         this.idTaxi = builder.idTaxi;
         this.nbreMaxPassagers = builder.nbreMaxPassagers;
         this.immatriculation = builder.immatriculation;
         this.prixKm = builder.prixKm;
-        this.listTaxiLoc = builder.listTaxiLoc;
+        this.listTaxiLoc = new ArrayList<>();
     }
 
 
@@ -103,6 +103,15 @@ public class Taxi {
      */
     public List<Location> getListTaxiLoc() {
         return listTaxiLoc;
+    }
+
+    /**
+     * setter immatriculation
+     *
+     * @param List de locations du taxi
+     */
+    public void setLocations(List<Location> locatTaxi) {
+        this.listTaxiLoc = locatTaxi;
     }
 
     /**

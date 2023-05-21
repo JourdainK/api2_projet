@@ -74,3 +74,11 @@
 20-05-2023 18:07:14.992 [main] INFO  mvp.model.location.LocationModelDB - Connexion étable - Location
 21-05-2023 11:07:15.087 [main] ERROR mvp.model.location.LocationModelDB - Erreur lors de la mise à jour de la location : java.sql.SQLException: Invalid column index
 21-05-2023 12:35:34.757 [main] ERROR mvp.model.location.LocationModelDB - Erreur lors de la recherche de la location : java.sql.SQLException: Invalid column name
+21-05-2023 15:03:02.876 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+
+21-05-2023 15:38:47.113 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+
+21-05-2023 15:40:27.301 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+
+21-05-2023 15:41:16.253 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+

@@ -3,7 +3,6 @@ package exercices1JDBC;
 import two_three.Taxi;
 import utilitaires.DateValidator;
 import utilitaires.DateValidatorUsingDateTimeFormatter;
-import utilitaires.SQLTaxiAllHashMap;
 import myconnections.DBConnection;
 
 import java.sql.*;

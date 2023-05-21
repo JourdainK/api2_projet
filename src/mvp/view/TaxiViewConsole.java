@@ -4,7 +4,6 @@ import mvp.presenter.TaxiPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
-import utilitaires.SQLTaxiAllHashMap;
 
 import java.util.*;
 
@@ -92,9 +91,8 @@ public class TaxiViewConsole implements TaxiViewInterface {
     }
 
     public void deleteTaxi(){
-        Map <Integer, String> allTaxis = new HashMap<>();
-        SQLTaxiAllHashMap getMap = new SQLTaxiAllHashMap();
-        allTaxis = getMap.getTaxis();
+        Map <Integer, String> allTaxis;
+        allTaxis = presenter.getMapTaxis();
         int choixTaxi = -1;
         String choixTaxi1;
         int confirm = -1;
