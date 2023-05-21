@@ -1,4 +1,6 @@
-package utilitaires;
+package exercices1JDBC;
+
+import exercices1JDBC.DateValidator;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

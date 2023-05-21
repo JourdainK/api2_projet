@@ -1,5 +1,7 @@
 package mvp.view;
 
+import mvp.presenter.Presenter;
+import mvp.presenter.SpecialTaxiPresenter;
 import mvp.presenter.TaxiPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +11,7 @@ import java.util.*;
 
 import static utilitaires.Utilitaire.*;
 
-public class TaxiViewConsole implements TaxiViewInterface {
+public class TaxiViewConsole implements ViewInterface<Taxi> {
     private TaxiPresenter presenter;
     private List<Taxi> lTaxis;
     private Scanner sc = new Scanner(System.in);
@@ -17,12 +19,11 @@ public class TaxiViewConsole implements TaxiViewInterface {
 
 
     @Override
-    public void setPresenter(TaxiPresenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(Presenter<Taxi> presenter) { this.presenter = (TaxiPresenter) presenter;
     }
 
     @Override
-    public void setListDatas(List<Taxi> ltaxis) {
+    public void setListDatas(List<Taxi> ltaxis,Comparator<Taxi> cmp) {
         this.lTaxis = ltaxis;
         //affListe(lTaxis);
         menu();
@@ -80,13 +81,12 @@ public class TaxiViewConsole implements TaxiViewInterface {
             Taxi tmpTaxi =  new Taxi.TaxiBuilder()
                     .setImmatriculation(immat).setNbreMaxPassagers(maxPass)
                     .setPrixKm(prixkm).build();
-            int idTaxi = presenter.addTaxi(tmpTaxi);
-            tmpTaxi.setIdTaxi(idTaxi);
+            presenter.add(tmpTaxi);
         }catch (Exception e){
             logger.error("Erreur lors de l'ajout d'un taxi : " + e );
             e.printStackTrace();
         }
-        lTaxis = presenter.getListTaxis();
+        lTaxis = presenter.getAll();
         //affListe(lTaxis);
     }
 
@@ -111,10 +111,9 @@ public class TaxiViewConsole implements TaxiViewInterface {
 
         System.out.print("Taxi choisi : ");
         System.out.println("\tID : " + choixTaxi + "\t\tImmatriculation : " + allTaxis.get(choixTaxi).toString());
-        String chosenImmat = allTaxis.get(choixTaxi).toString();
-        Taxi tmpTaxi = presenter.readTaxi(choixTaxi);
-        presenter.removeTaxi(tmpTaxi);
-        lTaxis = presenter.getListTaxis();
+        Taxi tmpTaxi = presenter.readTaxiById(choixTaxi);
+        presenter.remove(tmpTaxi);
+        lTaxis = presenter.getAll();
     }
 
     public void modifTaxi(){
@@ -185,8 +184,8 @@ public class TaxiViewConsole implements TaxiViewInterface {
                     break;
             }
         }while(choixMod!=4);
-        presenter.updateTaxi(chosenTaxi);
-        lTaxis = presenter.getListTaxis();
+        presenter.update(chosenTaxi);
+        lTaxis = presenter.getAll();
     }
 
     public void seekTaxi(){
@@ -194,15 +193,16 @@ public class TaxiViewConsole implements TaxiViewInterface {
         System.out.print("Saisir le numéro d'identification du taxi : ");
         String idTaxi = saisie("[0-9]*","Veuillez saisir un nombre");
         int taxiID = Integer.parseInt(idTaxi);
-        Taxi seekdTaxi = presenter.readTaxi(taxiID);
+        Taxi seekdTaxi = presenter.readTaxiById(taxiID);
     }
 
     //TODO special when all other classes' Crud are done
     @Override
-    public Taxi selectTaxi(List<Taxi> lTaxis) {
+    public Taxi select(List<Taxi> lTaxis) {
         affListe(lTaxis);
         int choix = choixElt(lTaxis);
         Taxi taxi = lTaxis.get(choix-1);
         return taxi;
     }
+
 }

@@ -1,13 +1,8 @@
 package two_three;
 
-import utilitaires.DateValidator;
-import utilitaires.DateValidatorUsingDateTimeFormatter;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
  * Classe métier de gestion de location de service Taxi

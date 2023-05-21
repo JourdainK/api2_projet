@@ -1,32 +1,32 @@
 package mvp.view;
 
 import mvp.presenter.AdressePresenter;
+import mvp.presenter.Presenter;
+import mvp.presenter.SpecialAdressePresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static utilitaires.Utilitaire.*;
 
-public class AdresseViewConsole implements AdresseViewInterface {
-    private AdressePresenter presenter;
+public class AdresseViewConsole implements ViewInterface<Adresse> {
+    private Presenter<Adresse> presenter;
     private List<Adresse> lAdresses;
     private Scanner sc = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(AdresseViewConsole.class);
 
 
     @Override
-    public void setPresenter(AdressePresenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(Presenter<Adresse> presenter) {
+        this.presenter = (AdressePresenter) presenter;
     }
 
     @Override
-    public void setListDatas(List<Adresse> lAdresses) {
+    public void setListDatas(List<Adresse> lAdresses, Comparator<Adresse> cmp) {
         this.lAdresses = lAdresses;
+        this.lAdresses.sort(cmp);
         //affListe(lAdresses);
         menu();
     }
@@ -75,8 +75,9 @@ public class AdresseViewConsole implements AdresseViewInterface {
                     .setRue(rue)
                     .setNum(num)
                     .build();
-            int idAdre = presenter.addAdresse(newAdresse);
-            newAdresse.setIdAdr(idAdre);
+            presenter.add(newAdresse);
+            //TODO
+            //newAdresse.setIdAdr(idAdre);
         }catch (Exception e){
             logger.error("Erreur lors de la création de l'adresse");
             e.printStackTrace();
@@ -95,7 +96,7 @@ public class AdresseViewConsole implements AdresseViewInterface {
             affListe(lAdresse);
             int choice = choixElt(lAdresse);
             System.out.println("Adresse à effacer : " + lAdresse.get(choice-1));
-            presenter.removeAdresse(lAdresse.get(choice-1));
+            presenter.remove(lAdresse.get(choice-1));
             lAdresses = presenter.getAll();
         }
         else System.out.println("Erreur, pas d'adresses trouvées");
@@ -105,22 +106,21 @@ public class AdresseViewConsole implements AdresseViewInterface {
         System.out.println("Saisir le numéro d'identification de l'adresse : ");
         String idAdre = saisie("[0-9]*","Veuillez saisir un numéro : ");
         int idAdr = Integer.parseInt(idAdre);
-
-        Adresse seekedAdresse = presenter.readAdresse(idAdr);
+        Adresse seekedAdresse = ((SpecialAdressePresenter)presenter).getAdresseByid(idAdr);
     }
 
     public void seekAdresseCP(){
         List<Adresse> lAdresse;
 
         int cp = getCp();
-        lAdresse = presenter.getAdressesByCP(cp);
+        lAdresse = ((SpecialAdressePresenter)presenter).getAdressesByCP(cp);
         affListe(lAdresse);
     }
 
     public void seekAdresseLoc(){
         System.out.println("Saisir la localité : ");
         String loc = sc.nextLine();
-        List<Adresse> lAdresse = presenter.getAdressesByLocalite(loc);
+        List<Adresse> lAdresse = ((SpecialAdressePresenter)presenter).getAdressesByLocalite(loc);
         affListe(lAdresse);
     }
 
@@ -191,7 +191,7 @@ public class AdresseViewConsole implements AdresseViewInterface {
                     break;
             }
         }while(choixMod!=loption.size());
-        presenter.updateAdresse(modifAdress);
+        presenter.update(modifAdress);
         lAdresses = presenter.getAll();
     }
 
@@ -207,12 +207,12 @@ public class AdresseViewConsole implements AdresseViewInterface {
                 break;
             case 2 :
                 int cp = getCp();
-                lAdresse = presenter.getAdressesByCP(cp);
+                lAdresse = ((SpecialAdressePresenter)presenter).getAdressesByCP(cp);
                 break;
             case 3 :
                 System.out.println("Saisir la localité : ");
                 String loc = sc.nextLine();
-                lAdresse = presenter.getAdressesByLocalite(loc);
+                lAdresse = ((SpecialAdressePresenter)presenter).getAdressesByLocalite(loc);
                 break;
         }
 

@@ -174,7 +174,7 @@ public class Client {
         }
 
         public Client build() throws Exception{
-            if(idClient<=0 || nom.isBlank() || prenom.isBlank() || tel.isBlank()) throw new Exception("Erreur lors de la construction du client");
+            if(nom.isBlank() || prenom.isBlank() || tel.isBlank()) throw new Exception("Erreur lors de la construction du client");
             return new Client(this);
         }
     }

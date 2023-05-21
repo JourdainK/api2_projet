@@ -1,5 +1,7 @@
 package mvp.view;
 import mvp.presenter.LocationPresenter;
+import mvp.presenter.Presenter;
+import mvp.presenter.SpecialLocationPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
@@ -15,17 +17,19 @@ import java.util.function.Predicate;
 
 import static utilitaires.Utilitaire.*;
 
-public class LocationViewConsole implements LocationViewInterface{
-    private LocationPresenter presenter;
+public class LocationViewConsole implements ViewInterface<Location>{
+    private Presenter<Location> presenter;
     private List<Location> locations;
     private Scanner sc = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(LocationViewConsole.class);
     @Override
-    public void setPresenter(LocationPresenter presenter) { this.presenter = presenter; }
+    public void setPresenter(Presenter<Location> presenter) { this.presenter = (LocationPresenter) presenter; }
 
     @Override
-    public void setListDatas(List<Location> locations) {
+    public void setListDatas(List<Location> locations,Comparator<Location> cmpt) {
         this.locations = locations;
+        this.locations.sort(cmpt);
+        //affListe(locations);
         menu();
     }
 
@@ -68,7 +72,7 @@ public class LocationViewConsole implements LocationViewInterface{
             String nbrPassagers = saisie("[0-9]{1,3}", "Erreur de saisie ");
             nbrPass = Integer.parseInt(nbrPassagers);
         } while (nbrPass < 1);
-        presenter.add(today, nbrkm, nbrPass);
+        ((SpecialLocationPresenter) presenter).add(today, nbrkm, nbrPass);
         locations = presenter.getAll();
     }
 
@@ -98,8 +102,8 @@ public class LocationViewConsole implements LocationViewInterface{
                     boolean isValid = false;
                     String newDate;
                     do{
-                        System.out.println("Saisir la nouvelle date : ");
-                        newDate = saisie("[0-9]{2}-[0-9]{2}-[0-9]{4}", "Erreur de saisie ");
+                        System.out.println("Saisir la nouvelle date (format jj-mm-aaaa) : ");
+                        newDate = saisie("[0-9]{2}-[0-9]{2}-[0-9]{4}", "Erreur de saisie (format jj-mm-aaaa)");
                         Predicate<String> dateValidator = dateString -> {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             try {
@@ -176,7 +180,7 @@ public class LocationViewConsole implements LocationViewInterface{
                     break;
 
                 case 4 :
-                    List<Taxi> lTaxis = presenter.ListeTaxi();
+                    List<Taxi> lTaxis = ((LocationPresenter)presenter).ListeTaxi();
                     System.out.println("Choisir le nouveau taxi : ");
                     affListe(lTaxis);
                     int choixTaxi = choixElt(lTaxis);
@@ -198,7 +202,7 @@ public class LocationViewConsole implements LocationViewInterface{
                     break;
 
                 case 5 :
-                    List<Client> lClients = presenter.ListeClients();
+                    List<Client> lClients = ((LocationPresenter)presenter).ListeClients();
                     System.out.println("Saisir le nouveau client : ");
                     affListe(lClients);
                     int choixClient = choixElt(lClients);
@@ -219,7 +223,7 @@ public class LocationViewConsole implements LocationViewInterface{
                     }
                     break;
                 case 6 :
-                    List<Adresse> lAdresses = presenter.ListeAdresse();
+                    List<Adresse> lAdresses =  ((LocationPresenter)presenter).ListeAdresse();
                     System.out.println("Saisir la nouvelle adresse de départ : ");
                     affListe(lAdresses);
                     int choixAdr = choixElt(lAdresses);
@@ -240,7 +244,7 @@ public class LocationViewConsole implements LocationViewInterface{
                     }
                     break;
                 case 7 :
-                    List<Adresse> lAdresses2 = presenter.ListeAdresse();
+                    List<Adresse> lAdresses2 =  ((LocationPresenter)presenter).ListeAdresse();
                     System.out.println("Saisir la nouvelle adresse de retour : ");
                     affListe(lAdresses2);
                     int choixAdr2 = choixElt(lAdresses2);
@@ -270,6 +274,16 @@ public class LocationViewConsole implements LocationViewInterface{
     public void rechercher(){
         System.out.println("Saisir le numéro de la location à rechercher : ");
         int id = Integer.parseInt(saisie("[0-9]{1,3}", "Erreur de saisie "));
-        Location location = presenter.read(id);
+        //TODO readByIDspecial
+        //Location location = presenter.read(id);
+    }
+
+    public Location select(List<Location> locations){
+        System.out.println("Saisir le numéro de la location à sélectionner : ");
+        affListe(locations);
+        int choix = choixElt(locations);
+        Location location = locations.get(choix-1);
+
+        return location;
     }
 }

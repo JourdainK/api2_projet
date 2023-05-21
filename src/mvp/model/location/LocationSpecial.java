@@ -13,4 +13,6 @@ public interface LocationSpecial {
     public Adresse getAdresseByID(int id);
 
     public Taxi getTaxiByID(int id);
+
+
 }

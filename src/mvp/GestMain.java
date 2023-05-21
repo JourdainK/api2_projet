@@ -5,10 +5,7 @@ import mvp.model.adresse.AdresseModelDB;
 import mvp.model.client.ClientModelDB;
 import mvp.model.location.LocationModelDB;
 import mvp.model.taxi.TaxiModelDB;
-import mvp.presenter.AdressePresenter;
-import mvp.presenter.ClientPresenter;
-import mvp.presenter.LocationPresenter;
-import mvp.presenter.TaxiPresenter;
+import mvp.presenter.*;
 import mvp.view.*;
 import two_three.Adresse;
 import two_three.Client;
@@ -16,41 +13,53 @@ import two_three.Location;
 import two_three.Taxi;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import static utilitaires.Utilitaire.*;
 
 public class GestMain {
 
     private DAO<Taxi> tm;
-    private TaxiViewInterface tv;
-    private TaxiPresenter tp;
+    private ViewInterface<Taxi> tv;
+    private Presenter<Taxi> tp;
     private DAO<Client> cm;
-    private ClientViewInterface cv;
+    private ViewInterface<Client> cv;
     private ClientPresenter cp;
     private DAO<Adresse> am;
-    private AdresseViewInterface av;
+    private ViewInterface<Adresse> av;
     private AdressePresenter ap;
     private DAO<Location> lm;
-    private LocationViewInterface lv;
-    private LocationPresenter lp;
+    private ViewInterface<Location> lv;
+    private Presenter<Location> lp;
 
     public void gestion(){
+        //compare postal code > ascending order (a1.getCP() - a2.getCP())
+        Comparator<Adresse> cmpAdr = (a1,a2)->a1.getCp()-(a2.getCp());
 
+        //compare name of client > ascending order (c1.getNom().compareTo(c2.getNom()))
+        Comparator<Client> cmpClient = (c1,c2)->c1.getNom().compareTo(c2.getNom());
+
+        //compare date of location > ascending order (l1.getDateLoc().compareTo(l2.getDateLoc()))
+        Comparator<Location> cmpLocation = (l1,l2)->l1.getDateLoc().compareTo(l2.getDateLoc());
+
+        //TODO check if something is better than this
+        //compare taxi number > ascending order (t1.getNumTaxi() - t2.getNumTaxi())
+        Comparator<Taxi> cmpTaxi = (t1,t2)->t1.getIdTaxi() - t2.getIdTaxi();
         tm = new TaxiModelDB();
         tv = new TaxiViewConsole();
-        tp = new TaxiPresenter(tm,tv);
+        tp = new TaxiPresenter(tm,tv,cmpTaxi);
         cm = new ClientModelDB();
         cv = new ClientViewConsole();
-        cp = new ClientPresenter(cm,cv);
+        cp = new ClientPresenter(cm,cv,cmpClient);
         am = new AdresseModelDB();
         av = new AdresseViewConsole();
-        ap = new AdressePresenter(am,av);
+        ap = new AdressePresenter(am,av,cmpAdr);
         lm = new LocationModelDB();
         lv = new LocationViewConsole();
-        lp = new LocationPresenter(lm,lv);
-        lp.setAdressePresenter(ap);
-        lp.setClientPresenter(cp);
-        lp.setTaxiPresenter(tp);
+        lp = new LocationPresenter(lm,lv,cmpLocation);
+        ((SpecialLocationPresenter)lp).setAdressePresenter(ap);
+        ((SpecialLocationPresenter)lp).setClientPresenter(cp);
+        ((SpecialLocationPresenter)lp).setTaxiPresenter((TaxiPresenter) tp);
 
 
 

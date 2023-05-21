@@ -1,27 +1,28 @@
 package mvp.view;
 
 import mvp.presenter.ClientPresenter;
+import mvp.presenter.Presenter;
+import mvp.presenter.SpecialClientPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Client;
 import static utilitaires.Utilitaire.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class ClientViewConsole implements ClientViewInterface{
-    private ClientPresenter presenter;
+public class ClientViewConsole implements ViewInterface<Client>{
+    private Presenter<Client> presenter;
     private List<Client> lClients;
     private Scanner sc = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(ClientViewConsole.class);
     @Override
-    public void setPresenter(ClientPresenter presenter) { this.presenter = presenter; }
+    public void setPresenter(Presenter<Client> presenter) { this.presenter = (ClientPresenter) presenter; }
 
     @Override
-    public void setListDatas(List<Client> lClient) {
+    public void setListDatas(List<Client> lClient, Comparator<Client> cmp) {
         this.lClients = lClient;
+        this.lClients.sort(cmp);
+        //affListe(lClients);
         menu();
     }
 
@@ -73,14 +74,16 @@ public class ClientViewConsole implements ClientViewInterface{
                     .setTel(phone)
                     .build();
             //presenter.addClient -> return idClient
-            int idcli = presenter.addClient(cli);
-            cli.setIdClient(idcli);
+            presenter.add(cli);
+            //TODO : ajouter l'idClient dans le client
+            Client client = presenter.read(cli);
+            //cli.setIdClient(idcli);
 
         }catch (Exception e){
             logger.error("Erreur lors de la création du client : " + e);
             e.printStackTrace();
         }
-        lClients = presenter.getClients();
+        lClients = presenter.getAll();
     }
 
 
@@ -94,8 +97,8 @@ public class ClientViewConsole implements ClientViewInterface{
         String keepOn1 = saisie("[1-2]{1}","Veuillez saisir :  \n1 pour confirmer effacement\n2 pour annuler");
         int keepOn  = Integer.parseInt(keepOn1);
         if(keepOn==1){
-            presenter.removeClient(clientDelete);
-            lClients = presenter.getClients();
+            presenter.remove(clientDelete);
+            lClients = presenter.getAll();
         }
         else System.out.println("effacement annulé");
     }
@@ -181,8 +184,8 @@ public class ClientViewConsole implements ClientViewInterface{
                     break;
             }
         }while(choixMod!=lOptions.size());
-        presenter.updateClient(chosenClient);
-        lClients = presenter.getClients();
+        presenter.update(chosenClient);
+        lClients = presenter.getAll();
     }
 
 
@@ -191,7 +194,7 @@ public class ClientViewConsole implements ClientViewInterface{
         System.out.print("Saisir le numéro du client : ");
         String idCli = saisie("[0-9]*","Veuillez saisir un numéro");
         int idClient = Integer.parseInt(idCli);
-        Client cli = presenter.readClientById(idClient);
+        Client cli = ((SpecialClientPresenter)presenter).readClientById(idClient);
     }
     //TODO client specials view
 

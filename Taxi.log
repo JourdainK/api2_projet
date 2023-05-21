@@ -82,3 +82,11 @@
 
 21-05-2023 15:41:16.253 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
 
+21-05-2023 19:39:14.704 [main] ERROR mvp.view.ClientViewConsole - Erreur lors de la création du client : java.lang.Exception: Erreur lors de la construction du client
+21-05-2023 19:40:14.407 [main] ERROR mvp.view.ClientViewConsole - Erreur lors de la création du client : java.lang.Exception: Erreur lors de la construction du client
+21-05-2023 22:48:58.238 [main] ERROR mvp.presenter.LocationPresenter - Erreur : création location: Cannot invoke "mvp.model.DAO.add(Object)" because "this.model" is null
+22-05-2023 00:01:14.269 [main] ERROR mvp.view.TaxiViewConsole - Erreur lors de l'ajout d'un taxi : java.lang.NullPointerException: Cannot invoke "two_three.Taxi.getIdTaxi()" because "tmpTaxi" is null
+22-05-2023 00:06:17.047 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+
+22-05-2023 00:07:14.366 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+
