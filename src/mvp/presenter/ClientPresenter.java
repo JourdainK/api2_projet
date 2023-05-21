@@ -87,4 +87,9 @@ public class ClientPresenter {
 
     //TODO client Specials
 
+    public Client select(){
+        List<Client> listCli = model.getAll();
+        Client cl = view.select(listCli);
+        return cl;
+    }
 }

@@ -3,13 +3,16 @@ package mvp;
 import mvp.model.*;
 import mvp.model.adresse.AdresseModelDB;
 import mvp.model.client.ClientModelDB;
+import mvp.model.location.LocationModelDB;
 import mvp.model.taxi.TaxiModelDB;
 import mvp.presenter.AdressePresenter;
 import mvp.presenter.ClientPresenter;
+import mvp.presenter.LocationPresenter;
 import mvp.presenter.TaxiPresenter;
 import mvp.view.*;
 import two_three.Adresse;
 import two_three.Client;
+import two_three.Location;
 import two_three.Taxi;
 
 import java.util.Arrays;
@@ -27,7 +30,9 @@ public class GestMain {
     private DAO<Adresse> am;
     private AdresseViewInterface av;
     private AdressePresenter ap;
-
+    private DAO<Location> lm;
+    private LocationViewInterface lv;
+    private LocationPresenter lp;
 
     public void gestion(){
 
@@ -40,10 +45,16 @@ public class GestMain {
         am = new AdresseModelDB();
         av = new AdresseViewConsole();
         ap = new AdressePresenter(am,av);
+        lm = new LocationModelDB();
+        lv = new LocationViewConsole();
+        lp = new LocationPresenter(lm,lv);
+        lp.setAdressePresenter(ap);
+        lp.setClientPresenter(cp);
+        lp.setTaxiPresenter(tp);
 
 
 
-        List<String> loptions = Arrays.asList("Menu Taxi", "Menu Client", "Menu Adresse","fin");
+        List<String> loptions = Arrays.asList("Menu Taxi", "Menu Client", "Menu Adresse","Menu Location" ,"fin");
 
         do{
             affListe(loptions);
@@ -59,6 +70,9 @@ public class GestMain {
                     ap.start();
                     break;
                 case 4 :
+                    lp.start();
+                    break;
+                case 5 :
                     System.exit(0);
                     break;
             }

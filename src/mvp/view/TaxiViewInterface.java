@@ -11,4 +11,6 @@ public interface TaxiViewInterface {
     public void setListDatas(List<Taxi> ltaxis);
 
     public void affMsg(String msg);
+
+    public Taxi selectTaxi(List<Taxi> listTaxis);
 }

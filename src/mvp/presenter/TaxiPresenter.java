@@ -68,5 +68,11 @@ public class TaxiPresenter {
     }
 
     //TODO specials when all other cruds are done
+    //select a taxi From listTaxis and return it
+    public Taxi selectTaxi(){
+        List<Taxi> listTaxis = getListTaxis();
+        Taxi taxi = view.selectTaxi(listTaxis);
+        return taxi;
+    }
 
 }

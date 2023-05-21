@@ -149,7 +149,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
                     break;
                 case 2 :
                     System.out.print("\nSaisir le nouveau nombre de passagers maximum : ");
-                    int newnbrMax= chosenTaxi.getNbreMaxPassagers();
+                    int newnbrMax;
                     do{
                         String newMax = saisie("[0-9]*","Veuillez entrer un nombre entier");
                         newnbrMax = Integer.parseInt(newMax);
@@ -168,7 +168,7 @@ public class TaxiViewConsole implements TaxiViewInterface {
                     break;
                 case 3 :
                     System.out.print("\nSaisir le nouveau prix au kilomètre : ");
-                    double newprix= chosenTaxi.getPrixKm();
+                    double newprix;
                     do{
                         String newPrice = saisie("[0-9]{0,10}[.][0-9]{0,2}|[0-9]{0,10}", "Erreur de saisie, veuillez saisir un nombre réel (séparée d'un point) supérieur à 0\nSaisir le prix au km : ");
                         newprix = Double.parseDouble(newPrice);
@@ -200,4 +200,11 @@ public class TaxiViewConsole implements TaxiViewInterface {
     }
 
     //TODO special when all other classes' Crud are done
+    @Override
+    public Taxi selectTaxi(List<Taxi> lTaxis) {
+        affListe(lTaxis);
+        int choix = choixElt(lTaxis);
+        Taxi taxi = lTaxis.get(choix-1);
+        return taxi;
+    }
 }

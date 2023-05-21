@@ -12,6 +12,7 @@ import two_three.Taxi;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -24,8 +25,6 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         if (dbConnect == null) {
             logger.error("Erreur de connexion, Location");
             System.exit(1);
-        } else {
-            logger.info("Connexion étable - Location");
         }
     }
 
@@ -35,7 +34,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         String query = "SELECT MAX(id_location) FROM APILOCATION WHERE dateloc = ? AND id_client = ?";
         try (PreparedStatement pstm1 = dbConnect.prepareStatement(insertQuery);
              PreparedStatement pstm2 = dbConnect.prepareStatement(query);) {
-            pstm1.setString(1, location.getDateLoc());
+            pstm1.setDate(1, Date.valueOf(location.getDateLoc()));
             pstm1.setInt(2, location.getKmTotal());
             pstm1.setInt(3, location.getNbrePassagers());
             pstm1.setInt(4, location.getVehicule().getIdTaxi());
@@ -46,14 +45,14 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
             int line = pstm1.executeUpdate();
 
             if (line == 1) {
-                pstm2.setString(1, location.getDateLoc());
+                pstm2.setDate(1, Date.valueOf(location.getDateLoc()));
                 pstm2.setInt(2, location.getClient().getIdclient());
                 ResultSet rs = pstm2.executeQuery();
                 if (rs.next()) {
-                    int idLoc = rs.getInt("id_location");
-                    location.setIdLoc(idLoc);
-                    //TODO CHECK WHAT FOLLOW !!!! IMPORTANT -> TEST !!!
-                    location.getVehicule().getListTaxiLoc().add(location);
+                    int idLoc = rs.getInt(1);
+                    location.setId(idLoc);
+                    //TODO specials taxi -> list location
+                    //location.getVehicule().getListTaxiLoc().add(location);
                     return location = read(location);
                 } else return null;
             } else {
@@ -87,20 +86,19 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
 
     @Override
     public Location update(Location location) {
-        String update = "UPDATE apilocation SET dateloc=?, kmtotal=?, nbrpassagers=?,total=?,id_taxi=?, id_adresse=?, id_adresse_1=?, id_client=? WHERE id_location=?";
+        String update = "UPDATE apilocation SET dateloc=?, kmtotal=?, nbrpassagers=?,id_taxi=?, id_adresse=?, id_adresse_1=?, id_client=? WHERE id_location=?";
         //check Date.valueOf
         try (PreparedStatement pstm = dbConnect.prepareStatement(update)) {
             pstm.setDate(1, (Date.valueOf(location.getDateLoc())));
             pstm.setInt(2, location.getKmTotal());
             pstm.setInt(3, location.getNbrePassagers());
-            //TODO delete total from method -> total will automatically updated by sql trigger -> no modifying possible
+            //TOTAL n'est pas modifiable, le total étant calculé par un trigger dans la base de données
             // read() will give back the price
-            pstm.setBigDecimal(4, BigDecimal.valueOf(location.getTotal()));
-            pstm.setInt(5, location.getVehicule().getIdTaxi());
-            pstm.setInt(6, location.getAdrDebut().getIdAdr());
-            pstm.setInt(7, location.getAdrFin().getIdAdr());
-            pstm.setInt(8, location.getClient().getIdclient());
-            pstm.setInt(9, location.getIdLoc());
+            pstm.setInt(4, location.getVehicule().getIdTaxi());
+            pstm.setInt(5, location.getAdrDebut().getIdAdr());
+            pstm.setInt(6, location.getAdrFin().getIdAdr());
+            pstm.setInt(7, location.getClient().getIdclient());
+            pstm.setInt(8, location.getIdLoc());
             int line = pstm.executeUpdate();
             if (line != 0) return read(location);
             else return null;
@@ -121,13 +119,13 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
                 int idLoc = rs.getInt("ID_LOCATION");
-                String dateloc = String.valueOf(rs.getDate("DATELOC"));
+                LocalDate dateloc = rs.getDate("DATELOC").toLocalDate();
                 int kmtot = rs.getInt("KMTOTAL");
                 int nbrpass = rs.getInt("NBRPASSAGERS");
                 double total = rs.getDouble("TOTAL");
                 int idTaxi = rs.getInt("ID_TAXI");
                 int idAdreDepart = rs.getInt("ID_ADRESSE");
-                int idAdreFin = rs.getInt("ID_ADRESS_1");
+                int idAdreFin = rs.getInt("ID_ADRESSE_1");
                 int idClient = rs.getInt("ID_CLIENT");
                 try {
                     Taxi taxi = getTaxiByID(idTaxi);
@@ -170,7 +168,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                 double total = rs.getDouble("TOTAL");
                 int idTaxi = rs.getInt("ID_TAXI");
                 int idAdreDepart = rs.getInt("ID_ADRESSE");
-                int idAdreFin = rs.getInt("ID_ADRESS_1");
+                int idAdreFin = rs.getInt("ID_ADRESSE_1");
                 int idClient = rs.getInt("ID_CLIENT");
                 try {
                     Taxi taxi = getTaxiByID(idTaxi);
@@ -178,7 +176,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                     Adresse adrD = getAdresseByID(idAdreDepart);
                     Adresse adrF = getAdresseByID(idAdreFin);
                     location = new Location.LocationBuilder().setIdLoc(idLoc)
-                            .setDateLoc(dateloc).setKmTot(kmtot).setNbrePassagers(nbrpass)
+                            .setDateLoc(LocalDate.parse(dateloc)).setKmTot(kmtot).setNbrePassagers(nbrpass)
                             .setTotal(total).setVehicule(taxi).setClient(cli).setAdrDebut(adrD).setAdrFin(adrF).build();
                 } catch (Exception e) {
                     logger.error("Erreur lors de la lecture du client : " + e);
@@ -196,15 +194,14 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
 
     @Override
     public List<Location> getAll() {
-        List<Location> ldatas;
-        Set<Location> locatSet = new HashSet<>();
+        List<Location> ldatas= new ArrayList<>();
         Location tmpLoc;
         String query = "SELECT * FROM APILOCATION ORDER BY id_location";
 
         try(Statement stmt = dbConnect.createStatement();
             ResultSet rs = stmt.executeQuery(query);){
             while(rs.next()){
-                int idLoc = rs.getInt(1);
+                int idLoc = rs.getInt("ID_LOCATION");
                 String dateloc = String.valueOf(rs.getDate(2));
                 int kmtot = rs.getInt(3);
                 int nbrPass = rs.getInt(4);
@@ -218,28 +215,33 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                     Client cli = getClientById(idCli);
                     Adresse adrD = getAdresseByID(adrDep);
                     Adresse adrF = getAdresseByID(adrFin);
-                    tmpLoc = new Location.LocationBuilder().setIdLoc(idLoc)
-                            .setDateLoc(dateloc).setKmTot(kmtot).setNbrePassagers(nbrPass)
-                            .setTotal(tot).setVehicule(taxi).setClient(cli).setAdrDebut(adrD).setAdrFin(adrF).build();
-                    locatSet.add(tmpLoc);
+                    tmpLoc = new Location.LocationBuilder()
+                            .setIdLoc(idLoc)
+                            .setDateLoc(LocalDate.parse(dateloc))
+                            .setKmTot(kmtot)
+                            .setNbrePassagers(nbrPass)
+                            .setTotal(tot)
+                            .setVehicule(taxi)
+                            .setClient(cli)
+                            .setAdrDebut(adrD)
+                            .setAdrFin(adrF).build();
+
+                    ldatas.add(tmpLoc);
+
                 }catch (Exception e){
                     logger.error("Erreur lors de la récupération des locations : " + e);
                     e.printStackTrace();
                     System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
                 }
-                //TODO test CHECK
-                ldatas = new ArrayList<>(locatSet);
 
-                return ldatas;
             }
-
         }catch (SQLException e){
             logger.error("Erreur lors de la récupération des taxis : " + e);
             System.err.println("Erreur Sql : " + e);
             e.printStackTrace();
         }
 
-        return null;
+        return ldatas;
     }
 
 
@@ -272,7 +274,6 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                     e.printStackTrace();
                     return null;
                 }
-
             } else return null;
 
         } catch (SQLException e) {
@@ -352,8 +353,6 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         }
 
     }
-
-
 
     //TODO specials
 }

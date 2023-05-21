@@ -13,4 +13,5 @@ public interface AdresseViewInterface {
 
     public void affMsg(String msg);
 
+    public Adresse select(List<Adresse> all);
 }

@@ -1,15 +1,22 @@
 package two_three;
 
+import utilitaires.DateValidator;
+import utilitaires.DateValidatorUsingDateTimeFormatter;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Classe métier de gestion de location de service Taxi
  *
- *  @author Kevin Jourdain
- *  @version 2.0
- *  @see Taxi
- *  @see Client
- *  @see Adresse
+ * @author Kevin Jourdain
+ * @version 2.0
+ * @see Taxi
+ * @see Client
+ * @see Adresse
  */
 
 public class Location {
@@ -28,7 +35,7 @@ public class Location {
     /**
      * date de la location
      */
-    protected String dateLoc;
+    protected LocalDate dateLoc;
     /**
      * coût total de la location
      */
@@ -53,9 +60,11 @@ public class Location {
 
     /**
      * Constructeur à l'aide du pattern Builder
+     *
      * @param builder
      */
-    private Location(LocationBuilder builder){
+    private Location(LocationBuilder builder) {
+        this.idLoc = builder.idLoc;
         this.kmTotal = builder.kmTot;
         this.nbrePassagers = builder.nbrePassagers;
         this.dateLoc = builder.dateLoc;
@@ -68,11 +77,11 @@ public class Location {
 
     /**
      * Setter idLoc (numéro d'identification de la location)
-     *  id donné par la base de données
+     * id donné par la base de données
      *
      * @param idLoc
      */
-    public void setIdLoc(int idLoc) {
+    public void setId(int idLoc) {
         this.idLoc = idLoc;
     }
 
@@ -87,6 +96,7 @@ public class Location {
 
     /**
      * Setter Client (Client de la location)
+     *
      * @param client
      */
     public void setClient(Client client) {
@@ -95,6 +105,7 @@ public class Location {
 
     /**
      * Setter adrDebut (Adresse de départ de la location)
+     *
      * @param adrDebut
      */
     public void setAdrDebut(Adresse adrDebut) {
@@ -104,6 +115,7 @@ public class Location {
 
     /**
      * Setter adrFin (Adresse d'arrivée de la location)
+     *
      * @param adrFin
      */
     public void setAdrFin(Adresse adrFin) {
@@ -142,7 +154,7 @@ public class Location {
      *
      * @return date de la location
      */
-    public String getDateLoc() {
+    public LocalDate getDateLoc() {
         return dateLoc;
     }
 
@@ -194,6 +206,7 @@ public class Location {
 
     /**
      * égalité de deux locations basées sur le quadruplet id, adrDebut, adrFin, dateLoc
+     *
      * @param o autre élément
      * @return égalité ou pas
      */
@@ -212,37 +225,53 @@ public class Location {
 
     /**
      * calcul du hashcode du client basé sur le quadruplet id, adrDebut, adrFin, dateLoc
+     *
      * @return valeur du hashcode
      */
     @Override
     public int hashCode() {
-        return Objects.hash(idLoc,adrDebut,adrFin,dateLoc);
+        return Objects.hash(idLoc, adrDebut, adrFin, dateLoc);
     }
 
     /**
      * methode toString
+     *
      * @return informations complètes
      */
     @Override
     public String toString() {
-        return "\n-- Location --\n" +
-                "\nN° d'identification : " + idLoc +
-                "\nKm Total : " + kmTotal +
-                "\t\tNombre de passagers : " + nbrePassagers +
-                "\nDate de la location : " + dateLoc +
-                "\nTotal : " + total + "€" +
-                "\nVéhicule : \n" + vehicule +
-                "\nClient : \n" + client +
-                "\nTrajet :\n\nAdresse de départ : " + adrDebut +
-                "\nAdresse d'arrivée : " + adrFin;
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_CYAN = "\u001B[36m";
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(ANSI_CYAN)
+                .append("\t\tN° d'identification : ").append(ANSI_RESET)
+                .append(idLoc)
+                .append("\nKm Total : ").append(kmTotal)
+                .append("\t\tNombre de passagers : ").append(nbrePassagers)
+                .append("\nDate de la location : ").append(dateLoc)
+                .append("\nTotal : ").append(total).append("€")
+                .append(ANSI_GREEN).append("\nVéhicule : \n").append(ANSI_RESET)
+                .append(vehicule.immatriculation).append("\t\tPrix/km : ").append(vehicule.prixKm).append(" €\t").append("Places : ").append(vehicule.getNbreMaxPassagers())
+                .append(ANSI_GREEN).append("\nClient : \n").append(ANSI_RESET)
+                .append(client.getMail()).append("\t\t").append(client.getNom()).append("\t\t").append(client.getPrenom())
+                .append(ANSI_GREEN).append("\nTrajet :").append(ANSI_RESET)
+                .append("\nAdresse de départ : ").append(adrDebut.getRue()).append("\t").append(adrDebut.getNum()).append("\t").append(adrDebut.getLocalite()).append("\t").append(adrDebut.getCp())
+                .append("\nAdresse d'arrivée : ").append(adrFin.getRue()).append("\t").append(adrFin.getNum()).append("\t").append(adrFin.getLocalite()).append("\t").append(adrFin.getCp()).append("\n\n");
+
+        String output = stringBuilder.toString();
+
+        return output;
     }
 
 
-    public static class LocationBuilder{
+    public static class LocationBuilder {
         protected int idLoc;
         protected int kmTot;
         protected int nbrePassagers;
-        protected String dateLoc;
+        protected LocalDate dateLoc;
         protected Taxi vehicule;
         protected double total;
         protected Client client;
@@ -264,7 +293,7 @@ public class Location {
             return this;
         }
 
-        public LocationBuilder setDateLoc(String dateLoc) {
+        public LocationBuilder setDateLoc(LocalDate dateLoc) {
             this.dateLoc = dateLoc;
             return this;
         }
@@ -294,8 +323,14 @@ public class Location {
             return this;
         }
 
-        public Location build() throws Exception{
-            if(idLoc<=0 || kmTot<=0 ||nbrePassagers<=0 || dateLoc.isBlank() || adrDebut == null || adrFin == null || client == null || vehicule == null ) throw new Exception("Erreur lors de la construction de la location");
+        //TODO check date -> fix
+        public Location build() throws Exception {
+            //problème pour l'exception concernant la date > condition la date ne doit précéder la date du jour -> dateLoc == null => exception.// passer par un trigger ou un check SQL
+            //LocalDate tod = LocalDate.now();
+            //dateLoc.isBefore(tod) -> passer par un trigger ou un check SQL
+
+            if (kmTot <= 0 || nbrePassagers <= 0 ||  dateLoc == null  ||adrDebut == null || adrFin == null || client == null || vehicule == null) throw new Exception("Erreur lors de la construction de la location");
+
             return new Location(this);
         }
 

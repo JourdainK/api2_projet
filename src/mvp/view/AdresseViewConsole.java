@@ -219,5 +219,13 @@ public class AdresseViewConsole implements AdresseViewInterface {
         return lAdresse;
     }
 
+    public Adresse select(List<Adresse> ladr){
+        affListe(ladr);
+        int choix = choixElt(ladr);
+        Adresse adr = ladr.get(choix-1);
+
+        return adr;
+    }
+
 
 }

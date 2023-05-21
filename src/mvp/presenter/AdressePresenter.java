@@ -76,5 +76,10 @@ public class AdressePresenter {
         return lAdresseLoc;
     }
 
+    public Adresse select(){
+        Adresse adr = view.select(model.getAll());
+
+        return adr;
+    }
 
 }

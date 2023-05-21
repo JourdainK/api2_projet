@@ -194,4 +194,12 @@ public class ClientViewConsole implements ClientViewInterface{
         Client cli = presenter.readClientById(idClient);
     }
     //TODO client specials view
+
+    public Client select(List<Client> cl) {
+        affListe(cl);
+        int choix = choixElt(cl);
+        Client cli = cl.get(choix - 1);
+
+        return cli;
+    }
 }
