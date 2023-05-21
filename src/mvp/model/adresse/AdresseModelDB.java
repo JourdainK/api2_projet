@@ -132,9 +132,37 @@ public class AdresseModelDB implements DAO<Adresse>, AdresseSpecial {
 
     @Override
     public Adresse read(Adresse adresse){
-        //TODO read Adresse(Adresse adre)
+        Adresse adress;
+        String query = "SELECT * FROM APIADRESSE WHERE cp=? AND localite=? AND rue=? AND num=?";
 
-        return null;
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
+            pstm.setInt(1,adresse.getCp());
+            pstm.setString(2,adresse.getLocalite());
+            pstm.setString(3,adresse.getRue());
+            pstm.setString(4,adresse.getNum());
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()){
+                int idAdre = rs.getInt(1);
+                int cp = rs.getInt(2);
+                String local = rs.getString(3);
+                String rue = rs.getString(4);
+                String num = rs.getString(5);
+                try{
+                    adress = new Adresse.AdresseBuilder()
+                            .setIdAdr(idAdre).setCp(cp).setLocalite(local).setRue(rue)
+                            .setNum(num).build();
+                    return adress;
+                }catch (Exception e){
+                    logger.error("Erreur lors de la recherche d'une adresse");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            else return null;
+        }catch (SQLException e){
+            logger.error("Erreur lors de la recherche d'une adresse");
+            return null;
+        }
     }
 
     @Override

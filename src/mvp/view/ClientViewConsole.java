@@ -75,9 +75,8 @@ public class ClientViewConsole implements ViewInterface<Client>{
                     .build();
             //presenter.addClient -> return idClient
             presenter.add(cli);
-            //TODO : ajouter l'idClient dans le client
             Client client = presenter.read(cli);
-            //cli.setIdClient(idcli);
+            cli.setIdClient(client.getIdclient());
 
         }catch (Exception e){
             logger.error("Erreur lors de la création du client : " + e);

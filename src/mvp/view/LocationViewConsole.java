@@ -1,6 +1,7 @@
 package mvp.view;
 import mvp.presenter.LocationPresenter;
 import mvp.presenter.Presenter;
+import mvp.presenter.SpecialClientPresenter;
 import mvp.presenter.SpecialLocationPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -274,8 +275,7 @@ public class LocationViewConsole implements ViewInterface<Location>{
     public void rechercher(){
         System.out.println("Saisir le numéro de la location à rechercher : ");
         int id = Integer.parseInt(saisie("[0-9]{1,3}", "Erreur de saisie "));
-        //TODO readByIDspecial
-        //Location location = presenter.read(id);
+        Location location = ((SpecialLocationPresenter)presenter).getLocById(id);
     }
 
     public Location select(List<Location> locations){

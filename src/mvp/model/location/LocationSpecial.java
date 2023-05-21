@@ -6,8 +6,6 @@ import two_three.Location;
 import two_three.Taxi;
 
 public interface LocationSpecial {
-    //TODO getClientbyID + getAdresseByID + getTaxibyId
-
     public Client getClientById(int id);
 
     public Adresse getAdresseByID(int id);

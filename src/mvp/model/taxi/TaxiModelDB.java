@@ -139,7 +139,37 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
 
     @Override
     public Taxi read(Taxi taxi) {
-        //TODO read Taxi taxi-> return taxi
+        Taxi taxiTmp;   // taxi à retourner
+        String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ? AND IMMATRICULATION = ?";
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, taxi.getIdTaxi());
+            pstm.setString(2, taxi.getImmatriculation());
+            try (ResultSet rs = pstm.executeQuery()) {
+                if (rs.next()) {
+                    int idTaxi = rs.getInt(1);
+                    String immat = rs.getString(2);
+                    int nbrPassMax = rs.getInt(3);
+                    double prixKm = rs.getDouble(4);
+                    try {
+                        taxiTmp = new Taxi.TaxiBuilder()
+                                .setIdTaxi(idTaxi)
+                                .setImmatriculation(immat)
+                                .setPrixKm(prixKm)
+                                .setNbreMaxPassagers(nbrPassMax)
+                                .build();
+                        return taxiTmp;
+                    } catch (Exception e) {
+                        logger.error("Erreur lors de la récupération du taxi : " + e);
+                        e.printStackTrace();
+                    }
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la récupération du taxi : " + e);
+            System.err.println("Erreur SQL : " + e);
+        }
         return null;
     }
 

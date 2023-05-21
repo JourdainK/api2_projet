@@ -59,7 +59,4 @@ public abstract class Presenter<T> {
         return  view.select(model.getAll());
     }
 
-
-
-
 }

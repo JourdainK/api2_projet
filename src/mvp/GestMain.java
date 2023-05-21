@@ -38,13 +38,14 @@ public class GestMain {
 
         //compare name of client > ascending order (c1.getNom().compareTo(c2.getNom()))
         Comparator<Client> cmpClient = (c1,c2)->c1.getNom().compareTo(c2.getNom());
+        cmpClient = cmpClient.thenComparing((c1,c2)->c1.getPrenom().compareTo(c2.getPrenom()));
 
         //compare date of location > ascending order (l1.getDateLoc().compareTo(l2.getDateLoc()))
         Comparator<Location> cmpLocation = (l1,l2)->l1.getDateLoc().compareTo(l2.getDateLoc());
 
-        //TODO check if something is better than this
-        //compare taxi number > ascending order (t1.getNumTaxi() - t2.getNumTaxi())
+        //compare taxi number > ascending order (t1.getIdTaxi() - t2.getIdTaxi())
         Comparator<Taxi> cmpTaxi = (t1,t2)->t1.getIdTaxi() - t2.getIdTaxi();
+
         tm = new TaxiModelDB();
         tv = new TaxiViewConsole();
         tp = new TaxiPresenter(tm,tv,cmpTaxi);

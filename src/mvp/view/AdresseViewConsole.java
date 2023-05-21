@@ -76,8 +76,6 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
                     .setNum(num)
                     .build();
             presenter.add(newAdresse);
-            //TODO
-            //newAdresse.setIdAdr(idAdre);
         }catch (Exception e){
             logger.error("Erreur lors de la création de l'adresse");
             e.printStackTrace();

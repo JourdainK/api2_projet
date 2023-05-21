@@ -206,7 +206,6 @@ public class Location {
      * @return égalité ou pas
      */
 
-    //TODO check this equals => Compare to exercice instructions !
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -318,7 +317,6 @@ public class Location {
             return this;
         }
 
-        //TODO check date -> fix
         public Location build() throws Exception {
             //problème pour l'exception concernant la date > condition la date ne doit précéder la date du jour -> dateLoc == null => exception.// passer par un trigger ou un check SQL
             //LocalDate tod = LocalDate.now();
