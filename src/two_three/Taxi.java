@@ -1,8 +1,7 @@
 package two_three;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Taxi {
     /**
@@ -108,7 +107,7 @@ public class Taxi {
     /**
      * setter immatriculation
      *
-     * @param List de locations du taxi
+     * @param 
      */
     public void setLocations(List<Location> locatTaxi) {
         this.listTaxiLoc = locatTaxi;
@@ -151,6 +150,46 @@ public class Taxi {
                 "\t\tImmatriculation : " + immatriculation +
                 "\nTarif (au kilomètre ) : " + prixKm + "€";
     }
+
+    public List<Client> getClientsOfTaxi(){
+        Set<Client> sClient = new HashSet<>();
+        for(Location loc : listTaxiLoc){
+            sClient.add(loc.getClient());
+        }
+        List<Client> listClient = new ArrayList<>(sClient);
+        return listClient;
+    }
+
+    public int getTotKm(){
+        int totKm = 0;
+        for(Location loc : listTaxiLoc){
+            totKm += loc.getKmTotal();
+        }
+        return totKm;
+    }
+
+    public double getTotGain(){
+        double totGain = 0;
+        for(Location loc : listTaxiLoc){
+            totGain += loc.getTotal();
+        }
+        return totGain;
+    }
+
+    public List<Location> getListLocationBetweenDates(LocalDate dateStart, LocalDate dateEnd){
+        Set<Location> sLocat = new HashSet<>();
+
+        for(Location l : listTaxiLoc){
+            if((l.getDateLoc().isAfter(dateStart) && l.getDateLoc().isBefore(dateEnd))|| l.getDateLoc().isEqual(dateStart) || l.getDateLoc().isEqual(dateEnd) || l.getDateLoc().isEqual(dateStart) && l.getDateLoc().isEqual(dateEnd)){
+                sLocat.add(l);
+            }
+        }
+        List<Location> listLocat = new ArrayList<>(sLocat);
+
+        return listLocat;
+    }
+
+
 
     public static class TaxiBuilder{
         protected int idTaxi;

@@ -417,7 +417,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return taxis;
     }
 
-    //TODO implements
+    //TODO use this / or use class -> list -> filter list + stream ? (java 8)
     @Override
     public List<Client> getClientOfTaxi(Taxi taxi) {
         try (CallableStatement cs = dbConnect.prepareCall("{? = call client_by_taxi(?)}")) {

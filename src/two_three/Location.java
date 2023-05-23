@@ -81,43 +81,6 @@ public class Location {
     }
 
     /**
-     * Setter Véhicule (taxi utilisé pour la location)
-     *
-     * @param vehicule
-     */
-    public void setVehicule(Taxi vehicule) {
-        this.vehicule = vehicule;
-    }
-
-    /**
-     * Setter Client (Client de la location)
-     *
-     * @param client
-     */
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    /**
-     * Setter adrDebut (Adresse de départ de la location)
-     *
-     * @param adrDebut
-     */
-    public void setAdrDebut(Adresse adrDebut) {
-        this.adrDebut = adrDebut;
-    }
-
-
-    /**
-     * Setter adrFin (Adresse d'arrivée de la location)
-     *
-     * @param adrFin
-     */
-    public void setAdrFin(Adresse adrFin) {
-        this.adrFin = adrFin;
-    }
-
-    /**
      * getter idLoc
      *
      * @return identifiant de la location

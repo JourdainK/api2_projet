@@ -90,3 +90,5 @@
 
 22-05-2023 00:07:14.366 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
 
+22-05-2023 00:44:48.313 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
+

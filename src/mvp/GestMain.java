@@ -24,10 +24,10 @@ public class GestMain {
     private Presenter<Taxi> tp;
     private DAO<Client> cm;
     private ViewInterface<Client> cv;
-    private ClientPresenter cp;
+    private Presenter<Client> cp;
     private DAO<Adresse> am;
     private ViewInterface<Adresse> av;
-    private AdressePresenter ap;
+    private Presenter<Adresse> ap;
     private DAO<Location> lm;
     private ViewInterface<Location> lv;
     private Presenter<Location> lp;
@@ -58,8 +58,8 @@ public class GestMain {
         lm = new LocationModelDB();
         lv = new LocationViewConsole();
         lp = new LocationPresenter(lm,lv,cmpLocation);
-        ((SpecialLocationPresenter)lp).setAdressePresenter(ap);
-        ((SpecialLocationPresenter)lp).setClientPresenter(cp);
+        ((SpecialLocationPresenter)lp).setAdressePresenter((AdressePresenter) ap);
+        ((SpecialLocationPresenter)lp).setClientPresenter((ClientPresenter) cp);
         ((SpecialLocationPresenter)lp).setTaxiPresenter((TaxiPresenter) tp);
 
 
