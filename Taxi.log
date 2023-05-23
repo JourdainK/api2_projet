@@ -92,3 +92,21 @@
 
 22-05-2023 00:44:48.313 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la recherche des locations d'un taxi : java.sql.SQLException: ORA-01008: not all variables bound
 
+23-05-2023 22:45:28.339 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-02-16 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:45:28.371 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-03-12 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:45:28.386 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-02-26 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:45:28.417 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-03-12 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:45:28.439 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-02-26 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:45:28.471 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors du listing clients : java.time.format.DateTimeParseException: Text '2023-05-20 00:00:00.0' could not be parsed, unparsed text found at index 10
+23-05-2023 22:48:25.458 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:25.489 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:25.511 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:25.531 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:25.549 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:25.580 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.835 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.851 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.882 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.898 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.914 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name
+23-05-2023 22:48:37.967 [main] ERROR mvp.model.taxi.TaxiModelDB - Erreur lors de la récupération des locations : java.sql.SQLException: Invalid column name

@@ -238,7 +238,7 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 int idLoc = rs.getInt("ID_LOCATION");
-                LocalDate dateLoc = LocalDate.parse(rs.getString("DATELOC"));
+                String dateLoc = rs.getString("DATELOC");
                 int kmtot = rs.getInt("KMTOT");
                 int nbrPass = rs.getInt("NBRPASSAGERS");
                 double prix = rs.getDouble("TOTAL");
@@ -254,7 +254,7 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
                 try {
                     tmpLocation = new Location.LocationBuilder()
                             .setIdLoc(idLoc)
-                            .setDateLoc(dateLoc)
+                            .setDateLoc(LocalDate.parse(dateLoc))
                             .setKmTot(kmtot)
                             .setNbrePassagers(nbrPass)
                             .setTotal(prix)

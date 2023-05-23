@@ -107,7 +107,7 @@ public class Taxi {
     /**
      * setter immatriculation
      *
-     * @param 
+     * @param
      */
     public void setLocations(List<Location> locatTaxi) {
         this.listTaxiLoc = locatTaxi;
