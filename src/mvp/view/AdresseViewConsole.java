@@ -11,7 +11,7 @@ import java.util.*;
 
 import static utilitaires.Utilitaire.*;
 
-public class AdresseViewConsole implements ViewInterface<Adresse> {
+public class AdresseViewConsole extends AbstractViewConsole<Adresse> implements SpecialAdresseViewConsole {
     private Presenter<Adresse> presenter;
     private List<Adresse> lAdresses;
     private Scanner sc = new Scanner(System.in);
@@ -36,28 +36,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         System.out.println("Information : " + msg);
     }
 
-    public void menu(){
-        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher toutes les adresses","Ajouter","effacer","Modifier","Rechercher par identifiant","Rechercher par code postal","Rechercher par localité","Retour"));
-
-        int choix;
-
-        do{
-            System.out.println("");
-            affListe(loptions);
-            choix = choixElt(loptions);
-            switch(choix){
-                case 1 -> affListe(lAdresses);
-                case 2 -> addAdresses();
-                case 3 -> deleteAdresse();
-                case 4 -> modifAdresse();
-                case 5 -> seekAdresseID();
-                case 6 -> seekAdresseCP();
-                case 7 -> seekAdresseLoc();
-            }
-        }while(choix!=8);
-    }
-
-    public void addAdresses(){
+    public void add(){
         System.out.println(" -- Encoder une nouvelle adresse --\n");
         System.out.print("\nSaisir la rue : ");
         String rue = sc.nextLine();
@@ -85,7 +64,8 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         //affListe(lAdresses);
     }
 
-    public void deleteAdresse(){
+    @Override
+    public void remove(){
         List<Adresse> lAdresse = null;
         System.out.println("-- Suppresion d'une adresse --\n");
         lAdresse = getListByChoice();
@@ -100,7 +80,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         else System.out.println("Erreur, pas d'adresses trouvées");
     }
 
-    public void seekAdresseID(){
+    public void seek(){
         System.out.println("Saisir le numéro d'identification de l'adresse : ");
         String idAdre = saisie("[0-9]*","Veuillez saisir un numéro : ");
         int idAdr = Integer.parseInt(idAdre);
@@ -122,8 +102,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         affListe(lAdresse);
     }
 
-    public void modifAdresse(){
-        boolean check = false;
+    public void update(){
         List<String> loption = new ArrayList<>(Arrays.asList("Rue","Numéro","Localité et code postal","Retour"));
 
         System.out.println("-- Modifier une adresse --\n");
@@ -131,6 +110,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         affListe(lAdresse);
         int choice = choixElt(lAdresse);
         Adresse modifAdress = lAdresse.get(choice-1);
+        System.out.println("Adresse à modifier : " + modifAdress );
         int choixMod;
         String newLocat;
         int cp;
@@ -145,6 +125,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
                     String newRue = sc.nextLine();
                     try{
                         modifAdress = new Adresse.AdresseBuilder()
+                                .setIdAdr(modifAdress.getIdAdr())
                                 .setCp(modifAdress.getCp())
                                 .setLocalite(modifAdress.getLocalite())
                                 .setRue(newRue)
@@ -160,6 +141,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
                     String num = saisie("[0-9]{1,3}[a-zA-Z]{0,1}","Veuillez un numéro d'adresse correcte ( 10 , 10A)");
                     try{
                         modifAdress = new Adresse.AdresseBuilder()
+                                .setIdAdr(modifAdress.getIdAdr())
                                 .setCp(modifAdress.getCp())
                                 .setLocalite(modifAdress.getLocalite())
                                 .setRue(modifAdress.getRue())
@@ -176,6 +158,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
                     cp = getCp();
                     try{
                         modifAdress = new Adresse.AdresseBuilder()
+                                .setIdAdr(modifAdress.getIdAdr())
                                 .setCp(cp)
                                 .setLocalite(newLocat)
                                 .setRue(modifAdress.getRue())
@@ -217,6 +200,7 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         return lAdresse;
     }
 
+    @Override
     public Adresse select(List<Adresse> ladr){
         affListe(ladr);
         int choix = choixElt(ladr);
@@ -225,5 +209,23 @@ public class AdresseViewConsole implements ViewInterface<Adresse> {
         return adr;
     }
 
+    @Override
+    protected void special() {
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir toutes les adresses","Rechercher par localité", "Rechercher par Code postal","Retour"));
+
+        int choix;
+
+        do{
+            System.out.println("");
+            affListe(listOptions);
+            choix = choixElt(listOptions);
+            switch(choix){
+                case 1 -> affListe(lAdresses);
+                case 2 -> seekAdresseLoc();
+                case 3 -> seekAdresseCP();
+            }
+        }while(choix!=listOptions.size());
+
+    }
 
 }

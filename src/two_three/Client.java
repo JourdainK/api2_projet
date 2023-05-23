@@ -1,8 +1,6 @@
 package two_three;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Client {
     /**
@@ -139,6 +137,15 @@ public class Client {
                 "\nNom : " + nom +
                 "\t\tPrénom : " + prenom +
                 "\nN° de téléphone : " + tel + "\n";
+    }
+
+    public List<Taxi> getListTaxi(){
+        Set<Taxi> setTaxi = new HashSet<>();
+        for(Location loc : listLocations){
+            setTaxi.add(loc.getVehicule());
+        }
+        List<Taxi> listTaxi = new ArrayList<>(setTaxi);
+        return listTaxi;
     }
 
     public static class ClientBuilder{

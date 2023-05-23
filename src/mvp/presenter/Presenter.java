@@ -43,7 +43,7 @@ public abstract class Presenter<T> {
 
     public void update(T elt) {
         T nelt  =model.update(elt);
-        if(nelt==null) view.affMsg("mise à jour infrucueuse");
+        if(nelt==null) view.affMsg("mise à jour infructueuse");
         else view.affMsg("mise à jour effectuée : "+nelt);
     }
 
