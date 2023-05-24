@@ -10,7 +10,7 @@ import static utilitaires.Utilitaire.*;
 
 import java.util.*;
 
-public class ClientViewConsole implements ViewInterface<Client>{
+public class ClientViewConsole extends AbstractViewConsole<Client> implements SpecialClientViewConsole{
     private Presenter<Client> presenter;
     private List<Client> lClients;
     private Scanner sc = new Scanner(System.in);
@@ -30,27 +30,8 @@ public class ClientViewConsole implements ViewInterface<Client>{
     public void affMsg(String msg) {
         System.out.println("Information : " + msg);
     }
-
-    public void menu(){
-        List<String> option = new ArrayList<>(Arrays.asList("Voir la liste des clients","Ajouter","Effacer","Modifier","Rechercher","Retour"));
-        int choix;
-        do{
-            System.out.println("\n-- Menu Client -- ");
-            affListe(option);
-            choix = choixElt(option);
-            switch (choix){
-                case 1 -> affListe(lClients);
-                case 2 -> addClient();
-                case 3 -> deleteClient();
-                case 4 -> modifClient();
-                case 5 -> seekClient();
-            }
-
-        }while(choix!=6);
-
-    }
-
-    public void addClient(){
+    @Override
+    public void add(){
 
         System.out.println("\n--Ajout d'un client --");
         System.out.println("Saisir l'email du client : ");
@@ -86,7 +67,8 @@ public class ClientViewConsole implements ViewInterface<Client>{
     }
 
 
-    public void deleteClient(){
+    @Override
+    public void remove(){
         System.out.println("-- Suppression d'un client--\n");
         affListe(lClients);
         int choix = choixElt(lClients);
@@ -102,7 +84,8 @@ public class ClientViewConsole implements ViewInterface<Client>{
         else System.out.println("effacement annulé");
     }
 
-    public void modifClient(){
+    @Override
+    public void update(){
         boolean check = false;
         affListe(lClients);
         int choix = choixElt(lClients);
@@ -187,21 +170,33 @@ public class ClientViewConsole implements ViewInterface<Client>{
         lClients = presenter.getAll();
     }
 
+    @Override
+    protected void special() {
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les clients" , "Retour"));
 
-    public void seekClient(){
+        int choix;
+
+        do {
+            System.out.println("");
+            affListe(listOptions);
+            choix = choixElt(listOptions);
+            switch (choix) {
+                case 1 -> affListe(lClients);
+            }
+        } while (choix != listOptions.size());
+
+        //TODO special client Menu
+    }
+
+    @Override
+    public void seek(){
         System.out.println(" -- Rechercher un client --\n");
         System.out.print("Saisir le numéro du client : ");
         String idCli = saisie("[0-9]*","Veuillez saisir un numéro");
         int idClient = Integer.parseInt(idCli);
         Client cli = ((SpecialClientPresenter)presenter).readClientById(idClient);
     }
+
     //TODO client specials view
 
-    public Client select(List<Client> cl) {
-        affListe(cl);
-        int choix = choixElt(cl);
-        Client cli = cl.get(choix - 1);
-
-        return cli;
-    }
 }

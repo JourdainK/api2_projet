@@ -120,6 +120,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                             .setPrixKm(prixKm)
                             .setNbreMaxPassagers(nbrMaxPas)
                             .build();
+                    tmpTaxi.setLocations(allLocTaxi(tmpTaxi));
                     ltaxis.add(tmpTaxi);
                 } catch (Exception e) {
                     logger.error("Erreur lors de la récupération des taxis : " + e);
@@ -157,6 +158,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                                 .setPrixKm(prixKm)
                                 .setNbreMaxPassagers(nbrPassMax)
                                 .build();
+                        taxiTmp.setLocations(allLocTaxi(taxiTmp));
                         return taxiTmp;
                     } catch (Exception e) {
                         logger.error("Erreur lors de la récupération du taxi : " + e);
@@ -218,7 +220,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         Set<Integer> idTaxis = new HashSet<>();
 
         int idClient = client.getIdclient();
-        String query1 = "SELECT * FROM api_taxi_used WHERE id_client = ?";
+        String query1 = "SELECT * FROM API_TAXI_USED WHERE id_client = ?";
 
         try (PreparedStatement pstm = dbConnect.prepareStatement(query1)) {
             pstm.setInt(1, idClient);
@@ -238,24 +240,25 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return taxisUsed;
     }
 
+    //TODO delete and use method of class or use it
     @Override
     public List<Location> allLocTaxi(Taxi taxi) {
-        int idTaxi = taxi.getIdTaxi();
         Location tmpLoc;
         List<Location> lLoc = new ArrayList<>();
+        Set<Location> sLoc = new HashSet<>();
         String query1 = "SELECT * FROM apilocation WHERE id_taxi = ?";
 
         try (PreparedStatement pstm = dbConnect.prepareStatement(query1)) {
-            pstm.setInt(1, idTaxi);
-            ResultSet rs = pstm.executeQuery(query1);
+            pstm.setInt(1, taxi.getIdTaxi());
+            ResultSet rs = pstm.executeQuery();
 
             if (rs.next()) {
                 int idLoc = rs.getInt(1);
-                LocalDate dateloc = rs.getDate(2).toLocalDate();
+                String dateloc = String.valueOf(rs.getDate(2));
                 int kmTotal = rs.getInt(3);
                 int nbrPass = rs.getInt(4);
                 //BigDecimal tot = rs.getBigDecimal(5);
-                double total = rs.getInt(5);
+                double total = rs.getDouble(5);
                 int idTax = rs.getInt(6);
                 int adAll = rs.getInt(7);
                 int adRet = rs.getInt(8);
@@ -263,17 +266,20 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                 Taxi taxiLoc = getTaxiByID(idTax);
                 Adresse adrAll = getAdresseByID(adAll);
                 Adresse adrRet = getAdresseByID(adRet);
+                Client cliLoc = getClientById(idCli);
                 try {
                     tmpLoc = new Location.LocationBuilder()
                             .setIdLoc(idLoc)
-                            .setDateLoc(dateloc)
+                            .setDateLoc(LocalDate.parse(dateloc))
                             .setKmTot(kmTotal)
                             .setNbrePassagers(nbrPass)
                             .setTotal(total)
                             .setVehicule(taxiLoc)
                             .setAdrDebut(adrAll)
                             .setAdrFin(adrRet)
+                            .setClient(cliLoc)
                             .build();
+                    sLoc.add(tmpLoc);
                 } catch (Exception e) {
                     logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
                 }
@@ -285,9 +291,12 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
         }
 
-        return null;
+        lLoc = new ArrayList<>(sLoc);
+
+        return lLoc;
     }
 
+    //TODO delete and use method of class or use it
     @Override
     public List<Adresse> allAdressTaxi(Taxi taxi) {
         return null;

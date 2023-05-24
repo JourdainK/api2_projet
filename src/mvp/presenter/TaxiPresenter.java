@@ -2,14 +2,12 @@ package mvp.presenter;
 
 import mvp.model.DAO;
 import mvp.model.taxi.TaxiSpecial;
-import mvp.view.TaxiViewInterface;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Taxi;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresenter {

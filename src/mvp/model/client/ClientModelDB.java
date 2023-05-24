@@ -238,16 +238,13 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 int idLoc = rs.getInt("ID_LOCATION");
-                String dateLoc = rs.getString("DATELOC");
-                int kmtot = rs.getInt("KMTOT");
+                String dateLoc = String.valueOf(rs.getDate("DATELOC"));
+                int kmtot = rs.getInt("KMTOTAL");
                 int nbrPass = rs.getInt("NBRPASSAGERS");
                 double prix = rs.getDouble("TOTAL");
                 int idVeh = rs.getInt("ID_TAXI");
                 int idDepart = rs.getInt("ID_ADRESSE");
                 int idArrivee = rs.getInt("ID_ADRESSE_1");
-                int idCli = rs.getInt("ID_CLIENT");
-                String dateRet = rs.getString("DATE_RETOUR");
-                Client cli = readbyId(idCli);
                 Taxi taxi = getTaxiByID(idVeh);
                 Adresse adrDepart = getAdresseByID(idDepart);
                 Adresse adrArrivee = getAdresseByID(idArrivee);
@@ -261,7 +258,7 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
                             .setVehicule(taxi)
                             .setAdrDebut(adrDepart)
                             .setAdrFin(adrArrivee)
-                            .setClient(cli)
+                            .setClient(client)
                             .build();
                     lLocations.add(tmpLocation);
                 } catch (Exception e) {

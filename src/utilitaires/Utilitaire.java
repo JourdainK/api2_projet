@@ -43,7 +43,7 @@ public class Utilitaire {
         String choix1;
         do {
             System.out.println("choix :");
-            choix1 = saisie("[0-9]*","Veuillez saisir un nombre");
+            choix1 = saisie("[1-9]*","Veuillez saisir un nombre");
             choix = Integer.parseInt(choix1);
             if(choix <1 || choix > l.size()){
                 System.out.println("Erreur le nombre doit être compris entre 1 et " + l.size());

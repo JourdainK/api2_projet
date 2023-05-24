@@ -35,7 +35,7 @@ public abstract class AbstractViewConsole<T> implements ViewInterface<T> {
     }
 
     public void menu(){
-        List<String> options = List.of("ajouter", "retirer", "rechercher","modifier","special","fin");
+        List<String> options = List.of("Ajouter", "Retirer", "Rechercher","Modifier","Special","Retour");
         do {
             affListe(options);
             int choix = choixElt(options);

@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 import static utilitaires.Utilitaire.*;
 
-public class LocationViewConsole implements ViewInterface<Location>{
+public class LocationViewConsole extends AbstractViewConsole<Location> implements SpecialLocationViewConsole{
     private Presenter<Location> presenter;
     private List<Location> locations;
     private Scanner sc = new Scanner(System.in);
@@ -37,26 +37,8 @@ public class LocationViewConsole implements ViewInterface<Location>{
     @Override
     public void affMsg(String msg) { System.out.println("Information : " +  msg); }
 
-    public void menu(){
-        List<String> loption = new ArrayList<>(Arrays.asList("Afficher les locations","Ajouter une location","Effacer une location","Modifier une location","Rechercher une location","Specials", "retour au menu précédent"));
-        int choix;
-
-        do{
-            affListe(loption);
-            choix = choixElt(loption);
-
-            switch (choix){
-                case 1 -> affListe(locations);
-                case 2 -> ajouter();
-                case 3 -> deleteLocation();
-                case 4 -> modifLocation();
-                case 5 -> rechercher();
-                case 6 -> System.out.println("Specials !!");
-            }
-        }while(choix != 7);
-    }
-
-    public void ajouter() {
+    @Override
+    public void add() {
         System.out.println("-- Encoder une nouvelle location --");
         //TODO today's or another day
         LocalDate today = LocalDate.now();
@@ -77,7 +59,8 @@ public class LocationViewConsole implements ViewInterface<Location>{
         locations = presenter.getAll();
     }
 
-    public void deleteLocation(){
+    @Override
+    public void remove(){
         System.out.println("-- Supprimer une location --");
         affListe(locations);
         int choix = choixElt(locations);
@@ -87,7 +70,8 @@ public class LocationViewConsole implements ViewInterface<Location>{
         locations = presenter.getAll();
     }
 
-    public void modifLocation(){
+    @Override
+    public void update(){
         int choixMod;
         System.out.println("-- Modifier une location --");
         affListe(locations);
@@ -272,12 +256,14 @@ public class LocationViewConsole implements ViewInterface<Location>{
         locations = presenter.getAll();
     }
 
-    public void rechercher(){
+    @Override
+    public void seek(){
         System.out.println("Saisir le numéro de la location à rechercher : ");
         int id = Integer.parseInt(saisie("[0-9]{1,3}", "Erreur de saisie "));
         Location location = ((SpecialLocationPresenter)presenter).getLocById(id);
     }
 
+    @Override
     public Location select(List<Location> locations){
         System.out.println("Saisir le numéro de la location à sélectionner : ");
         affListe(locations);
@@ -286,4 +272,20 @@ public class LocationViewConsole implements ViewInterface<Location>{
 
         return location;
     }
+    @Override
+    protected void special() {
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir toutes les locations" , "Retour"));
+
+        int choix;
+
+        do {
+            System.out.println("");
+            affListe(listOptions);
+            choix = choixElt(listOptions);
+            switch (choix) {
+                case 1 -> affListe(locations);
+            }
+        } while (choix != listOptions.size());
+    }
+
 }

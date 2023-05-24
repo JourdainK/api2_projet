@@ -11,7 +11,7 @@ import java.util.*;
 
 import static utilitaires.Utilitaire.*;
 
-public class TaxiViewConsole implements ViewInterface<Taxi> {
+public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements SpecialTaxiViewConsole {
     private TaxiPresenter presenter;
     private List<Taxi> lTaxis;
     private Scanner sc = new Scanner(System.in);
@@ -34,30 +34,8 @@ public class TaxiViewConsole implements ViewInterface<Taxi> {
         System.out.println("Information : " + msg);
     }
 
-
-    public void menu(){
-        List<String> loptions = new ArrayList<>(Arrays.asList("Voir la liste des taxis","Ajouter", "Effacer","Modifier","Rechercher","Voir les taxi d'un client donné","Voir les locations d'un taxi","Voir les adresses auquel s'est rendu un taxi","Retour"));
-        int choix;
-        do{
-            System.out.println("");
-            affListe(loptions);
-            choix = choixElt(loptions);
-            switch (choix){
-                case 1 -> affListe(lTaxis);
-                case 2 -> ajouter();
-                case 3 -> deleteTaxi();
-                case 4 -> modifTaxi();
-                case 5 -> seekTaxi();
-                case 6 -> System.out.println("voir taxi client");
-                case 7 -> System.out.println("voir locat taxi");
-                case 8 -> System.out.println("Voir adre");
-            }
-
-        }while(choix != 9);
-
-    }
-
-    public void ajouter(){
+    @Override
+    public void add(){
         System.out.println(" -- Encoder un nouveau taxi --\n ");
         System.out.println("Saisir l'immatriculation : ");
         String immat = saisie("^[T]{1}\\-([L]{1}||[X]{1})[A-Z]{2}\\-[0-9]{3}$", "Erreur de saisie, veuillez saisir une immatriculation de type 'T-XXX-000' ou 'T-LXX-000'\nSaisir l'immatriculation : ");
@@ -90,7 +68,8 @@ public class TaxiViewConsole implements ViewInterface<Taxi> {
         //affListe(lTaxis);
     }
 
-    public void deleteTaxi(){
+    @Override
+    public void remove(){
         Map <Integer, String> allTaxis;
         allTaxis = presenter.getMapTaxis();
         int choixTaxi = -1;
@@ -116,7 +95,8 @@ public class TaxiViewConsole implements ViewInterface<Taxi> {
         lTaxis = presenter.getAll();
     }
 
-    public void modifTaxi(){
+    @Override
+    public void update(){
         boolean check = false;
         affListe(lTaxis);
         int choix = choixElt(lTaxis);
@@ -188,7 +168,8 @@ public class TaxiViewConsole implements ViewInterface<Taxi> {
         lTaxis = presenter.getAll();
     }
 
-    public void seekTaxi(){
+    @Override
+    public void seek(){
         System.out.println("\t--Recherche d'un taxi--");
         System.out.print("Saisir le numéro d'identification du taxi : ");
         String idTaxi = saisie("[0-9]*","Veuillez saisir un nombre");
@@ -196,13 +177,28 @@ public class TaxiViewConsole implements ViewInterface<Taxi> {
         Taxi seekdTaxi = presenter.readTaxiById(taxiID);
     }
 
-    //TODO special when all other classes' Crud are done
     @Override
     public Taxi select(List<Taxi> lTaxis) {
         affListe(lTaxis);
         int choix = choixElt(lTaxis);
         Taxi taxi = lTaxis.get(choix-1);
         return taxi;
+    }
+
+    @Override
+    protected void special() {
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les taxis" , "Retour"));
+
+        int choix;
+
+        do {
+            System.out.println("");
+            affListe(listOptions);
+            choix = choixElt(listOptions);
+            switch (choix) {
+                case 1 -> affListe(lTaxis);
+            }
+        } while (choix != listOptions.size());
     }
 
 }

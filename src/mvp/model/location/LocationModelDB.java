@@ -197,10 +197,10 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         Location tmpLoc;
         String query = "SELECT * FROM APILOCATION ORDER BY id_location";
 
-        try(Statement stmt = dbConnect.createStatement();
-            ResultSet rs = stmt.executeQuery(query);){
+        try(Statement stmt = dbConnect.createStatement();){
+            ResultSet rs = stmt.executeQuery(query);
             while(rs.next()){
-                int idLoc = rs.getInt("ID_LOCATION");
+                int idLoc = rs.getInt(1);
                 String dateloc = String.valueOf(rs.getDate(2));
                 int kmtot = rs.getInt(3);
                 int nbrPass = rs.getInt(4);
