@@ -1,6 +1,7 @@
 package mvp.model.taxi;
 
 import mvp.model.DAO;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
@@ -240,7 +241,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return taxisUsed;
     }
 
-    //TODO delete and use method of class or use it
     @Override
     public List<Location> allLocTaxi(Taxi taxi) {
         Location tmpLoc;
@@ -252,7 +252,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             pstm.setInt(1, taxi.getIdTaxi());
             ResultSet rs = pstm.executeQuery();
 
-            if (rs.next()) {
+            while(rs.next()) {
                 int idLoc = rs.getInt(1);
                 String dateloc = String.valueOf(rs.getDate(2));
                 int kmTotal = rs.getInt(3);
@@ -285,13 +285,12 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                 }
 
             }
-            taxi.setLocation(lLoc);
+            lLoc = new ArrayList<>(sLoc);
+            //taxi.setLocation(lLoc);
 
         } catch (SQLException e) {
             logger.error("Erreur lors de la recherche des locations d'un taxi : " + e);
         }
-
-        lLoc = new ArrayList<>(sLoc);
 
         return lLoc;
     }
@@ -428,12 +427,12 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
 
     //TODO use this / or use class -> list -> filter list + stream ? (java 8)
     @Override
-    public List<Client> getClientOfTaxi(Taxi taxi) {
-        try (CallableStatement cs = dbConnect.prepareCall("{? = call client_by_taxi(?)}")) {
+    public List<Client> getClientsOfTaxi(Taxi taxi) {
+        try (CallableStatement cs = dbConnect.prepareCall("{?=call client_by_taxi(?)}")) {
 
-            cs.registerOutParameter(1, Types.REF_CURSOR);
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
             cs.setInt(2, taxi.getIdTaxi());
-            cs.execute();
+            cs.executeQuery();
 
             ResultSet rs = (ResultSet) cs.getObject(1);
             Set<Client> sClients = new HashSet<>();
@@ -460,7 +459,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
                     e.printStackTrace();
                 }
             }
-
             clients = new ArrayList<>(sClients);
             return clients;
         } catch (SQLException e) {
@@ -468,5 +466,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             return null;
         }
     }
+
 
 }

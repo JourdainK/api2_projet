@@ -20,5 +20,5 @@ public interface TaxiSpecial {
 
     public Taxi getTaxiByID(int id);
     public Map<Integer, String> getTaxisMap();
-    public List<Client> getClientOfTaxi(Taxi taxi);
+    public List<Client> getClientsOfTaxi(Taxi taxi);
 }

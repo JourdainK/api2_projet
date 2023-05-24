@@ -1,7 +1,6 @@
 package mvp.view;
 import mvp.presenter.LocationPresenter;
 import mvp.presenter.Presenter;
-import mvp.presenter.SpecialClientPresenter;
 import mvp.presenter.SpecialLocationPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,7 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
     private Scanner sc = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(LocationViewConsole.class);
     @Override
-    public void setPresenter(Presenter<Location> presenter) { this.presenter = (LocationPresenter) presenter; }
+    public void setPresenter(Presenter<Location> presenter) { this.presenter =  presenter; }
 
     @Override
     public void setListDatas(List<Location> locations,Comparator<Location> cmpt) {
@@ -41,6 +40,7 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
     public void add() {
         System.out.println("-- Encoder une nouvelle location --");
         //TODO today's or another day
+        //check TaxiVuiew  , utilitaires verif Date + Trigger SUr DB -> DATELOC >= today
         LocalDate today = LocalDate.now();
         System.out.println("Saisir le nombre de kilomètres total de la location : ");
         int nbrkm;

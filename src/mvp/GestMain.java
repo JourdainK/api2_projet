@@ -62,8 +62,6 @@ public class GestMain {
         ((SpecialLocationPresenter)lp).setClientPresenter((ClientPresenter) cp);
         ((SpecialLocationPresenter)lp).setTaxiPresenter((TaxiPresenter) tp);
 
-
-
         List<String> loptions = Arrays.asList("Menu Taxi", "Menu Client", "Menu Adresse","Menu Location" ,"fin");
 
         do{

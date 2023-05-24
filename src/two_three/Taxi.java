@@ -1,5 +1,6 @@
 package two_three;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -153,7 +154,9 @@ public class Taxi {
 
     public List<Client> getClientsOfTaxi(){
         Set<Client> sClient = new HashSet<>();
+
         for(Location loc : listTaxiLoc){
+            System.out.println(loc);
             sClient.add(loc.getClient());
         }
         List<Client> listClient = new ArrayList<>(sClient);
@@ -169,11 +172,13 @@ public class Taxi {
     }
 
     public double getTotGain(){
-        double totGain = 0;
+        BigDecimal totGain = new BigDecimal(0);
         for(Location loc : listTaxiLoc){
-            totGain += loc.getTotal();
+            totGain = totGain.add(BigDecimal.valueOf(loc.getTotal()));
         }
-        return totGain;
+
+        double tot = totGain.doubleValue();
+        return tot;
     }
 
     public List<Location> getListLocationBetweenDates(LocalDate dateStart, LocalDate dateEnd){

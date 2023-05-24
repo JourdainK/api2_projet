@@ -5,8 +5,12 @@ import mvp.presenter.SpecialTaxiPresenter;
 import mvp.presenter.TaxiPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import two_three.Client;
+import two_three.Location;
 import two_three.Taxi;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static utilitaires.Utilitaire.*;
@@ -187,7 +191,7 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
 
     @Override
     protected void special() {
-        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les taxis" , "Retour"));
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les taxis" , "Voir les clients d'un taxi", "Voir les gains et kilomètres total d'un taxi","Voir les locations entre deux dates d'un taxi","Retour"));
 
         int choix;
 
@@ -197,8 +201,74 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
             choix = choixElt(listOptions);
             switch (choix) {
                 case 1 -> affListe(lTaxis);
+                case 2 -> affClient();
+                case 3 -> taxiKmAndCashTotal();
+                case 4 -> getLocationsBetween2Dates();
             }
         } while (choix != listOptions.size());
     }
 
+    @Override
+    public void affClient() {
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_RESET = "\u001B[0m";
+        System.out.println("\t-- Liste des clients d'un taxi --");
+        System.out.println("Choisir un taxi : ");
+        affListe(lTaxis);
+        int choix = choixElt(lTaxis);
+        Taxi taxi = lTaxis.get(choix-1);
+        /*
+        //Utilisation objet : liste de locations du taxi (via MVP) -> utilisation de la méthode de classe getClientsOfTaxi()
+        //List<Client> lClients = taxi.getClientsOfTaxi();
+         */
+        //utilisation fonction sql :  client_by_taxi > exploitation du curseur
+        List<Client> lClients = presenter.getClientsOfTaxi(taxi);
+
+        System.out.println(ANSI_GREEN + "\n\tClients du taxi " + ANSI_RESET + taxi.getImmatriculation() + " : " );
+        affListe(lClients);
+    }
+
+    @Override
+    public void taxiKmAndCashTotal(){
+        System.out.println("\t-- Liste des taxis avec le nombre de kilomètres parcourus et le montant total des locations --\n");
+        affListe(lTaxis);
+        int choix = choixElt(lTaxis);
+        Taxi taxi = lTaxis.get(choix-1);
+
+        System.out.println("Le taxi à parcouru un total de : " + taxi.getTotKm() + " km" + "\nGain total : " + taxi.getTotGain() + " €");
+    }
+
+    @Override
+    public void getLocationsBetween2Dates(){
+        System.out.println("\t-- Liste des locations d'un taxi entre deux dates --\n");
+        affListe(lTaxis);
+        int choix = choixElt(lTaxis);
+        Taxi taxi = lTaxis.get(choix-1);
+
+        String dateDeb;
+        do{
+            System.out.println("Saisir la date de début (format : dd-mm-yyyy) : ");
+            dateDeb = saisie("^[0-9]{2}\\-[0-9]{2}\\-[0-9]{4}$", "Erreur de saisie, veuillez saisir une date au format dd/mm/yyyy\nSaisir la date de début : ");
+        }while(!isDateValid(dateDeb,"dd-MM-yyyy"));
+        LocalDate dateDebut = LocalDate.parse(dateDeb,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        String dateFin;
+        do{
+            System.out.println("Saisir la date de fin (format : dd/mm/yyyy) : ");
+            dateFin = saisie("^[0-9]{2}\\-[0-9]{2}\\-[0-9]{4}$", "Erreur de saisie, veuillez saisir une date au format dd/mm/yyyy\nSaisir la date de fin : ");
+        }while(!isDateValid(dateFin,"dd-MM-yyyy"));
+        LocalDate dateFinale = LocalDate.parse(dateFin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        List<Location> llocations = taxi.getListLocationBetweenDates(dateDebut,dateFinale);
+        Collections.sort(llocations, new Comparator<Location>() {
+            @Override
+            public int compare(Location o1, Location o2) {
+                return o1.getIdLoc()-o2.getIdLoc();
+            }
+        });
+
+        System.out.println("Liste des location entre le " + dateDebut + " et le " + dateFinale + " : ");
+        affListe(llocations);
+
+    }
 }

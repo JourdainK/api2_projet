@@ -5,9 +5,11 @@ import mvp.model.taxi.TaxiSpecial;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import two_three.Client;
 import two_three.Taxi;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresenter {
@@ -33,12 +35,19 @@ public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresent
     }
 
     //TODO specials when all other cruds are done
-
     @Override
     public Map<Integer, String> getMapTaxis(){
         Map<Integer, String> mapTaxis = ((TaxiSpecial) model).getTaxisMap();
 
         return mapTaxis;
     }
+
+    @Override
+    public List<Client> getClientsOfTaxi(Taxi taxi) {
+        List<Client> lClients = ((TaxiSpecial) model).getClientsOfTaxi(taxi);
+
+        return lClients;
+    }
+
 
 }

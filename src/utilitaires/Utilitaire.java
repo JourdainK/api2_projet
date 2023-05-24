@@ -1,7 +1,11 @@
 package utilitaires;
 
-import two_three.Taxi;
+import exercices1JDBC.DateValidator;
+import exercices1JDBC.DateValidatorUsingDateTimeFormatter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -71,6 +75,24 @@ public class Utilitaire {
 
         return cp;
     }
+
+    public static boolean isDateValid(String date, String format) {
+        boolean check;
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+            LocalDate.parse(date, formatter);
+            //System.out.println("La date est valide");
+            check = true;
+        } catch (DateTimeParseException e) {
+            System.out.println("La date n'est pas valide");
+            check = false;
+        }
+
+        return check;
+    }
+
+
 
 
 }
