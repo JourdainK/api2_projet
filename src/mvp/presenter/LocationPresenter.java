@@ -108,11 +108,12 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     }
 
     @Override
-    public List<Location> getAllLocatSamePlace() {
+    public void getAllLocatSamePlace() {
         List<Location> locations = ((LocationSpecial) model).getAllLocatSamePlace();
-        return locations;
+        view.affMsg("Locations : \n" + locations.toString());
     }
 
+    //TODO refactor -> same as getAllLocatSamePlace above !
     @Override
     public void getAllLocatSamePlaceWithPrice(LocalDate date) {
         HashMap<List<Location>, Double> locations = ((LocationSpecial) model).getAllLocatSamePlaceWithPrice(date);

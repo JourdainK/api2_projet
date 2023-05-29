@@ -21,7 +21,7 @@ public interface SpecialLocationPresenter{
     void setTaxiPresenter(TaxiPresenter taxiPresenter);
     void setAdressePresenter(AdressePresenter adressePresenter);
 
-    List<Location> getAllLocatSamePlace();
+    void getAllLocatSamePlace();
 
     void getAllLocatSamePlaceWithPrice(LocalDate date);
 

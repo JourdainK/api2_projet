@@ -55,6 +55,7 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
             String nbrPassagers = saisie("[0-9]{1,3}", "Erreur de saisie ");
             nbrPass = Integer.parseInt(nbrPassagers);
         } while (nbrPass < 1);
+
         System.out.println("Choisir le taxi pour la location : ");
         Taxi taxi = getChoice(((SpecialLocationPresenter) presenter).getTaxiByNbrPass(nbrPass));
         ((SpecialLocationPresenter) presenter).add(today, nbrkm, nbrPass,taxi);
@@ -277,18 +278,11 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
             choix = choixElt(listOptions);
             switch (choix) {
                 case 1 -> affListe(locations);
-                case 2 -> getAllLocatSamePlace();
+                case 2 -> ((SpecialLocationPresenter) presenter).getAllLocatSamePlace();
                 case 3 -> getAllLocatSamePlaceWithPrice();
             }
         } while (choix != listOptions.size());
     }
-
-    @Override
-    public void getAllLocatSamePlace() {
-        List<Location> lloc = ((SpecialLocationPresenter) presenter).getAllLocatSamePlace();
-        affListe(lloc);
-    }
-
     @Override
     public void getAllLocatSamePlaceWithPrice() {
         String date;

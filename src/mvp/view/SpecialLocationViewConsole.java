@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface SpecialLocationViewConsole {
 
-    void getAllLocatSamePlace();
-
     void getAllLocatSamePlaceWithPrice();
 }
