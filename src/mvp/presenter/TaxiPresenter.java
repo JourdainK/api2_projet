@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import two_three.Client;
 import two_three.Taxi;
 
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,6 @@ public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresent
         }
     }
 
-    //TODO specials when all other cruds are done
     @Override
     public Map<Integer, String> getMapTaxis(){
         Map<Integer, String> mapTaxis = ((TaxiSpecial) model).getTaxisMap();
@@ -49,5 +50,20 @@ public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresent
         return lClients;
     }
 
+    @Override
+    public int getKmParcourus(Taxi taxi) {
+        int km = ((TaxiSpecial) model).getKmParcourus(taxi);
+        if(km<=0) view.affMsg("Le taxi n'as pas encore effectué de location\n");
+        else view.affMsg("Km parcourus par le taxi  " + taxi.getImmatriculation() + " : " + km+"km\n");
+        return km;
+    }
+
+    @Override
+    public HashMap<Integer, Double> getNbrLocAndTotalGain(Taxi taxi, LocalDate dateLoc) {
+        HashMap<Integer,Double> map = ((TaxiSpecial) model).getNbrLocAndTotalGain(taxi, dateLoc);
+        if(map.isEmpty()) view.affMsg("Le taxi n'as pas encore effectué de location\n");
+
+        return map;
+    }
 
 }

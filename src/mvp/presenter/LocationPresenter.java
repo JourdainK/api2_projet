@@ -1,6 +1,7 @@
 package mvp.presenter;
 
 import mvp.model.DAO;
+import mvp.model.location.LocationSpecial;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,7 @@ import two_three.Taxi;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -40,21 +42,11 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
         this.adressePresenter = adressePresenter;
     }
 
-
     @Override
-    public void add(LocalDate date, int nbrKm, int nbrPassagers){
+    public void add(LocalDate date, int nbrKm, int nbrPassagers,Taxi taxi){
        //copie du modèle de Mr Poriaux > comfact > addLigne
 
-        Taxi taxi;
-        do{
-            taxi = taxiPresenter.select();
-            if (taxi.getNbreMaxPassagers() < nbrPassagers) {
-                view.affMsg("Erreur : le taxi sélectionné ne peut pas accueillir autant de passagers");
-            } else {
-                view.affMsg("Taxi sélectionné : " + taxi);
-            }
-        }while (taxi == null || taxi.getNbreMaxPassagers()<nbrPassagers);
-
+        view.affMsg("Client : ");
         Client client = clientPresenter.select();
         view.affMsg("Adresse de départ : ");
         Adresse adresseDepart = adressePresenter.select();
@@ -72,6 +64,8 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
                     .setAdrFin(adresseArrivee)
                     .build();
             Location loc = model.add(location);
+            double price = ((LocationSpecial) model).getTotalLocat(loc.getIdLoc());
+            loc.setTotal(price);
 
             if(loc!=null){
                 view.affMsg("Location ajoutée\nNuméro d'identification de la nouvelle location : " + loc.getIdLoc());
@@ -84,7 +78,6 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
             logger.error("Erreur : création location: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -111,7 +104,40 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
         return adresses;
     }
 
+    @Override
+    public List<Location> getAllLocatSamePlace() {
+        List<Location> locations = ((LocationSpecial) model).getAllLocatSamePlace();
+        return locations;
+    }
 
+    @Override
+    public HashMap<List<Location>, Double> getAllLocatSamePlaceWithPrice(LocalDate date) {
+        HashMap<List<Location>, Double> locations = ((LocationSpecial) model).getAllLocatSamePlaceWithPrice(date);
+        if(locations.isEmpty()){
+            view.affMsg("Aucune location n'a été trouvée pour cette date");
+            return locations;
+        }
+        else return locations;
+    }
 
+    @Override
+    public double getTotalLocat(int id) {
+        double total = ((LocationSpecial) model).getTotalLocat(id);
+        return total;
+    }
+
+    @Override
+    public List<Taxi> getTaxiByNbrPass(int nbrPass) {
+        List<Taxi> taxis = ((LocationSpecial) model).getTaxiByNbrPass(nbrPass);
+
+        if(taxis.size()==0){
+            view.affMsg("Aucun taxi n'a été trouvé pour ce nombre de passagers");
+            return null;
+        }
+        else {
+            return taxis;
+        }
+
+    }
 
 }

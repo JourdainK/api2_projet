@@ -3,6 +3,7 @@ package mvp.model.client;
 import mvp.model.DAO;
 import mvp.model.taxi.TaxiModelDB;
 import myconnections.DBConnection;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
@@ -377,4 +378,67 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
         }
     }
 
+    @Override
+    public List<Taxi> getTaxisOfClient(Client client) {
+        List<Taxi> lTaxis = new ArrayList<>();
+        Taxi tmpTaxi;
+        StringBuilder quer = new StringBuilder();
+        quer = quer.append("SELECT * FROM API_TAXI_USED WHERE id_client =");
+        quer = quer.append(client.getIdclient());
+        String query = quer.toString();
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                int idClient = rs.getInt(1);
+                int idTaxi = rs.getInt(6);
+                if(idClient == client.getIdclient()){
+                    tmpTaxi = getTaxiByID(idTaxi);
+                    lTaxis.add(tmpTaxi);
+                }
+            }
+            return lTaxis;
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la lecture du client (" + client.getIdclient() + ") Erreur SQL : " + e);
+            return null;
+        }
+    }
+
+    @Override
+    public int getIdAddClient(Client client) {
+        int id_cli;
+        try(CallableStatement cs = dbConnect.prepareCall("{? = call taxi_add_client(?,?,?,?)}")) {
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.setString(2, client.getMail());
+            cs.setString(3, client.getNom());
+            cs.setString(4, client.getPrenom());
+            cs.setString(5, client.getTel());
+            cs.execute();
+            id_cli = cs.getInt(1);
+            return id_cli;
+        }catch (SQLException e){
+            logger.error("Erreur lors de l'ajout du client (récupération du numéro d'identification) : " + e);
+            return 0;
+        }
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

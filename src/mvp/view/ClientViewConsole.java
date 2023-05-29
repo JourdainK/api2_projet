@@ -6,6 +6,8 @@ import mvp.presenter.SpecialClientPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Client;
+import two_three.Taxi;
+
 import static utilitaires.Utilitaire.*;
 
 import java.util.*;
@@ -16,7 +18,7 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
     private Scanner sc = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(ClientViewConsole.class);
     @Override
-    public void setPresenter(Presenter<Client> presenter) { this.presenter = (ClientPresenter) presenter; }
+    public void setPresenter(Presenter<Client> presenter) { this.presenter = presenter; }
 
     @Override
     public void setListDatas(List<Client> lClient, Comparator<Client> cmp) {
@@ -55,9 +57,8 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
                     .setTel(phone)
                     .build();
             //presenter.addClient -> return idClient
-            presenter.add(cli);
-            Client client = presenter.read(cli);
-            cli.setIdClient(client.getIdclient());
+            int idcli = ((SpecialClientPresenter) presenter).getIdAddClient(cli);
+            cli.setIdClient(idcli);
 
         }catch (Exception e){
             logger.error("Erreur lors de la création du client : " + e);
@@ -70,9 +71,8 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
     @Override
     public void remove(){
         System.out.println("-- Suppression d'un client--\n");
-        affListe(lClients);
-        int choix = choixElt(lClients);
-        Client clientDelete = lClients.get(choix-1);
+
+        Client clientDelete = getChoice(lClients);
         System.out.println("Client à supprimer : " + clientDelete);
         System.out.println("1.Confirmer l'effacement \n2.Annuler l'effacement" );
         String keepOn1 = saisie("[1-2]{1}","Veuillez saisir :  \n1 pour confirmer effacement\n2 pour annuler");
@@ -86,11 +86,9 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
 
     @Override
     public void update(){
-        boolean check = false;
-        affListe(lClients);
-        int choix = choixElt(lClients);
+
         int choixMod = -1;
-        Client chosenClient = lClients.get(choix-1);
+        Client chosenClient = getChoice(lClients);
         List<String> lOptions = new ArrayList<>(Arrays.asList("Mail","Nom","Prénom","Téléphone","Retour"));
 
         do{
@@ -101,7 +99,7 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
             switch (choixMod){
                 case 1 :
                     System.out.print("\nSaisir le nouvel email : ");
-                    String newMail = sc.nextLine();
+                    String newMail = saisie("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$","veuillez saisir un email valide");
                     try{
                         chosenClient = new Client.ClientBuilder()
                                 .setMail(newMail)
@@ -172,7 +170,7 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
 
     @Override
     protected void special() {
-        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les clients" , "Retour"));
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les clients" , "Voir la liste des taxis utilisés par un client","Retour"));
 
         int choix;
 
@@ -182,6 +180,7 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
             choix = choixElt(listOptions);
             switch (choix) {
                 case 1 -> affListe(lClients);
+                case 2 -> getTaxisOfClient();
             }
         } while (choix != listOptions.size());
 
@@ -195,6 +194,12 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
         String idCli = saisie("[0-9]*","Veuillez saisir un numéro");
         int idClient = Integer.parseInt(idCli);
         Client cli = ((SpecialClientPresenter)presenter).readClientById(idClient);
+    }
+
+    @Override
+    public void getTaxisOfClient() {
+        Client cli = getChoice(lClients);
+        List<Taxi> lTaxis = ((SpecialClientPresenter)presenter).getTaxisOfClient(cli);
     }
 
     //TODO client specials view

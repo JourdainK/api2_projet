@@ -40,7 +40,7 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
     public void add() {
         System.out.println("-- Encoder une nouvelle location --");
         //TODO today's or another day
-        //check TaxiVuiew  , utilitaires verif Date + Trigger SUr DB -> DATELOC >= today
+        //check TaxiView  , utilitaires verif Date + Trigger SUr DB -> DATELOC >= today
         LocalDate today = LocalDate.now();
         System.out.println("Saisir le nombre de kilomètres total de la location : ");
         int nbrkm;
@@ -55,16 +55,15 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
             String nbrPassagers = saisie("[0-9]{1,3}", "Erreur de saisie ");
             nbrPass = Integer.parseInt(nbrPassagers);
         } while (nbrPass < 1);
-        ((SpecialLocationPresenter) presenter).add(today, nbrkm, nbrPass);
-        locations = presenter.getAll();
+        System.out.println("Choisir le taxi pour la location : ");
+        Taxi taxi = getChoice(((SpecialLocationPresenter) presenter).getTaxiByNbrPass(nbrPass));
+        ((SpecialLocationPresenter) presenter).add(today, nbrkm, nbrPass,taxi);
     }
 
     @Override
     public void remove(){
         System.out.println("-- Supprimer une location --");
-        affListe(locations);
-        int choix = choixElt(locations);
-        Location location = locations.get(choix-1);
+        Location location = getChoice(locations);
         presenter.remove(location);
 
         locations = presenter.getAll();
@@ -74,9 +73,8 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
     public void update(){
         int choixMod;
         System.out.println("-- Modifier une location --");
-        affListe(locations);
-        int choix = choixElt(locations);
-        Location location = locations.get(choix-1);
+        Location location = getChoice(locations);
+
         List<String> lmodif = new ArrayList<>(Arrays.asList("Date","Nombre de kilomètres","Nombre de passagers","Taxi","Client","Adresse de départ", "Adresse de retour","Retour"));
         do{
             System.out.println("Modifier : ");
@@ -261,20 +259,15 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
         System.out.println("Saisir le numéro de la location à rechercher : ");
         int id = Integer.parseInt(saisie("[0-9]{1,3}", "Erreur de saisie "));
         Location location = ((SpecialLocationPresenter)presenter).getLocById(id);
+        if(location != null) {
+            System.out.println(location);
+        }
+        else System.out.println("Aucune location ne correspond à cet identifiant");
     }
 
-    @Override
-    public Location select(List<Location> locations){
-        System.out.println("Saisir le numéro de la location à sélectionner : ");
-        affListe(locations);
-        int choix = choixElt(locations);
-        Location location = locations.get(choix-1);
-
-        return location;
-    }
     @Override
     protected void special() {
-        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir toutes les locations" , "Retour"));
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir toutes les locations" ,"Voir toutes les locations ayant la même adresse de départ et d'arrivée" ,"Voir les locations et le montant total d'une date","Retour"));
 
         int choix;
 
@@ -284,8 +277,41 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
             choix = choixElt(listOptions);
             switch (choix) {
                 case 1 -> affListe(locations);
+                case 2 -> getAllLocatSamePlace();
+                case 3 -> getAllLocatSamePlaceWithPrice();
             }
         } while (choix != listOptions.size());
     }
+
+    @Override
+    public void getAllLocatSamePlace() {
+        List<Location> lloc = ((SpecialLocationPresenter) presenter).getAllLocatSamePlace();
+        affListe(lloc);
+    }
+
+    @Override
+    public void getAllLocatSamePlaceWithPrice() {
+        String date;
+        do{
+            System.out.println("Saisir la date de location : ");
+            date = saisie("[0-9]{2}-[0-9]{2}-[0-9]{4}", "Erreur de saisie, la date doit être au format dd-MM-yyyy");
+        }while(!isDateValid(date,"dd-MM-yyyy"));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate dateLocs = LocalDate.parse(date,formatter);
+        HashMap<List<Location>,Double> map = ((SpecialLocationPresenter) presenter).getAllLocatSamePlaceWithPrice(dateLocs);
+
+        for (Map.Entry<List<Location>, Double> entry : map.entrySet()) {
+            if(entry.getKey().size() > 0){
+                System.out.println("Locations : ");
+                affListe(entry.getKey());
+                System.out.println("Gain total de la journée ( "+ dateLocs + ") : " + entry.getValue() + " €");
+            }
+            else {
+                System.out.println("Aucune location pour cette date");
+            }
+        }
+    }
+
 
 }

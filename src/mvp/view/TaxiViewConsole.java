@@ -23,8 +23,7 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
 
 
     @Override
-    public void setPresenter(Presenter<Taxi> presenter) { this.presenter = (TaxiPresenter) presenter;
-    }
+    public void setPresenter(Presenter<Taxi> presenter) { this.presenter = (TaxiPresenter) presenter;}
 
     @Override
     public void setListDatas(List<Taxi> ltaxis,Comparator<Taxi> cmp) {
@@ -69,7 +68,6 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
             e.printStackTrace();
         }
         lTaxis = presenter.getAll();
-        //affListe(lTaxis);
     }
 
     @Override
@@ -78,8 +76,6 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
         allTaxis = presenter.getMapTaxis();
         int choixTaxi = -1;
         String choixTaxi1;
-        int confirm = -1;
-        String confirm1;
 
         System.out.println("-- Effacer un Taxi --");
         printMapTaxis(allTaxis);
@@ -102,10 +98,8 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
     @Override
     public void update(){
         boolean check = false;
-        affListe(lTaxis);
-        int choix = choixElt(lTaxis);
         int choixMod = -1;
-        Taxi chosenTaxi = lTaxis.get(choix-1);
+        Taxi chosenTaxi = getChoice(lTaxis);
         //System.out.println("chosen = "  + chosenTaxi);
         List<String> lmodif = new ArrayList<>(Arrays.asList("Immatriculation","Nombre maximum de passager","Prix au kilomètre","retour"));
         do{
@@ -181,17 +175,10 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
         Taxi seekdTaxi = presenter.readTaxiById(taxiID);
     }
 
-    @Override
-    public Taxi select(List<Taxi> lTaxis) {
-        affListe(lTaxis);
-        int choix = choixElt(lTaxis);
-        Taxi taxi = lTaxis.get(choix-1);
-        return taxi;
-    }
 
     @Override
     protected void special() {
-        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les taxis" , "Voir les clients d'un taxi", "Voir les gains et kilomètres total d'un taxi","Voir les locations entre deux dates d'un taxi","Retour"));
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les taxis" , "Voir les clients d'un taxi", "Voir les gains et kilomètres total d'un taxi","Voir les locations entre deux dates d'un taxi","Voir les kilomètres parcourus d'un taxi","Voir le nombre de location et les gains d'un taxi, une date donnée","Retour"));
 
         int choix;
 
@@ -204,6 +191,8 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
                 case 2 -> affClient();
                 case 3 -> taxiKmAndCashTotal();
                 case 4 -> getLocationsBetween2Dates();
+                case 5 -> getKmParcourus();
+                case 6 -> getNbrLocAndTotalGain();
             }
         } while (choix != listOptions.size());
     }
@@ -214,12 +203,11 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
         String ANSI_RESET = "\u001B[0m";
         System.out.println("\t-- Liste des clients d'un taxi --");
         System.out.println("Choisir un taxi : ");
-        affListe(lTaxis);
-        int choix = choixElt(lTaxis);
-        Taxi taxi = lTaxis.get(choix-1);
+
+        Taxi taxi = getChoice(lTaxis);
         /*
-        //Utilisation objet : liste de locations du taxi (via MVP) -> utilisation de la méthode de classe getClientsOfTaxi()
-        //List<Client> lClients = taxi.getClientsOfTaxi();
+        Utilisation objet : liste de locations du taxi (via MVP) : utilisation de la méthode de classe getClientsOfTaxi()
+        List<Client> lClients = taxi.getClientsOfTaxi();
          */
         //utilisation fonction sql :  client_by_taxi > exploitation du curseur
         List<Client> lClients = presenter.getClientsOfTaxi(taxi);
@@ -231,19 +219,15 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
     @Override
     public void taxiKmAndCashTotal(){
         System.out.println("\t-- Liste des taxis avec le nombre de kilomètres parcourus et le montant total des locations --\n");
-        affListe(lTaxis);
-        int choix = choixElt(lTaxis);
-        Taxi taxi = lTaxis.get(choix-1);
+        Taxi taxi = getChoice(lTaxis);
 
         System.out.println("Le taxi à parcouru un total de : " + taxi.getTotKm() + " km" + "\nGain total : " + taxi.getTotGain() + " €");
     }
 
     @Override
     public void getLocationsBetween2Dates(){
-        System.out.println("\t-- Liste des locations d'un taxi entre deux dates --\n");
-        affListe(lTaxis);
-        int choix = choixElt(lTaxis);
-        Taxi taxi = lTaxis.get(choix-1);
+        //slower Taxi taxi = presenter.select();
+        Taxi taxi1 = getChoice(lTaxis);
 
         String dateDeb;
         do{
@@ -259,7 +243,7 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
         }while(!isDateValid(dateFin,"dd-MM-yyyy"));
         LocalDate dateFinale = LocalDate.parse(dateFin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        List<Location> llocations = taxi.getListLocationBetweenDates(dateDebut,dateFinale);
+        List<Location> llocations = taxi1.getListLocationBetweenDates(dateDebut,dateFinale);
         Collections.sort(llocations, new Comparator<Location>() {
             @Override
             public int compare(Location o1, Location o2) {
@@ -271,4 +255,34 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
         affListe(llocations);
 
     }
+
+    @Override
+    public void getKmParcourus() {
+        Taxi chosentaxi = getChoice(lTaxis);
+        int km = presenter.getKmParcourus(chosentaxi);
+    }
+
+    @Override
+    public void getNbrLocAndTotalGain() {
+        Taxi taxi = getChoice(lTaxis);
+        String date;
+        do{
+            System.out.println("Saisir la date : ");
+            date = saisie("^[0-9]{2}\\-[0-9]{2}\\-[0-9]{4}$", "Erreur de saisie, veuillez saisir une date au format dd/mm/yyyy\nSaisir la date : ");
+        }while(!isDateValid(date,"dd-MM-yyyy"));
+        LocalDate dateLoc = LocalDate.parse(date,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        HashMap<Integer,Double> map = presenter.getNbrLocAndTotalGain(taxi,dateLoc);
+
+        if(map.isEmpty()) {
+            System.out.println("Aucune location pour ce taxi à cette date");
+        }
+        else {
+            for(Map.Entry<Integer,Double> entry : map.entrySet()) {
+                System.out.println("Le taxi " + taxi.getImmatriculation() + " a effectué " + entry.getKey() + " locations pour un gain total de " + entry.getValue() + "€");
+            }
+        }
+
+    }
+
+
 }

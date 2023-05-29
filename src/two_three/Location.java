@@ -81,6 +81,15 @@ public class Location {
     }
 
     /**
+     * Setter kmTotal (nombre de kilomètres parcourus)
+     * Total calculé par la base de données (Trigger)
+     * @param total
+     */
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    /**
      * getter idLoc
      *
      * @return identifiant de la location

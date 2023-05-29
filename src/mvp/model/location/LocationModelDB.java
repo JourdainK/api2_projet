@@ -2,6 +2,8 @@ package mvp.model.location;
 
 import mvp.model.DAO;
 import myconnections.DBConnection;
+import oracle.jdbc.OracleTypes;
+import oracle.jdbc.proxy.annotation.Pre;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Adresse;
@@ -193,13 +195,13 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
 
     @Override
     public List<Location> getAll() {
-        List<Location> ldatas= new ArrayList<>();
+        List<Location> ldatas = new ArrayList<>();
         Location tmpLoc;
         String query = "SELECT * FROM APILOCATION ORDER BY id_location";
 
-        try(Statement stmt = dbConnect.createStatement();){
+        try (Statement stmt = dbConnect.createStatement();) {
             ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()){
+            while (rs.next()) {
                 int idLoc = rs.getInt(1);
                 String dateloc = String.valueOf(rs.getDate(2));
                 int kmtot = rs.getInt(3);
@@ -209,7 +211,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                 int adrDep = rs.getInt(7);
                 int adrFin = rs.getInt(8);
                 int idCli = rs.getInt(9);
-                try{
+                try {
                     Taxi taxi = getTaxiByID(idTaxi);
                     Client cli = getClientById(idCli);
                     Adresse adrD = getAdresseByID(adrDep);
@@ -227,14 +229,14 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
 
                     ldatas.add(tmpLoc);
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error("Erreur lors de la récupération des locations : " + e);
                     e.printStackTrace();
                     System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
                 }
 
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Erreur lors de la récupération des taxis : " + e);
             System.err.println("Erreur Sql : " + e);
             e.printStackTrace();
@@ -287,27 +289,26 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         Adresse tmpAdr;
         String query = "SELECT * FROM APIADRESSE WHERE ID_ADRESSE = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)){
-            pstm.setInt(1,id);
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 int idAdres = rs.getInt(1);
                 int cp = rs.getInt(2);
                 String localite = rs.getString(3);
                 String rue = rs.getString(4);
                 String num = rs.getString(5);
-                try{
+                try {
                     tmpAdr = new Adresse.AdresseBuilder()
                             .setCp(cp).setLocalite(localite).setIdAdr(idAdres).setNum(num)
                             .setRue(rue).build();
                     return tmpAdr;
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error("Erreur lors de la recherche de l'adresse");
                     e.printStackTrace();
                     return null;
                 }
-            }
-            else return null;
+            } else return null;
 
         } catch (SQLException e) {
             logger.error("Erreur lors de la recherche de l'adresse");
@@ -321,7 +322,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
         Taxi tmpTaxi;
         String query = "SELECT * FROM APITAXI WHERE ID_TAXI = ?";
 
-        try(PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
             if (rs.next()) {
@@ -329,7 +330,7 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                 String immat = rs.getString(2);
                 int nbrPassMax = rs.getInt(3);
                 double prixKm = rs.getDouble(4);
-                try{
+                try {
                     tmpTaxi = new Taxi.TaxiBuilder()
                             .setIdTaxi(taxiId)
                             .setImmatriculation(immat)
@@ -337,21 +338,162 @@ public class LocationModelDB implements DAO<Location>, LocationSpecial {
                             .setNbreMaxPassagers(nbrPassMax)
                             .build();
                     return tmpTaxi;
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error("Erreur lors de la recherche d'un taxi : " + e);
                     e.printStackTrace();
                     return null;
                 }
-            }
-            else {
+            } else {
                 return null;
             }
         } catch (SQLException e) {
             logger.error("Erreur lors de la lecture du client (" + id + ") Erreur SQL : " + e);
-            return  null;
+            return null;
         }
 
     }
 
-    //TODO specials
+    @Override
+    public List<Location> getAllLocatSamePlace() {
+        Set<Location> Slocat = new HashSet<>();
+        Location tmpLoc;
+        String query = "SELECT * FROM API_LOCAT_SAME_ADR";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                int id_loc = rs.getInt(1);
+                LocalDate dateloc = rs.getDate(2).toLocalDate();
+                int nbrPass = rs.getInt(3);
+                int kmtot = rs.getInt(4);
+                double prixtot = rs.getDouble(6);
+                int idTaxi = rs.getInt(7);
+                int adrDep = rs.getInt(9);
+                int adrFin = rs.getInt(11);
+                int idCli = rs.getInt(13);
+                Client tmpcli = getClientById(idCli);
+                Taxi taxi = getTaxiByID(idTaxi);
+                Adresse adrD = getAdresseByID(adrDep);
+                Adresse adrF = getAdresseByID(adrFin);
+                try {
+                    tmpLoc = new Location.LocationBuilder()
+                            .setIdLoc(id_loc)
+                            .setDateLoc(dateloc)
+                            .setKmTot(kmtot)
+                            .setNbrePassagers(nbrPass)
+                            .setTotal(prixtot)
+                            .setVehicule(taxi)
+                            .setClient(tmpcli)
+                            .setAdrDebut(adrD)
+                            .setAdrFin(adrF).build();
+                    Slocat.add(tmpLoc);
+                } catch (Exception f) {
+                    logger.error("Erreur lors de la récupération des locations (à la même adresse) : " + f);
+                    f.printStackTrace();
+                    System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la récupération des locations (à la même adresse) : " + e);
+            e.printStackTrace();
+            System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
+
+            return null;
+        }
+
+        List<Location> lLocations = new ArrayList<>(Slocat);
+        return lLocations;
+    }
+
+    @Override
+    public HashMap<List<Location>, Double> getAllLocatSamePlaceWithPrice(LocalDate date) {
+        HashMap<List<Location>, Double> map = new HashMap<>();
+        List<Location> listLoc = new ArrayList<>();
+
+        try (CallableStatement cs = dbConnect.prepareCall("{?=call get_locat_day(?,?)}");) {
+            double total = 0;
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.setDate(2, Date.valueOf(date));
+            cs.setDouble(3, total);
+            cs.registerOutParameter(2, OracleTypes.DATE);
+            cs.execute();
+            ResultSet resultSet = (ResultSet) cs.getObject(1);
+            total = cs.getDouble(3);
+            while (resultSet.next()) {
+                int id_loc = resultSet.getInt("ID_LOCATION");
+                Location location = readbyId(id_loc);
+                listLoc.add(location);
+            }
+            map.put(listLoc, total);
+
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la récupération des locations (à la même adresse) : " + e);
+            e.printStackTrace();
+            System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
+            return null;
+        }
+
+        return map;
+    }
+
+    @Override
+    public double getTotalLocat(int id) {
+        double price=0;
+
+        try (CallableStatement cs = dbConnect.prepareCall("{call get_tot_locat(?,?)}")) {
+            cs.setInt(1,id);
+            cs.setDouble(2,price);
+            cs.registerOutParameter(2, OracleTypes.DOUBLE);
+            cs.execute();
+            double total = cs.getDouble(2);
+
+            return total;
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la récupération des locations (à la même adresse) : " + e);
+            e.printStackTrace();
+            System.err.println("Erreur, les locations n'ont pas été récupérées par le programme");
+            return 0;
+        }
+    }
+
+    @Override
+    public List<Taxi> getTaxiByNbrPass(int nbrPass) {
+        Set<Taxi> sTaxis = new HashSet<>();
+
+        try(CallableStatement cs = dbConnect.prepareCall("{?=call get_taxis_nbrpass(?)}")){
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.setInt(2, nbrPass);
+            cs.execute();
+            ResultSet rs = (ResultSet) cs.getObject(1);
+            while(rs.next()){
+                int idTaxi = rs.getInt(1);
+                String immat = rs.getString(2);
+                int nbrPassMax = rs.getInt(3);
+                double prixKm = rs.getDouble(4);
+                try {
+                    Taxi tmpTaxi = new Taxi.TaxiBuilder()
+                            .setIdTaxi(idTaxi)
+                            .setImmatriculation(immat)
+                            .setPrixKm(prixKm)
+                            .setNbreMaxPassagers(nbrPassMax)
+                            .build();
+                    sTaxis.add(tmpTaxi);
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la récupération des taxis : " + e);
+                    e.printStackTrace();
+                    System.err.println("Erreur, les taxis n'ont pas été récupérés par le programme");
+                }
+            }
+            List<Taxi> lTaxis = new ArrayList<>(sTaxis);
+            return lTaxis;
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la récupération des taxis : " + e);
+            e.printStackTrace();
+            System.err.println("Erreur, les taxis n'ont pas été récupérés par le programme");
+            return null;
+        }
+
+    }
+
 }

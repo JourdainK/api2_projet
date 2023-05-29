@@ -13,5 +13,7 @@ public interface SpecialClient {
     Client getClientById(int id);
     Taxi getTaxiByID(int id);
     Adresse getAdresseByID(int id);
+    List<Taxi> getTaxisOfClient(Client client);
+    int getIdAddClient(Client client);
 
 }

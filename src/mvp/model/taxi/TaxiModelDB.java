@@ -11,6 +11,7 @@ import two_three.Taxi;
 import myconnections.DBConnection;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -425,7 +426,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return taxis;
     }
 
-    //TODO use this / or use class -> list -> filter list + stream ? (java 8)
+
     @Override
     public List<Client> getClientsOfTaxi(Taxi taxi) {
         try (CallableStatement cs = dbConnect.prepareCall("{?=call client_by_taxi(?)}")) {
@@ -463,6 +464,48 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             return clients;
         } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e);
+            return null;
+        }
+    }
+
+    @Override
+    public int getKmParcourus(Taxi taxi) {
+        String query = "SELECT * FROM API_TOTKM_TAXI WHERE ID_TAXI = ?";
+        int km;
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(query)) {
+            pstm.setInt(1, taxi.getIdTaxi());
+            ResultSet rs = pstm.executeQuery();
+            while(rs.next()) {
+                km = rs.getInt(3);
+                return km;
+            }
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la lecture du client (" + taxi.getIdTaxi() + ") Erreur SQL : " + e);
+            return 0;
+        }
+        return 0;
+    }
+
+    @Override
+    public HashMap<Integer, Double> getNbrLocAndTotalGain(Taxi taxi, LocalDate dateLocat) {
+        HashMap<Integer, Double> map = new HashMap<>();
+        double gain = 0;
+
+        try (CallableStatement cs = dbConnect.prepareCall("{?=call get_nbr_locat(?,?,?)}")) {
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.setInt(2, taxi.getIdTaxi());
+            cs.setDate(3, Date.valueOf(dateLocat));
+            cs.setDouble(4, gain);
+            cs.execute();
+
+            int nbrLoc = cs.getInt(1);  // Retrieve the OUT parameter as an Integer
+            double totalGain = cs.getDouble(4);  // Retrieve the OUT parameter as a Double
+            map.put(nbrLoc, totalGain);
+
+            return map;
+        } catch (SQLException e) {
+            logger.error("Erreur lors de la lecture du client (" + taxi.getIdTaxi() + ") Erreur SQL : " + e);
             return null;
         }
     }

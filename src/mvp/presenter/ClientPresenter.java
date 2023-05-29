@@ -2,10 +2,12 @@ package mvp.presenter;
 
 import mvp.model.DAO;
 
+import mvp.model.client.SpecialClient;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import two_three.Client;
+import two_three.Taxi;
 
 
 import java.util.Comparator;
@@ -32,5 +34,54 @@ public class ClientPresenter extends Presenter<Client> implements SpecialClientP
         }
     }
 
+    @Override
+    public List<Taxi> getTaxisOfClient(Client client) {
+        List<Taxi> lTaxisOfClient = ((SpecialClient)model).getTaxisOfClient(client);
+        if(!lTaxisOfClient.isEmpty()) {
+            view.affMsg("Taxis du client : ");
+            view.affMsg(lTaxisOfClient.toString());
+            return lTaxisOfClient;
+        }
+        else {
+            view.affMsg("Aucun taxi trouvé pour ce client");
+            return null;
+        }
+    }
+
+    @Override
+    public int getIdAddClient(Client client) {
+        int id_cli = ((SpecialClient)model).getIdAddClient(client);
+        if(id_cli>0){
+            view.affMsg("Client ajouté avec le numéro d'identification : " + id_cli);
+            return id_cli;
+        }
+        else {
+            view.affMsg("Erreur lors de l'ajout du client");
+            return -1;
+        }
+    }
+
     //TODO client Specials
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

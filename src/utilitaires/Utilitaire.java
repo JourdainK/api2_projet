@@ -35,13 +35,6 @@ public class Utilitaire {
         }
     }
 
-    public static void affNoNumberList(List l){
-        for(Object o : l){
-            System.out.println(o);
-        }
-    }
-
-
     public static int choixElt(List l){
         int choix;
         String choix1;
@@ -92,7 +85,19 @@ public class Utilitaire {
         return check;
     }
 
-
-
+    public static <T> T getChoice(List<T> l) {
+        int choix;
+        String choix1;
+        do {
+            affListe(l);
+            System.out.println("choix :");
+            choix1 = saisie("[1-9]*","Veuillez saisir un nombre");
+            choix = Integer.parseInt(choix1);
+            if (choix < 1 || choix > l.size()) {
+                System.out.println("Erreur le nombre doit être compris entre 1 et " + l.size());
+            }
+        } while (choix < 1 || choix > l.size());
+        return l.get(choix - 1);
+    }
 
 }
