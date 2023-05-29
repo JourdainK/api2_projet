@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static utilitaires.Utilitaire.affListe;
 
 
 public class LocationPresenter extends Presenter<Location> implements SpecialLocationPresenter {
@@ -111,13 +114,25 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     }
 
     @Override
-    public HashMap<List<Location>, Double> getAllLocatSamePlaceWithPrice(LocalDate date) {
+    public void getAllLocatSamePlaceWithPrice(LocalDate date) {
         HashMap<List<Location>, Double> locations = ((LocationSpecial) model).getAllLocatSamePlaceWithPrice(date);
         if(locations.isEmpty()){
             view.affMsg("Aucune location n'a été trouvée pour cette date");
-            return locations;
         }
-        else return locations;
+
+        else{
+            for (Map.Entry<List<Location>, Double> entry : locations.entrySet()) {
+                if(entry.getKey().size() > 0){
+                    List<Location> loc = entry.getKey();
+                    view.affMsg("Locations : ");
+                    view.affMsg(loc.toString());
+                    view.affMsg("Gain total de la journée ( "+ date + ") : " + entry.getValue() + " €");
+                }
+                else {
+                    System.out.println("Aucune location pour cette date");
+                }
+            }
+        }
     }
 
     @Override

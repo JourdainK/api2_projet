@@ -297,20 +297,7 @@ public class LocationViewConsole extends AbstractViewConsole<Location> implement
             date = saisie("[0-9]{2}-[0-9]{2}-[0-9]{4}", "Erreur de saisie, la date doit être au format dd-MM-yyyy");
         }while(!isDateValid(date,"dd-MM-yyyy"));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate dateLocs = LocalDate.parse(date,formatter);
-        HashMap<List<Location>,Double> map = ((SpecialLocationPresenter) presenter).getAllLocatSamePlaceWithPrice(dateLocs);
-
-        for (Map.Entry<List<Location>, Double> entry : map.entrySet()) {
-            if(entry.getKey().size() > 0){
-                System.out.println("Locations : ");
-                affListe(entry.getKey());
-                System.out.println("Gain total de la journée ( "+ dateLocs + ") : " + entry.getValue() + " €");
-            }
-            else {
-                System.out.println("Aucune location pour cette date");
-            }
-        }
+        ((SpecialLocationPresenter) presenter).getAllLocatSamePlaceWithPrice(LocalDate.parse(date,DateTimeFormatter.ofPattern("dd-MM-yyyy")));
     }
 
 

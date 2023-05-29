@@ -23,7 +23,7 @@ public interface SpecialLocationPresenter{
 
     List<Location> getAllLocatSamePlace();
 
-    HashMap<List<Location>, Double> getAllLocatSamePlaceWithPrice(LocalDate date);
+    void getAllLocatSamePlaceWithPrice(LocalDate date);
 
     double getTotalLocat(int id);
 
