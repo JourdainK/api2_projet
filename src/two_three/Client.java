@@ -139,6 +139,11 @@ public class Client {
                 "\nN° de téléphone : " + tel + "\n";
     }
 
+    /**
+     * méthode getListTaxi
+     *
+     * @return la liste des taxis (sans doublons) ayant été loués par le client
+     */
     public List<Taxi> getListTaxi(){
         Set<Taxi> setTaxi = new HashSet<>();
         for(Location loc : listLocations){
@@ -148,6 +153,11 @@ public class Client {
         return listTaxi;
     }
 
+
+    /**
+     * Builder de la classe Client
+     *
+     */
     public static class ClientBuilder{
         protected int idClient;
         protected String mail;

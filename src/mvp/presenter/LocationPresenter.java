@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static utilitaires.Utilitaire.affListe;
-
 
 public class LocationPresenter extends Presenter<Location> implements SpecialLocationPresenter {
     private ClientPresenter clientPresenter;
@@ -35,6 +33,7 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     public void setClientPresenter(ClientPresenter clientPresenter) {
         this.clientPresenter = clientPresenter;
     }
+
     @Override
     public void setTaxiPresenter(TaxiPresenter taxiPresenter) {
         this.taxiPresenter = taxiPresenter;
@@ -46,8 +45,8 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     }
 
     @Override
-    public void add(LocalDate date, int nbrKm, int nbrPassagers,Taxi taxi){
-       //copie du modèle de Mr Poriaux > comfact > addLigne
+    public void add(LocalDate date, int nbrKm, int nbrPassagers, Taxi taxi) {
+        //copie du modèle de Mr Poriaux > comfact > addLigne
 
         view.affMsg("Client : ");
         Client client = clientPresenter.select();
@@ -56,7 +55,7 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
         view.affMsg("Adresse d'arrivée : ");
         Adresse adresseArrivee = adressePresenter.select();
         Location location = null;
-        try{
+        try {
             location = new Location.LocationBuilder()
                     .setDateLoc(date)
                     .setKmTot(nbrKm)
@@ -67,16 +66,16 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
                     .setAdrFin(adresseArrivee)
                     .build();
             Location loc = model.add(location);
+            //utilisation du travail API/SGBD , on récupère le prix total de la location via une fonction pl/sql
             double price = ((LocationSpecial) model).getTotalLocat(loc.getIdLoc());
             loc.setTotal(price);
 
-            if(loc!=null){
+            if (loc != null) {
                 view.affMsg("Location ajoutée\nNuméro d'identification de la nouvelle location : " + loc.getIdLoc());
-            }
-            else{
+            } else {
                 view.affMsg("Erreur : échec de l'ajout de la location");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             view.affMsg("Erreur lors de la création de la location");
             logger.error("Erreur : création location: " + e.getMessage());
             e.printStackTrace();
@@ -84,25 +83,28 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     }
 
     @Override
-    public Location getLocById(int idLoc){
+    public Location getLocById(int idLoc) {
         Location loc = model.readbyId(idLoc);
+        if (loc != null) {
+            view.affMsg("Location : " + loc.toString());
+        } else view.affMsg("Erreur : location introuvable");
         return loc;
     }
 
     @Override
-    public List<Taxi> ListeTaxi(){
+    public List<Taxi> ListeTaxi() {
         List<Taxi> taxis = taxiPresenter.getAll();
         return taxis;
     }
 
     @Override
-    public List<Client> ListeClients(){
+    public List<Client> ListeClients() {
         List<Client> clients = clientPresenter.getAll();
         return clients;
     }
 
     @Override
-    public List<Adresse> ListeAdresse(){
+    public List<Adresse> ListeAdresse() {
         List<Adresse> adresses = adressePresenter.getAll();
         return adresses;
     }
@@ -113,27 +115,25 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
         view.affMsg("Locations : \n" + locations.toString());
     }
 
-    //TODO refactor -> same as getAllLocatSamePlace above !
     @Override
     public void getAllLocatSamePlaceWithPrice(LocalDate date) {
         HashMap<List<Location>, Double> locations = ((LocationSpecial) model).getAllLocatSamePlaceWithPrice(date);
-        if(locations.isEmpty()){
+        if (locations.isEmpty()) {
             view.affMsg("Aucune location n'a été trouvée pour cette date");
-        }
-
-        else{
+        } else {
             for (Map.Entry<List<Location>, Double> entry : locations.entrySet()) {
-                if(entry.getKey().size() > 0){
+                if (entry.getKey().size() > 0) {
                     List<Location> loc = entry.getKey();
                     view.affMsg("Locations : ");
                     view.affMsg(loc.toString());
-                    view.affMsg("Gain total de la journée ( "+ date + ") : " + entry.getValue() + " €");
-                }
-                else {
-                    System.out.println("Aucune location pour cette date");
+                    view.affMsg("Gain total de la journée ( " + date + ") : " + entry.getValue() + " €");
+                } else {
+                    view.affMsg("Aucune location pour cette date");
                 }
             }
         }
+        //throw to the garbage collector
+        locations = null;
     }
 
     @Override
@@ -146,11 +146,10 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
     public List<Taxi> getTaxiByNbrPass(int nbrPass) {
         List<Taxi> taxis = ((LocationSpecial) model).getTaxiByNbrPass(nbrPass);
 
-        if(taxis.size()==0){
+        if (taxis.size() == 0) {
             view.affMsg("Aucun taxi n'a été trouvé pour ce nombre de passagers");
             return null;
-        }
-        else {
+        } else {
             return taxis;
         }
 

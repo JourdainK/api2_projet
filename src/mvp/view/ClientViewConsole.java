@@ -1,6 +1,5 @@
 package mvp.view;
 
-import mvp.presenter.ClientPresenter;
 import mvp.presenter.Presenter;
 import mvp.presenter.SpecialClientPresenter;
 import org.apache.logging.log4j.LogManager;
@@ -91,86 +90,69 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
         Client chosenClient = getChoice(lClients);
         List<String> lOptions = new ArrayList<>(Arrays.asList("Mail","Nom","Prénom","Téléphone","Retour"));
 
-        do{
-            System.out.println("\t-- Modifier --");
+        if(chosenClient != null){
             System.out.println("Client à modifier choisi : " + chosenClient);
-            affListe(lOptions);
-            choixMod = choixElt(lOptions);
-            switch (choixMod){
-                case 1 :
-                    System.out.print("\nSaisir le nouvel email : ");
-                    String newMail = saisie("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$","veuillez saisir un email valide");
-                    try{
-                        chosenClient = new Client.ClientBuilder()
-                                .setMail(newMail)
-                                .setIdClient(chosenClient.getIdclient())
-                                .setNom(chosenClient.getNom())
-                                .setPrenom(chosenClient.getPrenom())
-                                .setTel(chosenClient.getTel())
-                                .build();
-                    }catch (Exception e){
-                        logger.error("Erreur lors de la modification (mail) du client + " + e);
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2 :
-                    System.out.print("\nSaisir le nouveau nom : ");
-                    String newName = saisie("^[A-Z][a-zçéèêëîïôöûü']+([-\\s][A-ZÇÉÈ][a-zçéèêëîïôöûü']+)*$","Veuillez saisir un nom commençant par une majuscule");
-                    try{
-                        chosenClient = new Client.ClientBuilder()
-                                .setMail(chosenClient.getMail())
-                                .setIdClient(chosenClient.getIdclient())
-                                .setNom(newName)
-                                .setPrenom(chosenClient.getPrenom())
-                                .setTel(chosenClient.getTel())
-                                .build();
-                    }catch (Exception e){
-                        logger.error("Erreur lors de la modification (nom) du client : " + e);
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3 :
-                    System.out.print("\nSaisir le nouveau prénom : ");
-                    String newPren = saisie("^[A-Z][a-zçéèêëîïôöûü']+([-\\s][A-Z][a-zçéèêëîïôöûü']+)*$","Veuillez saisir un prénom commençant par une majuscule");
-                    try{
-                        chosenClient = new Client.ClientBuilder()
-                                .setMail(chosenClient.getMail())
-                                .setIdClient(chosenClient.getIdclient())
-                                .setNom(chosenClient.getNom())
-                                .setPrenom(newPren)
-                                .setTel(chosenClient.getTel())
-                                .build();
-                    }catch (Exception e){
-                        logger.error("Erreur lors de la modification du client (prénom) : " + e);
-                        e.printStackTrace();
-                    }
-                    break;
-                case 4 :
-                    System.out.print("\nSaisir le nouveau numéro de téléphone :");
-                    String newPhone = sc.nextLine();
-                    //String newPhone = saisie("^([04]+[0-9]{2}||[065])\\/[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}$","Veuillez saisir un numéro de téléphone valide");
-                    try{
-                        chosenClient = new Client.ClientBuilder()
-                                .setMail(chosenClient.getMail())
-                                .setIdClient(chosenClient.getIdclient())
-                                .setNom(chosenClient.getNom())
-                                .setPrenom(chosenClient.getPrenom())
-                                .setTel(newPhone)
-                                .build();
-                    }catch (Exception e){
-                        logger.error("Erreur lors de la modification (téléphone) du client + " + e);
-                        e.printStackTrace();
-                    }
-                    break;
+
+            String newName = chosenClient.getNom();
+            String newPren = chosenClient.getPrenom();
+            String newMail = chosenClient.getMail();
+            String newPhone = chosenClient.getTel();
+            Client modifClient = null;
+            do{
+                System.out.println("\t-- Modifier --");
+                affListe(lOptions);
+                choixMod = choixElt(lOptions);
+                switch (choixMod){
+                    case 1 :
+                        System.out.print("\nSaisir le nouvel email : ");
+                        newMail = saisie("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$","veuillez saisir un email valide");
+
+                        break;
+                    case 2 :
+                        System.out.print("\nSaisir le nouveau nom : ");
+                        newName = saisie("^[A-Z][a-zçéèêëîïôöûü']+([-\\s][A-ZÇÉÈ][a-zçéèêëîïôöûü']+)*$","Veuillez saisir un nom commençant par une majuscule");
+
+                        break;
+                    case 3 :
+                        System.out.print("\nSaisir le nouveau prénom : ");
+                        newPren = saisie("^[A-Z][a-zçéèêëîïôöûü']+([-\\s][A-Z][a-zçéèêëîïôöûü']+)*$","Veuillez saisir un prénom commençant par une majuscule");
+
+                        break;
+                    case 4 :
+                        System.out.print("\nSaisir le nouveau numéro de téléphone :");
+                        newPhone = sc.nextLine();
+                        //String newPhone = saisie("^([04]+[0-9]{2}||[065])\\/[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}$","Veuillez saisir un numéro de téléphone valide");
+                        break;
+                    case 5 :
+                        try{
+                            modifClient = new Client.ClientBuilder()
+                                    .setIdClient(chosenClient.getIdclient())
+                                    .setMail(newMail)
+                                    .setNom(newName)
+                                    .setPrenom(newPren)
+                                    .setTel(newPhone)
+                                    .build();
+                        }catch (Exception e){
+                            logger.error("Erreur lors de la modification (téléphone) du client + " + e);
+                            e.printStackTrace();
+                        }
+
+                        break;
+                }
+            }while(choixMod!=lOptions.size());
+            if(!chosenClient.equals(modifClient) ||chosenClient.getNom().equals(newName) || chosenClient.getPrenom().equals(newPren) || !chosenClient.getTel().equals(newPhone) ){
+                presenter.update(modifClient);
+                lClients = presenter.getAll();
             }
-        }while(choixMod!=lOptions.size());
-        presenter.update(chosenClient);
-        lClients = presenter.getAll();
+            else System.out.println("Aucune modification effectuée");
+
+        }
+
     }
 
     @Override
     protected void special() {
-        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les clients" , "Voir la liste des taxis utilisés par un client","Retour"));
+        List<String> listOptions = new ArrayList<>(Arrays.asList("Voir tous les clients" , "Voir la liste des taxis utilisés par un client","Voir les locations d'un client","Retour"));
 
         int choix;
 
@@ -181,10 +163,10 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
             switch (choix) {
                 case 1 -> affListe(lClients);
                 case 2 -> getTaxisOfClient();
+                case 3 -> getListLocationsClient();
             }
         } while (choix != listOptions.size());
 
-        //TODO special client Menu
     }
 
     @Override
@@ -202,6 +184,8 @@ public class ClientViewConsole extends AbstractViewConsole<Client> implements Sp
         List<Taxi> lTaxis = ((SpecialClientPresenter)presenter).getTaxisOfClient(cli);
     }
 
-    //TODO client specials view
-
+    public void getListLocationsClient() {
+        Client cli = getChoice(lClients);
+        ((SpecialClientPresenter) presenter).getListLocations(cli);
+    }
 }

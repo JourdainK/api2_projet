@@ -12,18 +12,18 @@ public abstract class Presenter<T> {
     protected ViewInterface<T> view;
     protected Comparator<T> cmp;
 
-    public Presenter(DAO<T> model, ViewInterface<T> view,Comparator<T> cmp) {
+    public Presenter(DAO<T> model, ViewInterface<T> view, Comparator<T> cmp) {
         this.model = model;
         this.view = view;
         this.view.setPresenter(this);
-        this.cmp=cmp;
+        this.cmp = cmp;
     }
 
     public void start() {
-        view.setListDatas(getAll(),cmp);
+        view.setListDatas(getAll(), cmp);
     }
 
-    public List<T> getAll(){
+    public List<T> getAll() {
         List<T> l = model.getAll();
         l.sort(cmp);
         return l;
@@ -31,32 +31,32 @@ public abstract class Presenter<T> {
 
     public void add(T elt) {
         T nelt = model.add(elt);
-        if(nelt!=null) view.affMsg("création de :"+nelt);
+        if (nelt != null) view.affMsg("création de :" + nelt);
         else view.affMsg("erreur de création");
     }
 
     public void remove(T elt) {
         boolean ok = model.remove(elt);
-        if(ok) view.affMsg("élément effacé");
+        if (ok) view.affMsg("élément effacé");
         else view.affMsg("élément non effacé");
     }
 
     public void update(T elt) {
-        T nelt  =model.update(elt);
-        if(nelt==null) view.affMsg("mise à jour infructueuse");
-        else view.affMsg("mise à jour effectuée : "+nelt);
+        T nelt = model.update(elt);
+        if (nelt == null) view.affMsg("mise à jour infructueuse");
+        else view.affMsg("mise à jour effectuée : " + nelt);
     }
 
     public T read(T rech) {
-        T elt= model.read(rech);
-        if(elt==null) view.affMsg("recherche infructueuse");
+        T elt = model.read(rech);
+        if (elt == null) view.affMsg("recherche infructueuse");
         else view.affMsg(elt.toString());
 
         return elt;
     }
 
-    public T select(){
-        return  view.select(model.getAll());
+    public T select() {
+        return view.select(model.getAll());
     }
 
 }

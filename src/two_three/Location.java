@@ -233,6 +233,10 @@ public class Location {
     }
 
 
+    /**
+     * Builder de la classe Location
+     *
+     */
     public static class LocationBuilder {
         protected int idLoc;
         protected int kmTot;
@@ -292,7 +296,7 @@ public class Location {
         public Location build() throws Exception {
             //problème pour l'exception concernant la date > condition la date ne doit précéder la date du jour -> dateLoc == null => exception.// passer par un trigger ou un check SQL
             //LocalDate tod = LocalDate.now();
-            //dateLoc.isBefore(tod) -> passer par un trigger ou un check SQL
+            //dateLoc.isBefore(tod) -> passer par un trigger ou un check lors de l'ajout dans la base de données
 
             if (kmTot <= 0 || nbrePassagers <= 0 ||  dateLoc == null  ||adrDebut == null || adrFin == null || client == null || vehicule == null) throw new Exception("Erreur lors de la construction de la location");
 

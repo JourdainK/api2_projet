@@ -8,7 +8,7 @@ public class Taxi {
     /**
      * classe Taxi
      * @author Kevin Jourdain
-     * @version 1.0
+     * @version 2.0
      * @see Location
      */
 
@@ -33,7 +33,7 @@ public class Taxi {
      */
     protected List<Location> listTaxiLoc;
 
-    private Taxi(TaxiBuilder builder){
+    private Taxi(TaxiBuilder builder) {
         this.idTaxi = builder.idTaxi;
         this.nbreMaxPassagers = builder.nbreMaxPassagers;
         this.immatriculation = builder.immatriculation;
@@ -130,7 +130,7 @@ public class Taxi {
 
     /**
      * calcul du hashcode basé sur l'immatriculation
-
+     *
      * @return valeur du hashcode
      */
     @Override
@@ -152,10 +152,16 @@ public class Taxi {
                 "\nTarif (au kilomètre ) : " + prixKm + "€";
     }
 
-    public List<Client> getClientsOfTaxi(){
+    /**
+     * méthode getClientsOfTaxi
+     *
+     * @return liste des clients (sans doublons) ayant utilisé le taxi
+     */
+
+    public List<Client> getClientsOfTaxi() {
         Set<Client> sClient = new HashSet<>();
 
-        for(Location loc : listTaxiLoc){
+        for (Location loc : listTaxiLoc) {
             System.out.println(loc);
             sClient.add(loc.getClient());
         }
@@ -163,17 +169,27 @@ public class Taxi {
         return listClient;
     }
 
-    public int getTotKm(){
+    /**
+     * méthode getTotKm
+     *
+     * @return total des kilomètres parcourus par le taxi lors de ses locations
+     */
+    public int getTotKm() {
         int totKm = 0;
-        for(Location loc : listTaxiLoc){
+        for (Location loc : listTaxiLoc) {
             totKm += loc.getKmTotal();
         }
         return totKm;
     }
 
-    public double getTotGain(){
+    /**
+     * méthode getTotGain
+     *
+     * @return total des gains réalisés par le taxi lors de ses locations
+     */
+    public double getTotGain() {
         BigDecimal totGain = new BigDecimal(0);
-        for(Location loc : listTaxiLoc){
+        for (Location loc : listTaxiLoc) {
             totGain = totGain.add(BigDecimal.valueOf(loc.getTotal()));
         }
 
@@ -181,22 +197,36 @@ public class Taxi {
         return tot;
     }
 
-    public List<Location> getListLocationBetweenDates(LocalDate dateStart, LocalDate dateEnd){
+    /**
+     * méthode getListLocationBetweenDates
+     *
+     * @param dateStart date de début de la période
+     * @param dateEnd   date de fin de la période
+     * @return la liste des locations du taxi entre les deux dates (incluses)
+     */
+
+    public List<Location> getListLocationBetweenDates(LocalDate dateStart, LocalDate dateEnd) {
         Set<Location> sLocat = new HashSet<>();
 
-        for(Location l : listTaxiLoc){
-            if((l.getDateLoc().isAfter(dateStart) && l.getDateLoc().isBefore(dateEnd))|| l.getDateLoc().isEqual(dateStart) || l.getDateLoc().isEqual(dateEnd) || l.getDateLoc().isEqual(dateStart) && l.getDateLoc().isEqual(dateEnd)){
+        for (Location l : listTaxiLoc) {
+            if ((l.getDateLoc().isAfter(dateStart) && l.getDateLoc().isBefore(dateEnd)) || l.getDateLoc().isEqual(dateStart) || l.getDateLoc().isEqual(dateEnd) || l.getDateLoc().isEqual(dateStart) && l.getDateLoc().isEqual(dateEnd)) {
                 sLocat.add(l);
             }
         }
-        List<Location> listLocat = new ArrayList<>(sLocat);
 
+        List<Location> listLocat = new ArrayList<>(sLocat);
         return listLocat;
     }
 
 
+    /**
+     * Design Pattern : Builder
+     *
+     *
+     * Builder pour la classe Taxi
+     */
 
-    public static class TaxiBuilder{
+    public static class TaxiBuilder {
         protected int idTaxi;
         protected int nbreMaxPassagers;
         protected String immatriculation;
@@ -228,8 +258,9 @@ public class Taxi {
             return this;
         }
 
-        public Taxi build() throws Exception{
-            if(idTaxi<0 || immatriculation.isBlank() || prixKm < 0 || nbreMaxPassagers < 1) throw new Exception("Erreur lors de la construction du Taxi");
+        public Taxi build() throws Exception {
+            if (idTaxi < 0 || immatriculation.isBlank() || prixKm < 0 || nbreMaxPassagers < 1)
+                throw new Exception("Erreur lors de la construction du Taxi");
             return new Taxi(this);
         }
     }

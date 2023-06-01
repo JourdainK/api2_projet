@@ -9,16 +9,21 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
-public interface SpecialLocationPresenter{
+public interface SpecialLocationPresenter {
     List<Taxi> ListeTaxi();
+
     List<Client> ListeClients();
+
     List<Adresse> ListeAdresse();
+
     Location getLocById(int idLoc);
-    void add(LocalDate date, int nbrKm, int nbrPassagers,Taxi taxi);
+
+    void add(LocalDate date, int nbrKm, int nbrPassagers, Taxi taxi);
 
     void setClientPresenter(ClientPresenter clientPresenter);
 
     void setTaxiPresenter(TaxiPresenter taxiPresenter);
+
     void setAdressePresenter(AdressePresenter adressePresenter);
 
     void getAllLocatSamePlace();

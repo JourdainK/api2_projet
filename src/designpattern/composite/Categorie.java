@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Categorie extends Element{
+public class Categorie extends Element {
     String nom;
 
     Set<Element> elements = new HashSet<>();
 
-    public Categorie(int id,String nom) {
+    public Categorie(int id, String nom) {
         super(id);
         this.nom = nom;
     }
@@ -31,7 +31,7 @@ public class Categorie extends Element{
         StringBuilder sb = new StringBuilder();
         sb.append("Categorie :")
                 .append("\nid : ").append(id)
-                .append("nom :").append(nom);
+                .append("\tnom : ").append(nom);
 
         if (!elements.isEmpty()) {
             sb.append("\nelements :");

@@ -5,9 +5,12 @@ import two_three.Taxi;
 
 import java.util.List;
 
-public interface SpecialClientPresenter{
+public interface SpecialClientPresenter {
     Client readClientById(int idClient);
+
     List<Taxi> getTaxisOfClient(Client client);
 
     int getIdAddClient(Client client);
+
+    void getListLocations(Client client);
 }

@@ -6,7 +6,7 @@ public class Adresse {
     /**
      * Classe adresse
      * @author Kevin Jourdain
-     * @version 1.0
+     * @version 2.0
      */
 
     /**
@@ -30,6 +30,11 @@ public class Adresse {
      */
     protected String num;
 
+    /**
+     * Constructeur de la classe adresse utilisant le pattern builder
+     *
+     * @param builder
+     */
     private Adresse(AdresseBuilder builder){
         this.idAdr = builder.idAdr;
         this.cp = builder.cp;
@@ -134,6 +139,10 @@ public class Adresse {
                 "\t" + num + "\n\n";
     }
 
+    /**
+     * classe builder de l'adresse
+     *
+     */
     public static class AdresseBuilder{
         protected int idAdr;
         protected int cp;

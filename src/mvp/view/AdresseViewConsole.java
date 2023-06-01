@@ -69,7 +69,6 @@ public class AdresseViewConsole extends AbstractViewConsole<Adresse> implements 
         List<Adresse> lAdresse = null;
         System.out.println("-- Suppresion d'une adresse --\n");
         lAdresse = getListByChoice();
-        //System.out.println("test ladresse" + lAdresse);
 
         if(lAdresse.size() > 0){
             affListe(lAdresse);
@@ -98,83 +97,66 @@ public class AdresseViewConsole extends AbstractViewConsole<Adresse> implements 
 
         System.out.println("-- Modifier une adresse --\n");
         List<Adresse> lAdresse = getListByChoice();
-        affListe(lAdresse);
-        int choice = choixElt(lAdresse);
-        Adresse modifAdress = lAdresse.get(choice - 1);
-        System.out.println("Adresse à modifier : " + modifAdress);
+
+        Adresse adress = getChoice(lAdresse);
+        System.out.println("Adresse à modifier : " + adress);
         int choixMod;
-        String newLocat;
-        int cp;
 
-        do {
-            System.out.println("\t-- Modifier --");
-            affListe(loption);
-            choixMod = choixElt(loption);
-            switch (choixMod) {
-                case 1:
-                    System.out.print("\nSaisir la nouvelle rue : ");
-                    String newRue = sc.nextLine();
-                    try {
-                        modifAdress = new Adresse.AdresseBuilder()
-                                .setIdAdr(modifAdress.getIdAdr())
-                                .setCp(modifAdress.getCp())
-                                .setLocalite(modifAdress.getLocalite())
-                                .setRue(newRue)
-                                .setNum(modifAdress.getNum())
-                                .build();
-                    } catch (Exception e) {
-                        logger.error("Erreur lors de la modification de l'adresse (rue)");
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    System.out.print("\nSaisir le nouveau numéro : ");
-                    String num = saisie("[0-9]{1,3}[a-zA-Z]{0,1}", "Veuillez un numéro d'adresse correcte ( 10 , 10A)");
-                    try {
-                        modifAdress = new Adresse.AdresseBuilder()
-                                .setIdAdr(modifAdress.getIdAdr())
-                                .setCp(modifAdress.getCp())
-                                .setLocalite(modifAdress.getLocalite())
-                                .setRue(modifAdress.getRue())
-                                .setNum(num)
-                                .build();
-                    } catch (Exception e) {
-                        logger.error("Erreur lors de la modification de l'adresse (rue)");
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3:
-                    System.out.print("\nSaisir la nouvelle localité : ");
-                    newLocat = sc.nextLine();
-                    cp = getCp();
-                    try {
-                        modifAdress = new Adresse.AdresseBuilder()
-                                .setIdAdr(modifAdress.getIdAdr())
-                                .setCp(cp)
-                                .setLocalite(newLocat)
-                                .setRue(modifAdress.getRue())
-                                .setNum(modifAdress.getNum())
-                                .build();
-                    } catch (Exception e) {
-                        logger.error("Erreur lors de la modification de l'adresse (rue)");
-                        e.printStackTrace();
-                    }
+        if(adress != null){
+            int newCp = adress.getCp();
+            String newLocat = adress.getLocalite();
+            String newRue = adress.getRue();
+            String newNum = adress.getNum();
+            Adresse modifAdress = null;
 
-                    break;
-            }
-        } while (choixMod != loption.size());
-        presenter.update(modifAdress);
-        lAdresses = presenter.getAll();
-    }
+            do {
+                System.out.println("\t-- Modifier --");
+                affListe(loption);
+                choixMod = choixElt(loption);
+                switch (choixMod) {
 
+                    case 1:
+                        System.out.print("\nSaisir la nouvelle rue : ");
+                        newRue = sc.nextLine();
+                        break;
 
-    @Override
-    public Adresse select(List<Adresse> ladr) {
-        affListe(ladr);
-        int choix = choixElt(ladr);
-        Adresse adr = ladr.get(choix - 1);
+                    case 2:
+                        System.out.print("\nSaisir le nouveau numéro : ");
+                        newNum = saisie("[0-9]{1,3}[a-zA-Z]{0,1}", "Veuillez un numéro d'adresse correcte ( 10 , 10A)");
 
-        return adr;
+                        break;
+                    case 3:
+                        System.out.print("\nSaisir la nouvelle localité : ");
+                        newLocat = sc.nextLine();
+                        newCp = getCp();
+
+                        break;
+
+                    case 4:
+                        try {
+                            modifAdress = new Adresse.AdresseBuilder()
+                                    .setIdAdr(adress.getIdAdr())
+                                    .setCp(newCp)
+                                    .setLocalite(newLocat)
+                                    .setRue(newRue)
+                                    .setNum(newNum)
+                                    .build();
+                        } catch (Exception e) {
+                            logger.error("Erreur lors de la modification de l'adresse (rue)");
+                            e.printStackTrace();
+                        }
+                        break;
+
+                }
+            } while (choixMod != loption.size());
+
+            if(!modifAdress.equals(adress)){
+                presenter.update(modifAdress);
+                lAdresses = presenter.getAll();
+            } else System.out.println("Aucune modification n'a été effectuée");
+
+        }
+
     }
 
     @Override

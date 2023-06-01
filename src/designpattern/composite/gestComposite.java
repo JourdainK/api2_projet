@@ -10,11 +10,11 @@ public class gestComposite {
         Taxi tSix = new Taxi(6,"TX-ABC-006",12,"essence",1.2);
         Taxi tSeven = new Taxi(7,"TX-ABC-007",4,"essence",1.2);
 
-        Categorie cOne = new Categorie(1,"Pick-up");
+        Categorie cOne = new Categorie(1,"Camionnette");
         Categorie cTwo = new Categorie(2,"SUV");
-        Categorie cThree = new Categorie(3,"Bus");
+        Categorie cThree = new Categorie(3,"Auto");
         Categorie cFour = new Categorie(4,"Citadine");
-        Categorie cFive = new Categorie(5,"Monospace");
+        Categorie cFive = new Categorie(5,"Motorhome");
         Categorie cSix = new Categorie(6,"Limousine");
 
         cOne.getElements().add(tOne);
@@ -27,6 +27,7 @@ public class gestComposite {
         //Ajout à la catégorie SUV , la catégorie Limousine
         cTwo.getElements().add(cSix);
 
+        //TODO pick up here
         System.out.println("Test Cat 1 :\n");
         System.out.println(cOne);
         System.out.println("\nTest Cat 2 :\n");
@@ -40,10 +41,6 @@ public class gestComposite {
         System.out.println(cFive);
         System.out.println("\nTest Cat 6 :\n");
         System.out.println(cSix);
-
-
-
-
 
     }
 }

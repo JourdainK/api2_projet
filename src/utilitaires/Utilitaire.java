@@ -1,14 +1,11 @@
 package utilitaires;
 
-import exercices1JDBC.DateValidator;
-import exercices1JDBC.DateValidatorUsingDateTimeFormatter;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class Utilitaire {
     private static Scanner sca = new Scanner(System.in);
@@ -24,7 +21,7 @@ public class Utilitaire {
             } else {
                 System.out.println(message);
             }
-        } while (!check);
+        } while (!check || phrase.isEmpty());
         return phrase;
     }
 
@@ -40,7 +37,7 @@ public class Utilitaire {
         String choix1;
         do {
             System.out.println("choix :");
-            choix1 = saisie("[1-9]*","Veuillez saisir un nombre");
+            choix1 = saisie("[0-9]*","Veuillez saisir un nombre");
             choix = Integer.parseInt(choix1);
             if(choix <1 || choix > l.size()){
                 System.out.println("Erreur le nombre doit être compris entre 1 et " + l.size());
@@ -69,20 +66,20 @@ public class Utilitaire {
         return cp;
     }
 
-    public static boolean isDateValid(String date, String format) {
-        boolean check;
+    public static boolean isDateValid(String date) {
+        boolean isValid;
 
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-            LocalDate.parse(date, formatter);
-            //System.out.println("La date est valide");
-            check = true;
-        } catch (DateTimeParseException e) {
-            System.out.println("La date n'est pas valide");
-            check = false;
-        }
+        Predicate<String> dateValidator = dateString -> {
+            try {
+                LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                return true;
+            } catch (Exception e) {
+                System.out.println("Erreur la date doit être valide et au format dd-MM-yyyy");
+                return false;
+            }
+        };
 
-        return check;
+        return isValid = dateValidator.test(date);
     }
 
     public static <T> T getChoice(List<T> l) {
@@ -91,7 +88,7 @@ public class Utilitaire {
         do {
             affListe(l);
             System.out.println("choix :");
-            choix1 = saisie("[1-9]*","Veuillez saisir un nombre");
+            choix1 = saisie("[0-9]*","Veuillez saisir un nombre");
             choix = Integer.parseInt(choix1);
             if (choix < 1 || choix > l.size()) {
                 System.out.println("Erreur le nombre doit être compris entre 1 et " + l.size());

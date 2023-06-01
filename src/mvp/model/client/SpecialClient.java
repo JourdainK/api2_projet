@@ -8,7 +8,6 @@ import two_three.Taxi;
 import java.util.List;
 
 public interface SpecialClient {
-    //TODO special client
     List<Location> getLocationsOfClient(Client client);
     Client getClientById(int id);
     Taxi getTaxiByID(int id);

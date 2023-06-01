@@ -1,6 +1,7 @@
 package mvp.presenter;
 
 import two_three.Client;
+import two_three.Location;
 import two_three.Taxi;
 
 import java.time.LocalDate;
@@ -17,6 +18,9 @@ public interface SpecialTaxiPresenter {
     List<Client> getClientsOfTaxi(Taxi taxi);
 
     int getKmParcourus(Taxi taxi);
-    HashMap<Integer,Double> getNbrLocAndTotalGain(Taxi taxi, LocalDate dateLoc);
+
+    HashMap<Integer, Double> getNbrLocAndTotalGain(Taxi taxi, LocalDate dateLoc);
+
+    void getAllLocationsChosenTaxi(Taxi taxi);
 
 }
