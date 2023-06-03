@@ -71,7 +71,7 @@ public class LocationPresenter extends Presenter<Location> implements SpecialLoc
             loc.setTotal(price);
 
             if (loc != null) {
-                view.affMsg("Location ajoutée\nNuméro d'identification de la nouvelle location : " + loc.getIdLoc());
+                view.affMsg("Location ajoutée\nNuméro d'identification de la nouvelle location : " + loc.getIdLoc() + "\nPrix total : " + loc.getTotal() + "€");
             } else {
                 view.affMsg("Erreur : échec de l'ajout de la location");
             }

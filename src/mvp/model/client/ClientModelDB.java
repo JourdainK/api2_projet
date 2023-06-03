@@ -380,7 +380,8 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
 
     @Override
     public List<Taxi> getTaxisOfClient(Client client) {
-        List<Taxi> lTaxis = new ArrayList<>();
+        Set<Taxi> sTaxi = new HashSet<>();
+        List<Taxi> lTaxis;
         Taxi tmpTaxi;
         StringBuilder quer = new StringBuilder();
         quer = quer.append("SELECT * FROM API_TAXI_USED WHERE id_client =");
@@ -394,10 +395,10 @@ public class ClientModelDB implements DAO<Client>, SpecialClient {
                 int idTaxi = rs.getInt(6);
                 if(idClient == client.getIdclient()){
                     tmpTaxi = getTaxiByID(idTaxi);
-                    lTaxis.add(tmpTaxi);
+                    sTaxi.add(tmpTaxi);
                 }
             }
-            return lTaxis;
+            return lTaxis = new ArrayList<>(sTaxi);
         } catch (SQLException e) {
             logger.error("Erreur lors de la lecture du client (" + client.getIdclient() + ") Erreur SQL : " + e);
             return null;

@@ -1,6 +1,5 @@
 package designpattern.observer;
 
-public abstract class Observer {
-
-    public abstract void update(String alert);
+public interface Observer {
+    void update(String alert);
 }

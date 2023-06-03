@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Client extends Observer{
+public class Client implements Observer{
     //TODO do docu
     private int id;
     private String mail;
@@ -47,7 +47,6 @@ public class Client extends Observer{
     public void setTel(String tel) {
         this.tel = tel;
     }
-
 
 
     @Override

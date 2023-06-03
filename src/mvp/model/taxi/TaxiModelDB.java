@@ -98,9 +98,7 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             logger.error("Erreur lors de la mise à jour (" + taxi.getIdTaxi() + ") , Erreur SQL + " + e);
             return null;
         }
-
     }
-
 
     @Override
     public List<Taxi> getAll() {
@@ -135,7 +133,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
             System.err.println("Erreur SQL : " + e);
             logger.error("Erreur lors de la récupération des taxis : " + e);
         }
-
         tmpTaxi = null;
         return ltaxis;
     }
@@ -217,32 +214,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
     }
 
     @Override
-    public List<Taxi> taxisUtilisés(Client client) {
-        List<Taxi> taxisUsed = new ArrayList<>();
-        Set<Integer> idTaxis = new HashSet<>();
-
-        int idClient = client.getIdclient();
-        String query1 = "SELECT * FROM API_TAXI_USED WHERE id_client = ?";
-
-        try (PreparedStatement pstm = dbConnect.prepareStatement(query1)) {
-            pstm.setInt(1, idClient);
-            ResultSet rs = pstm.executeQuery(query1);
-            if (rs.next()) {
-                idTaxis.add(rs.getInt("ID_TAXI"));
-            }
-        } catch (SQLException e) {
-            logger.error("Erreur lors de la requête taxi utilisé : " + e);
-        }
-        Taxi tmpTaxi;
-        for (Integer s : idTaxis) {
-            tmpTaxi = readbyId(s);
-            taxisUsed.add(tmpTaxi);
-        }
-
-        return taxisUsed;
-    }
-
-    @Override
     public List<Location> allLocTaxi(Taxi taxi) {
         Location tmpLoc;
         List<Location> lLoc = new ArrayList<>();
@@ -296,11 +267,6 @@ public class TaxiModelDB implements DAO<Taxi>, TaxiSpecial {
         return lLoc;
     }
 
-    //TODO delete and use method of class or use it
-    @Override
-    public List<Adresse> allAdressTaxi(Taxi taxi) {
-        return null;
-    }
 
     @Override
     public Client getClientById(int id) {

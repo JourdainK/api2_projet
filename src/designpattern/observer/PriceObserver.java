@@ -3,7 +3,7 @@ package designpattern.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PriceObserver {
+public abstract class PriceObserver implements Observer{
 
     List<Observer> lObservers = new ArrayList<>();
 

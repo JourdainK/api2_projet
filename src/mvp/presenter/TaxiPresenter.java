@@ -27,8 +27,7 @@ public class TaxiPresenter extends Presenter<Taxi> implements SpecialTaxiPresent
             view.affMsg("Taxi non trouvé\n");
             return null;
         } else {
-            view.affMsg(tx.toString());
-            view.affMsg("\n");
+            view.affMsg(tx.toString()+"\n");
             return tx;
         }
     }

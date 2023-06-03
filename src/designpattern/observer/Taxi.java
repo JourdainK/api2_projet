@@ -10,6 +10,8 @@ public class Taxi extends PriceObserver{
     private String immatriculation;
     private double prixKm;
 
+    private List<Observer> lObservers = new ArrayList<>();
+
 
     public Taxi(int id, int nbreMaxPassagers, String immatriculation, double prixKm) {
         this.id = id;
@@ -36,8 +38,25 @@ public class Taxi extends PriceObserver{
 
     @Override
     public void setPrice(double prixKm) {
+
         this.prixKm = prixKm;
+        setAlert(prixKm);
+        notifyObservers("Le prix au kilomètre a été modifié" +
+                "\nNouveau prix : " + prixKm + "€\n");
     }
+
+    public List<Observer> getlObservers() {
+        return lObservers;
+    }
+
+    public void setlObservers(List<Observer> lObservers) {
+        this.lObservers = lObservers;
+    }
+
+    public void addObserver(Observer observer) {
+        lObservers.add(observer);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -69,6 +88,19 @@ public class Taxi extends PriceObserver{
 
     @Override
     public void setAlert(double alert) {
+        update("Le prix du taxi " + immatriculation + " est passé à " + alert + "€");
+    }
+
+    @Override
+    public void update(String alert) {
         System.out.println("Taxi : " + immatriculation + " : " + alert);
     }
+
+    public void notifyObservers(String alert) {
+        for (Observer observer : lObservers) {
+            observer.update(alert);
+        }
+    }
+
+
 }

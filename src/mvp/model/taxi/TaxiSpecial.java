@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaxiSpecial {
-
-    List<Taxi> taxisUtilisés(Client client);
     List<Location> allLocTaxi(Taxi taxi);
-    List<Adresse> allAdressTaxi(Taxi taxi);
 
     Client getClientById(int id);
 

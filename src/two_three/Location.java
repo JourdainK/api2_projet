@@ -220,12 +220,13 @@ public class Location {
                 .append("\nDate de la location : ").append(dateLoc)
                 .append("\nTotal : ").append(total).append("€")
                 .append(ANSI_GREEN).append("\nVéhicule : \n").append(ANSI_RESET)
-                .append(vehicule.immatriculation).append("\t\tPrix/km : ").append(vehicule.prixKm).append(" €\t").append("Places : ").append(vehicule.getNbreMaxPassagers())
-                .append(ANSI_GREEN).append("\nClient : \n").append(ANSI_RESET)
+                .append("N° d'identification du véhicule : ").append(vehicule.getIdTaxi()).append("\t\tImmatriculation : ")
+                .append(vehicule.immatriculation).append("\t\tPrix/km : ").append(vehicule.prixKm).append("€\t").append("Places : ").append(vehicule.getNbreMaxPassagers())
+                .append(ANSI_GREEN).append("\nClient : \n").append(ANSI_RESET).append("N° d'identification du client : ").append(client.getIdclient()).append("\t\tMail : ")
                 .append(client.getMail()).append("\t\t").append(client.getNom()).append("\t\t").append(client.getPrenom())
                 .append(ANSI_GREEN).append("\nTrajet :").append(ANSI_RESET)
-                .append("\nAdresse de départ : ").append(adrDebut.getRue()).append("\t").append(adrDebut.getNum()).append("\t").append(adrDebut.getLocalite()).append("\t").append(adrDebut.getCp())
-                .append("\nAdresse d'arrivée : ").append(adrFin.getRue()).append("\t").append(adrFin.getNum()).append("\t").append(adrFin.getLocalite()).append("\t").append(adrFin.getCp()).append("\n\n");
+                .append("\nAdresse de départ : ").append("\tID : ").append(adrDebut.getIdAdr()).append("\t\t").append(adrDebut.getRue()).append("\t").append(adrDebut.getNum()).append("\t").append(adrDebut.getLocalite()).append("\t").append(adrDebut.getCp())
+                .append("\nAdresse d'arrivée : ").append("\tID : ").append(adrFin.getIdAdr()).append("\t\t").append(adrFin.getRue()).append("\t").append(adrFin.getNum()).append("\t").append(adrFin.getLocalite()).append("\t").append(adrFin.getCp()).append("\n\n");
 
         String output = stringBuilder.toString();
 

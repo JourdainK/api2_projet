@@ -219,7 +219,7 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
 
         String dateFin;
         do {
-            System.out.println("Saisir la date de fin (format : dd/mm/yyyy) : ");
+            System.out.println("Saisir la date de fin (format : dd-mm-yyyy) : ");
             dateFin = saisie("^[0-9]{2}\\-[0-9]{2}\\-[0-9]{4}$", "Erreur de saisie, veuillez saisir une date au format dd-mm-yyyy\nSaisir la date de fin : ");
         } while (!isDateValid(dateFin));
         LocalDate dateFinale = LocalDate.parse(dateFin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
@@ -232,7 +232,7 @@ public class TaxiViewConsole extends AbstractViewConsole<Taxi> implements Specia
             }
         });
 
-        if(llocations!=null){
+        if(!llocations.isEmpty()){
             System.out.println("Liste des location entre le " + dateDebut + " et le " + dateFinale + " : ");
             affListe(llocations);
         } else System.out.println("Aucune location entre le " + dateDebut + " et le " + dateFinale + " pour le taxi " + taxi1.getImmatriculation());

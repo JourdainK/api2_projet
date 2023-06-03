@@ -25,7 +25,6 @@ public abstract class AbstractViewConsole<T> implements ViewInterface<T> {
     public void setListDatas(List<T> ldatas, Comparator<T> cmp) {
         this.ldatas = ldatas;
         this.ldatas.sort(cmp);
-        //affListe(ldatas);
         menu();
     }
 
