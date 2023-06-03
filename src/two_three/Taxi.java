@@ -33,6 +33,11 @@ public class Taxi {
      */
     protected List<Location> listTaxiLoc;
 
+    /**
+     * Constructeur de la classe Taxi
+     *
+     * @param builder
+     */
     private Taxi(TaxiBuilder builder) {
         this.idTaxi = builder.idTaxi;
         this.nbreMaxPassagers = builder.nbreMaxPassagers;
@@ -43,7 +48,7 @@ public class Taxi {
 
 
     /**
-     * Setter IdTaxi -> numéro d'identification du taxi
+     * Setter IdTaxi : numéro d'identification du taxi
      *
      * @param idTaxi
      */
